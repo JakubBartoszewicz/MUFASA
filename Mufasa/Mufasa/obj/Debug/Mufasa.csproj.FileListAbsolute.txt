@@ -7,3 +7,6 @@ C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.Pr
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.csproj.GenerateResource.Cache
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.exe
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.pdb
+C:\Users\Katarzyna R\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\bin\Debug\Mufasa.exe.config
+C:\Users\Katarzyna R\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.exe
+C:\Users\Katarzyna R\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.pdb
