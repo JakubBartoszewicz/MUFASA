@@ -1,0 +1,9 @@
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\bin\Debug\Mufasa.exe.config
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\bin\Debug\Mufasa.exe
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\bin\Debug\Mufasa.pdb
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.csprojResolveAssemblyReference.cache
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.GuiMain.resources
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.Properties.Resources.resources
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.csproj.GenerateResource.Cache
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.exe
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.pdb
