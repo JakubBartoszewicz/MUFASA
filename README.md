@@ -1,4 +1,4 @@
 PoznanSoft2014
 ======
 
-PoznanSoft 2014 iGEM project
+MUFASA: Multiple fragments assembler for scarless cloning of big genetic constructs.
