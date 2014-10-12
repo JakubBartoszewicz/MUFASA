@@ -16,13 +16,60 @@ using System.Windows.Shapes;
 namespace Mufasa.Pages
 {
     /// <summary>
-    /// Interaction logic for BasicPage1.xaml
+    /// Interaction logic for Design.xaml
     /// </summary>
-    public partial class BasicPage1 : UserControl
+    public partial class Design : UserControl
     {
-        public BasicPage1()
+        public Design()
         {
+            fragmentFiles = new List<String>();
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Open fragment file dialog
+        /// </summary>
+        private Microsoft.Win32.OpenFileDialog openFragmentFileDialog;
+
+        /// <summary>
+        /// List of fragment filenames
+        /// </summary>
+        private List<String> fragmentFiles;
+
+        /// <summary>
+        /// <paramref>OpenFragmentFileDialog</paramref> initialization
+        /// </summary>
+        private void InitializeOpenFragmentFileDialog()
+        {
+            this.openFragmentFileDialog = new Microsoft.Win32.OpenFileDialog();
+            this.openFragmentFileDialog.FileName = ""; // Default file name
+            this.openFragmentFileDialog.DefaultExt = ".fa"; // Default file extension
+            this.openFragmentFileDialog.Filter = "Fasta files (.fa, .fas, .fasta)|*.fa;*.fas;*.fasta|GenBank files (.gb)|*.gb|All files|*.*"; // Filter files by extension
+            this.openFragmentFileDialog.Multiselect = true;
+            this.openFragmentFileDialog.Title = "Open fragment file...";
+        }
+
+
+        /// <summary>
+        /// <paramref>openFileButton</paramref> click event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void openFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Initialize
+            InitializeOpenFragmentFileDialog();
+
+            // Show open file dialog box
+            Nullable<bool> result = openFragmentFileDialog.ShowDialog();
+
+            // Process open file dialog box results 
+            if (result == true)
+            {
+                fragmentFiles.AddRange(openFragmentFileDialog.FileNames);
+            }
+        }
+
+
     }
 }
