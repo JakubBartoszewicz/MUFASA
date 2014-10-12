@@ -19,3 +19,4 @@ C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa_Ma
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.g.resources
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.exe
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.pdb
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Assets\ModernUI.MufasaTheme.baml
