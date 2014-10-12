@@ -18,5 +18,7 @@ C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.g.
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.exe
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.pdb
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Assets\ModernUI.MufasaTheme.baml
-C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\MufasaTabs.baml
-C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\MufasaTabs.g.cs
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\Reaction.baml
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\Design.baml
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\Reaction.g.cs
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\Design.g.cs

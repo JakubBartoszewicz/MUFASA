@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Mufasa.Pages
 {
     /// <summary>
-    /// Interaction logic for MufasaTabs.xaml
+    /// Interaction logic for BasicPage1.xaml
     /// </summary>
-    public partial class MufasaTabs : UserControl
+    public partial class BasicPage1 : UserControl
     {
-        public MufasaTabs()
+        public BasicPage1()
         {
             InitializeComponent();
         }

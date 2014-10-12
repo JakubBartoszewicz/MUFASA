@@ -69,7 +69,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\MufasaTabs.xaml">
+    <Page Include="Pages\Reaction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Design.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -77,8 +81,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="Pages\MufasaTabs.xaml.cs">
-      <DependentUpon>MufasaTabs.xaml</DependentUpon>
+    <Compile Include="Pages\Reaction.xaml.cs">
+      <DependentUpon>Reaction.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Design.xaml.cs">
+      <DependentUpon>Design.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
