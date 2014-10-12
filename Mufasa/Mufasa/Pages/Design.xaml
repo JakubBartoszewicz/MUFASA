@@ -7,11 +7,21 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="536">
     <Grid Style="{StaticResource ContentRoot}">
-        <ScrollViewer>
-            <StackPanel MinWidth="200">
-                <Button x:Name="openFileButton" Content="Open fragments..." HorizontalAlignment="Left" Margin="98,24,0,0" VerticalAlignment="Top" Width="139" ToolTip="Open fragment sequence file" Click="openFileButton_Click"/>
-                <ListBox x:Name="fragmentListBox" Height="100" Width="100"/>
-            </StackPanel>
-        </ScrollViewer>        
+        <ScrollViewer Margin="0,25,0,0">
+            <Grid MinWidth="200" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button x:Name="openFileButton" Content="Open fragments..." HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" Width="137" ToolTip="Open fragment sequence file" Click="openFileButton_Click" Height="26" Grid.Column="0"/>
+                <Button x:Name="searchButton" Content="Search registry..." HorizontalAlignment="Left" Margin="20,66,20,20" VerticalAlignment="Top" Width="135" ToolTip="Search the parts registry" Height="26" Grid.Column="0"/>
+                <Button x:Name="deleteFragmentButton" Content="Delete fragments" HorizontalAlignment="Left" Margin="20,112,20,20" VerticalAlignment="Top" Width="137" ToolTip="Delete selected fragments" Height="26" Grid.Column="0"/>
+                <ListBox x:Name="fragmentListBox" HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" SelectionChanged="fragmentListBox_SelectionChanged" SelectionMode="Extended" IsSynchronizedWithCurrentItem="True" ToolTip="These are your fragments." Grid.Column="1"/>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>
