@@ -10,7 +10,7 @@ using System.Windows.Media;
 namespace Mufasa.Pages.Settings
 {
     /// <summary>
-    /// A simple view model for configuring theme, font and accent colors.
+    /// A simple view model for configuring theme, font and accent colors. Based on Modern UI for WPF.
     /// </summary>
     public class AppearanceViewModel
         : NotifyPropertyChanged
@@ -58,11 +58,13 @@ namespace Mufasa.Pages.Settings
         private Color selectedAccentColor;
         private LinkCollection themes = new LinkCollection();
         private Link selectedTheme;
+        private Link mufasaDefaultTheme = new Link { DisplayName = "mufasa", Source = AppearanceManager.Current.ThemeSource};
         private string selectedFontSize;
 
         public AppearanceViewModel()
         {
             // add the default themes
+            this.themes.Add(mufasaDefaultTheme);
             this.themes.Add(new Link { DisplayName = "dark", Source = AppearanceManager.DarkThemeSource });
             this.themes.Add(new Link { DisplayName = "light", Source = AppearanceManager.LightThemeSource });
 

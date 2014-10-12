@@ -6,13 +6,11 @@ C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.cs
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\MainWindow.baml
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\Settings\About.baml
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\Settings\Appearance.baml
-C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\Home.baml
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\SettingsPage.baml
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\App.baml
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\MainWindow.g.cs
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\Settings\About.g.cs
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\Settings\Appearance.g.cs
-C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\Home.g.cs
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\SettingsPage.g.cs
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\App.g.cs
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa_MarkupCompile.cache
@@ -20,3 +18,5 @@ C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.g.
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.exe
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.pdb
 C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Assets\ModernUI.MufasaTheme.baml
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\MufasaTabs.baml
+C:\Users\Jakub\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\MufasaTabs.g.cs

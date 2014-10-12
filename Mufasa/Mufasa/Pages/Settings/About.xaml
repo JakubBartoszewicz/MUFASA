@@ -8,8 +8,8 @@
     <Grid>
         <ScrollViewer>
             <StackPanel MinWidth="200">
-                <TextBlock Text="ABOUT" Style="{StaticResource Heading2}" />
-                <TextBlock Text="TODO: provide information about the software" Margin="0,0,0,8" TextWrapping="Wrap" />
+                <TextBlock Text="MUFASA: Multiple fragments assembler for scarless cloning of big genetic constructs." Style="{StaticResource Heading2}" TextWrapping="Wrap"/>
+                <TextBlock Text="Overlap-based cloning techniques like Gibson Assembly and Circular Polimerase Extension Cloning (CPEC) have been recently becoming more and more popular. While available software allows rapid overlap design for constructs of conventional size, details of its functioning are not always fully transparent. MUFASA aims not only at facilitating the scarless cloning from the oligonucleotide design to putting the tubes into the thermocycler, but also at designing the fragments themselves in parallel with the overlaps for synthesis of big constructs de novo. Use of multiple overlaps pose a risk of non-specific hybridization and overlap &quot;shadowing&quot;. Such &quot;shadowy places&quot; may be eliminated by thermodynamic sequence optimization of both CPEC primers and fragments of the desired construct." Margin="0,0,0,8" TextWrapping="Wrap" TextAlignment="Justify"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>

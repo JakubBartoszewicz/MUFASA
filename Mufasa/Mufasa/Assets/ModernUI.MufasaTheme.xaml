@@ -11,12 +11,5 @@
     <Color x:Key="AccentColor">#f0a30a</Color>
 
     <!-- custom theme resources-->
-    <Rectangle x:Key="WindowBackgroundContent" x:Shared="false">
-        <Rectangle.Fill>
-            <LinearGradientBrush EndPoint="0,1" Opacity=".2">
-                <GradientStop Offset="0" Color="Transparent" />
-                <GradientStop Offset="1" Color="{DynamicResource AccentColor}" />
-            </LinearGradientBrush>
-        </Rectangle.Fill>
-    </Rectangle>
+
 </ResourceDictionary>
