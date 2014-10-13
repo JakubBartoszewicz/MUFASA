@@ -1,17 +1,27 @@
-﻿<UserControl x:Class="Mufasa.Pages.BasicPage1"
+﻿<UserControl x:Class="Mufasa.Pages.Design"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="536">
     <Grid Style="{StaticResource ContentRoot}">
-        <ScrollViewer>
-            <StackPanel MinWidth="200">
-                <TextBlock Text="DESIGN PAGE" Style="{StaticResource Heading2}" />
-                <TextBlock Text="Content goes here" />
-            </StackPanel>
+        <ScrollViewer Margin="0,25,0,0">
+            <Grid MinWidth="200" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button x:Name="openFileButton" Content="Open fragments..." HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" Width="137" ToolTip="Open fragment sequence file" Click="openFileButton_Click" Height="26" Grid.Column="0"/>
+                <Button x:Name="searchButton" Content="Search registry..." HorizontalAlignment="Left" Margin="20,66,20,20" VerticalAlignment="Top" Width="135" ToolTip="Search the parts registry" Height="26" Grid.Column="0"/>
+                <Button x:Name="deleteFragmentButton" Content="Delete fragments" HorizontalAlignment="Left" Margin="20,112,20,20" VerticalAlignment="Top" Width="137" ToolTip="Delete selected fragments" Height="26" Grid.Column="0"/>
+                <ListBox x:Name="fragmentListBox" HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" SelectionChanged="fragmentListBox_SelectionChanged" SelectionMode="Extended" IsSynchronizedWithCurrentItem="True" ToolTip="These are your fragments." Grid.Column="1"/>
+            </Grid>
         </ScrollViewer>
     </Grid>
 </UserControl>
