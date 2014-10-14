@@ -40,21 +40,6 @@ namespace Mufasa.Pages
         private Microsoft.Win32.OpenFileDialog openFragmentFileDialog;
 
         /// <summary>
-        /// BioBrick label.
-        /// </summary>
-        private Label bbLabel; 
-
-        /// <summary>
-        /// BioBrick name input.
-        /// </summary>
-        private TextBox bbInputTextBox; 
-
-        /// <summary>
-        /// BioBrick accept button.
-        /// </summary>
-        private Button bbSearchButton;
-
-        /// <summary>
         /// List of fragments.
         /// </summary>
         private ObservableCollection<Fragment> fragmentList;
@@ -84,29 +69,9 @@ namespace Mufasa.Pages
         /// </summary>
         private void InitializeBbSearching()
         {
-            this.bbLabel = new Label();
-            bbLabel.Content = "Please enter full Biobrick name:";
-            bbLabel.Width = 300;
-            bbLabel.Height = 30;
-            searchCanvas.Children.Add(bbLabel);
-            this.bbInputTextBox = new TextBox();
-            bbInputTextBox.Name = "bbInputTextBox";
-            bbInputTextBox.Width = 200;
-            bbInputTextBox.Height = 30;
-            searchCanvas.Children.Add(bbInputTextBox);
-            this.bbSearchButton = new Button();
-            bbSearchButton.Name = "bbSearchButton";
-            bbSearchButton.Content = "Search";
-            bbSearchButton.Width = 100;
-            bbSearchButton.Height = 30;
-            bbSearchButton.Click += bbSearchButton_Click;
-            searchCanvas.Children.Add(bbSearchButton);
-            Canvas.SetTop(bbLabel, 0);
-            Canvas.SetLeft(bbLabel, 10);
-            Canvas.SetTop(bbInputTextBox, 30);
-            Canvas.SetLeft(bbInputTextBox, 10);
-            Canvas.SetTop(bbSearchButton, 30);
-            Canvas.SetLeft(bbSearchButton, 250);
+            bbLabel.Visibility = System.Windows.Visibility.Visible;
+            bbInputTextBox.Visibility = System.Windows.Visibility.Visible;
+            bbSearchButton.Visibility = System.Windows.Visibility.Visible;
         }
 
         /// <summary>
@@ -126,6 +91,10 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void openFileButton_Click(object sender, RoutedEventArgs e)
         {
+            bbLabel.Visibility = System.Windows.Visibility.Hidden;
+            bbInputTextBox.Visibility = System.Windows.Visibility.Hidden;
+            bbSearchButton.Visibility = System.Windows.Visibility.Hidden;
+
             // Initialize
             InitializeOpenFragmentFileDialog();
 
@@ -215,7 +184,30 @@ namespace Mufasa.Pages
                     foreach (XPathNavigator oCurrentPart in oPartNodesIterator)
                     {
                         message = "\nPart name: " + oCurrentPart.SelectSingleNode("part_name").Value + "\nPart type: " + oCurrentPart.SelectSingleNode("part_type").Value + "\nShort description: " + oCurrentPart.SelectSingleNode("part_short_desc").Value + "\n\nAdd this BioBrick to fragments list?";
-                        ModernDialog.ShowMessage("Please check informations about " + bbInputTextBox.Text + " and click Yes to add BioBrick to fragment list.\n" + message, bbInputTextBox.Text + " informations", MessageBoxButton.YesNo);
+                        var result = ModernDialog.ShowMessage("Please check informations about " + bbInputTextBox.Text + " and click Yes to add BioBrick to fragment list.\n" + message, bbInputTextBox.Text + " informations", MessageBoxButton.YesNo);
+                        
+                        if (MessageBoxResult.Yes == result)
+                        {
+                            try 
+                            { 
+                                if (fragmentNames.Contains(bbInputTextBox.Text))
+                                {
+                                    throw new FragmentNamingException(bbInputTextBox.Text);
+                                }
+                                else
+                                {
+                                    fragmentNames.Add(bbInputTextBox.Text);
+                                    fragmentListBox.ItemsSource = fragmentNames;
+                                    fragmentListBox.Items.Refresh();
+                                }
+                            }
+                            catch (FragmentNamingException)
+                            {
+                                ModernDialog.ShowMessage("Following fragment names already exist and will be ignored: " + bbInputTextBox.Text, "Warning", MessageBoxButton.OK);
+                            }
+                            
+                        }
+                        if (MessageBoxResult.No == result) { bbInputTextBox.Clear(); }
                     }
                 }
             }

@@ -6,7 +6,7 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="536">
-    <Grid Style="{StaticResource ContentRoot}">
+    <Grid x:Name ="mainGrid" Style="{StaticResource ContentRoot}">
         <ScrollViewer Margin="0,25,0,0">
             <Grid MinWidth="200" >
                 <Grid.ColumnDefinitions>
@@ -21,7 +21,9 @@
                 <Button x:Name="searchButton" Content="Search registry..." HorizontalAlignment="Left" Margin="20,66,20,20" VerticalAlignment="Top" Width="135" ToolTip="Search the parts registry" Click="searchButton_Click" Height="26" Grid.Column="0"/>
                 <Button x:Name="deleteFragmentButton" Content="Delete fragments" HorizontalAlignment="Left" Margin="20,112,20,20" VerticalAlignment="Top" Width="137" ToolTip="Delete selected fragments" Height="26" Grid.Column="0"/>
                 <ListBox x:Name="fragmentListBox" HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" SelectionChanged="fragmentListBox_SelectionChanged" SelectionMode="Extended" IsSynchronizedWithCurrentItem="True" ToolTip="These are your fragments." Grid.Column="1"/>
-                <Canvas x:Name="searchCanvas" Grid.Column="1" HorizontalAlignment="Left" Height="53" Margin="10,20,0,0" VerticalAlignment="Top" Width="307"/>
+                <Label x:Name="bbLabel" Content="Please eneter full name of BioBrick: " Height="30" HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" Visibility="Hidden" Grid.Column="1" Grid.Row="1"/>
+                <TextBox x:Name="bbInputTextBox" HorizontalAlignment="Left" Width="150" Height="30" Margin="20,70,20,20" VerticalAlignment="Top" Visibility="Hidden" Grid.Column="1" Grid.Row="1"/>
+                <Button x:Name="bbSearchButton" Content="Search" HorizontalAlignment="Left" Width="100" Height="30" Margin="200,70,20,20" Click="bbSearchButton_Click" VerticalAlignment="Top" Visibility="Hidden" Grid.Column="1" Grid.Row="1"/>
             </Grid>
         </ScrollViewer>
     </Grid>
