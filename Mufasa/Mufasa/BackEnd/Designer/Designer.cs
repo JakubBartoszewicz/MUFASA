@@ -5,11 +5,15 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bio;
 
 namespace Mufasa.BackEnd.Designer
 {
     class Designer
     {
+        /// <summary>
+        /// Designer constructor.
+        /// </summary>
         public Designer()
         {
             FragmentList = new ObservableCollection<Fragment>();
@@ -29,8 +33,8 @@ namespace Mufasa.BackEnd.Designer
         /// <summary>
         /// Add Fragment <paramref name="name"/> if valid.
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="name"></param>
+        /// <param name="file">Fragment filename</param>
+        /// <param name="name">Fragment name</param>
         public void AddFragment(String file, String name)
         {
             if (this.FragmentNames.Contains(name))
@@ -40,6 +44,8 @@ namespace Mufasa.BackEnd.Designer
             this.FragmentNames.Add(name);
             this.FragmentList.Add(new Fragment(file, name));
         }
+
+
     }
 }
 

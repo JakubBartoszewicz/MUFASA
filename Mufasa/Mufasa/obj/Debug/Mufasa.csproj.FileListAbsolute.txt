@@ -70,3 +70,5 @@ C:\Users\Kuba\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Pages\Sett
 C:\Users\Kuba\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\App.g.cs
 C:\Users\Kuba\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa_MarkupCompile.cache
 C:\Users\Kuba\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\obj\Debug\Mufasa.g.resources
+C:\Users\Kuba\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\bin\Debug\Bio.dll
+C:\Users\Kuba\Documents\GitHub\PoznanSoft2014\Mufasa\Mufasa\bin\Debug\Bio.IO.dll
