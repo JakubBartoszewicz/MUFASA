@@ -10,9 +10,9 @@ namespace Mufasa.BackEnd.Designer
     class Fragment
     {
         /// <value>
-        /// Path to the file containing the fragment.
+        /// Path to the file or url containing the fragment.
         /// </value>
-        public String FileName { get; set; }
+        public String Source { get; set; }
         /// <summary>
         /// Name of the fragment.
         /// </summary>
@@ -27,9 +27,9 @@ namespace Mufasa.BackEnd.Designer
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="name"></param>
-        public Fragment(String filename, String name, ISequence sequence)
+        public Fragment(String source, String name, ISequence sequence)
         {
-            this.FileName = filename;
+            this.Source = source;
             this.Name = name;
             this.Sequence = sequence;
         }
