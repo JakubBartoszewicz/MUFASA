@@ -18,9 +18,10 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Button x:Name="openFileButton" Content="Open fragments..." HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" Width="137" ToolTip="Open fragment sequence file" Click="openFileButton_Click" Height="26" Grid.Column="0"/>
-                <Button x:Name="searchButton" Content="Search registry..." HorizontalAlignment="Left" Margin="20,66,20,20" VerticalAlignment="Top" Width="135" ToolTip="Search the parts registry" Height="26" Grid.Column="0"/>
+                <Button x:Name="searchButton" Content="Search registry..." HorizontalAlignment="Left" Margin="20,66,20,20" VerticalAlignment="Top" Width="135" ToolTip="Search the parts registry" Click="searchButton_Click" Height="26" Grid.Column="0"/>
                 <Button x:Name="deleteFragmentButton" Content="Delete fragments" HorizontalAlignment="Left" Margin="20,112,20,20" VerticalAlignment="Top" Width="137" ToolTip="Delete selected fragments" Height="26" Grid.Column="0"/>
                 <ListBox x:Name="fragmentListBox" HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" SelectionChanged="fragmentListBox_SelectionChanged" SelectionMode="Extended" IsSynchronizedWithCurrentItem="True" ToolTip="These are your fragments." Grid.Column="1"/>
+                <Canvas x:Name="searchCanvas" Grid.Column="1" HorizontalAlignment="Left" Height="53" Margin="10,20,0,0" VerticalAlignment="Top" Width="307"/>
             </Grid>
         </ScrollViewer>
     </Grid>

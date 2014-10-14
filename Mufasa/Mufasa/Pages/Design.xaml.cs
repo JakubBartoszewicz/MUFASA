@@ -16,6 +16,9 @@ using System.Windows.Shapes;
 using Mufasa.BackEnd;
 using Mufasa.BackEnd.Exceptions;
 using FirstFloor.ModernUI.Windows.Controls;
+using System.Net;
+using System.Xml;
+using System.Xml.XPath;
 
 namespace Mufasa.Pages
 {
@@ -35,6 +38,21 @@ namespace Mufasa.Pages
         /// Open fragment file dialog.
         /// </summary>
         private Microsoft.Win32.OpenFileDialog openFragmentFileDialog;
+
+        /// <summary>
+        /// BioBrick label.
+        /// </summary>
+        private Label bbLabel; 
+
+        /// <summary>
+        /// BioBrick name input.
+        /// </summary>
+        private TextBox bbInputTextBox; 
+
+        /// <summary>
+        /// BioBrick accept button.
+        /// </summary>
+        private Button bbSearchButton;
 
         /// <summary>
         /// List of fragments.
@@ -59,7 +77,48 @@ namespace Mufasa.Pages
             this.openFragmentFileDialog.Title = "Open fragment file...";
         }
 
+        /// <summary>
+        /// <paramref>bbLabel</paramref> initialozation.
+        /// <paramref>bbInputTextBox</paramref> initialization.
+        /// <paramref>bbAcceptButton</paramref> initialization.
+        /// </summary>
+        private void InitializeBbSearching()
+        {
+            this.bbLabel = new Label();
+            bbLabel.Content = "Please enter full Biobrick name:";
+            bbLabel.Width = 300;
+            bbLabel.Height = 30;
+            searchCanvas.Children.Add(bbLabel);
+            this.bbInputTextBox = new TextBox();
+            bbInputTextBox.Name = "bbInputTextBox";
+            bbInputTextBox.Width = 200;
+            bbInputTextBox.Height = 30;
+            searchCanvas.Children.Add(bbInputTextBox);
+            this.bbSearchButton = new Button();
+            bbSearchButton.Name = "bbSearchButton";
+            bbSearchButton.Content = "Search";
+            bbSearchButton.Width = 100;
+            bbSearchButton.Height = 30;
+            bbSearchButton.Click += bbSearchButton_Click;
+            searchCanvas.Children.Add(bbSearchButton);
+            Canvas.SetTop(bbLabel, 0);
+            Canvas.SetLeft(bbLabel, 10);
+            Canvas.SetTop(bbInputTextBox, 30);
+            Canvas.SetLeft(bbInputTextBox, 10);
+            Canvas.SetTop(bbSearchButton, 30);
+            Canvas.SetLeft(bbSearchButton, 250);
+        }
 
+        /// <summary>
+        /// <paramref></paramref> initialozation.
+        /// <paramref></paramref> initialization.
+        /// <paramref></paramref> initialization.
+        /// </summary>
+        private void InitializeBbInformations()
+        {
+
+        } 
+        
         /// <summary>
         /// <paramref>openFileButton</paramref> click event handler.
         /// </summary>
@@ -118,6 +177,54 @@ namespace Mufasa.Pages
 
         }
 
+        /// <summary>
+        /// <paramref>searchButton</paramref> click event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void searchButton_Click(object sender, RoutedEventArgs e)
+        {
+            InitializeBbSearching();
+        }
+
+        /// <summary>
+        /// <paramref>bbSearchButton</paramref> click event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bbSearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            //Initialize url.
+            string url = "http://parts.igem.org/cgi/xml/part.cgi?part=" + bbInputTextBox.Text;
+            string message;
+
+            //Initialize parsing.
+            try
+            {
+                XPathDocument oXPathDocument = new XPathDocument(url);
+                XPathNavigator oXPathNavigator = oXPathDocument.CreateNavigator();
+
+                //Checking for BioBrick.
+                XPathNodeIterator oPartNodesIterator = oXPathNavigator.Select("/rsbpml/part_list/part");
+                if (oPartNodesIterator.Count == 0)
+                {
+                    ModernDialog.ShowMessage("BioBrick " + bbInputTextBox.Text + " not found!\nCheck the name of BioBrick and try again.", "warning", MessageBoxButton.OK);
+                }
+                else
+                {
+                    foreach (XPathNavigator oCurrentPart in oPartNodesIterator)
+                    {
+                        message = "\nPart name: " + oCurrentPart.SelectSingleNode("part_name").Value + "\nPart type: " + oCurrentPart.SelectSingleNode("part_type").Value + "\nShort description: " + oCurrentPart.SelectSingleNode("part_short_desc").Value + "\n\nAdd this BioBrick to fragments list?";
+                        ModernDialog.ShowMessage("Please check informations about " + bbInputTextBox.Text + " and click Yes to add BioBrick to fragment list.\n" + message, bbInputTextBox.Text + " informations", MessageBoxButton.YesNo);
+                    }
+                }
+            }
+            catch
+            {
+                ModernDialog.ShowMessage("Cannot open url. Check your Internet connection and try again.", "Warning", MessageBoxButton.OK);
+            }
+            
+        }
 
     }
 }
