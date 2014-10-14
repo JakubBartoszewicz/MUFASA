@@ -1,0 +1,37 @@
+﻿Merge branch 'registry-search'
+
+Conflicts:
+	Mufasa/Mufasa.v12.suo
+	Mufasa/Mufasa/Pages/Design.xaml
+	Mufasa/Mufasa/Pages/Design.xaml.cs
+	Mufasa/Mufasa/bin/Debug/Mufasa.exe
+	Mufasa/Mufasa/bin/Debug/Mufasa.pdb
+	Mufasa/Mufasa/obj/Debug/Mufasa.exe
+	Mufasa/Mufasa/obj/Debug/Mufasa.pdb
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   Mufasa/Mufasa.v12.suo
+#	modified:   Mufasa/Mufasa/Pages/Design.xaml
+#	modified:   Mufasa/Mufasa/Pages/Design.xaml.cs
+#	modified:   Mufasa/Mufasa/bin/Debug/Mufasa.exe
+#	modified:   Mufasa/Mufasa/bin/Debug/Mufasa.pdb
+#	modified:   Mufasa/Mufasa/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+#	modified:   Mufasa/Mufasa/obj/Debug/Mufasa.csproj.FileListAbsolute.txt
+#	modified:   Mufasa/Mufasa/obj/Debug/Mufasa.csprojResolveAssemblyReference.cache
+#	modified:   Mufasa/Mufasa/obj/Debug/Mufasa.exe
+#	modified:   Mufasa/Mufasa/obj/Debug/Mufasa.pdb
+#
+
