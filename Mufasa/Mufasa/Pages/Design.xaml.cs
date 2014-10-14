@@ -133,7 +133,7 @@ namespace Mufasa.Pages
                     String name = System.IO.Path.GetFileNameWithoutExtension(file);
                     try
                     {
-                        CheckFragment(file, name);
+                        designer.AddFragment(file, name);
                     }
                     catch (FragmentNamingException fne)
                     {
@@ -158,20 +158,7 @@ namespace Mufasa.Pages
             }
         }
 
-        /// <summary>
-        /// Check if Fragment <paramref name="name"/> is valid.
-        /// </summary>
-        /// <param name="file"></param>
-        /// <param name="name"></param>
-        private void CheckFragment(String file, String name)
-        {
-            if (designer.FragmentNames.Contains(name))
-            {
-                throw new FragmentNamingException(name);
-            }
-            designer.FragmentNames.Add(name);
-            designer.FragmentList.Add(new Fragment(file, name));
-        }
+
 
         private void fragmentListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
