@@ -89,6 +89,8 @@
     <Compile Include="BackEnd\Designer\Designer.cs" />
     <Compile Include="BackEnd\Exceptions\FragmentNamingException.cs" />
     <Compile Include="BackEnd\Designer\Fragment.cs" />
+    <Compile Include="BackEnd\Exceptions\SequenceCountException.cs" />
+    <Compile Include="BackEnd\Exceptions\SequenceLengthException.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

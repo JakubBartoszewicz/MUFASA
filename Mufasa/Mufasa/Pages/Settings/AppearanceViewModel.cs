@@ -52,7 +52,8 @@ namespace Mufasa.Pages.Settings
             Color.FromRgb(0x6d, 0x87, 0x64),   // olive
             Color.FromRgb(0x64, 0x76, 0x87),   // steel
             Color.FromRgb(0x76, 0x60, 0x8a),   // mauve
-            Color.FromRgb(0x87, 0x79, 0x4e),   // taupe
+            Color.FromRgb(0x87, 0x79, 0x4e),   // taupe            
+            Color.FromRgb(0x00, 0x00, 0x00),   // black
         };
 
         private Color selectedAccentColor;

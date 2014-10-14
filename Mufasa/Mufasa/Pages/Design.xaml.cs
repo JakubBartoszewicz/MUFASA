@@ -19,6 +19,7 @@ using FirstFloor.ModernUI.Windows.Controls;
 using System.Net;
 using System.Xml;
 using System.Xml.XPath;
+using System.IO;
 
 namespace Mufasa.Pages
 {
@@ -139,6 +140,10 @@ namespace Mufasa.Pages
                     {
                         invalidNames.Add(fne.Message);
                     }
+                    catch (Exception ex)
+                    {
+                        ModernDialog.ShowMessage(ex.Message, "warning", MessageBoxButton.OK);
+                    }
                     
                 }
                 if (invalidNames.Count > 0)
@@ -152,7 +157,7 @@ namespace Mufasa.Pages
                     message.AppendLine(Environment.NewLine + "Please choose other names.");
                     ModernDialog.ShowMessage(message.ToString(), "warning", MessageBoxButton.OK);
                 }
-                fragmentListBox.ItemsSource = designer.FragmentNames;
+                fragmentListBox.ItemsSource = designer.FragmentDict.Keys;
                 fragmentListBox.Items.Refresh();
 
             }
@@ -162,7 +167,9 @@ namespace Mufasa.Pages
 
         private void fragmentListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            Fragment sel = designer.FragmentDict[fragmentListBox.SelectedItem.ToString()];
+            fragmentSequenceTextBox.Text = sel.GetString();
+            
         }
 
         /// <summary>

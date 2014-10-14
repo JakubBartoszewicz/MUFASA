@@ -7,24 +7,25 @@ using System.Threading.Tasks;
 namespace Mufasa.BackEnd.Exceptions
 {
     /// <remarks>
-    /// Exception thrown if a fragment name is invalid.
+    /// Exception thrown if sequence count in a file is invalid.
     /// <see cref="BackEnd.Designer.Designer.cs"/>
     /// </remarks>
-    class FragmentNamingException : Exception
+    class SequenceCountException : Exception
     {
         /// <summary>
-        /// FragmentNamingException constructor.
+        /// SequenceCountException constructor.
         /// </summary>
-        public FragmentNamingException() : base()
+        public SequenceCountException() : base()
         {
 
         }
 
         /// <summary>
-        /// FragmentNamingException constructor.
+        /// SequenceCountException constructor.
         /// </summary>
         /// <param name="message">Message to send.</param>
-        public FragmentNamingException(string message) : base(message)
+        public SequenceCountException(string message)
+            : base(message)
         {
 
         }

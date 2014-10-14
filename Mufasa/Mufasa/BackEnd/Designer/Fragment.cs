@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,12 +20,32 @@ namespace Mufasa.BackEnd.Designer
         /// <summary>
         /// Fragment sequence.
         /// </summary>
-        public String Sequence { get; set; }
+        public ISequence Sequence { get; set; }
 
-        public Fragment(String filename, String name)
+        /// <summary>
+        /// Fragment constructor.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="name"></param>
+        public Fragment(String filename, String name, ISequence sequence)
         {
             this.FileName = filename;
             this.Name = name;
+            this.Sequence = sequence;
+        }
+
+        /// <summary>
+        /// Returns full fragment sequence as a string. Based on .NET Bio Programming Guide.
+        /// </summary>
+        /// <returns></returns>
+        public string GetString()
+        {
+            char[] symbols = new char[this.Sequence.Count];
+            for (long index = 0; index < this.Sequence.Count; index++)
+            {
+                symbols[index] = (char)this.Sequence[index]; 
+            }
+            return new String(symbols); 
         }
     }
 }
