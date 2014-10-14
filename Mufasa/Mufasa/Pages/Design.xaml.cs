@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Mufasa.BackEnd;
+using Mufasa.BackEnd.Designer;
 using Mufasa.BackEnd.Exceptions;
 using FirstFloor.ModernUI.Windows.Controls;
 using System.Net;
@@ -29,8 +29,7 @@ namespace Mufasa.Pages
     {
         public Design()
         {
-            fragmentList = new ObservableCollection<Fragment>();
-            fragmentNames = new ObservableCollection<String>();
+            designer = new Designer();
             InitializeComponent();
         }
 
@@ -55,17 +54,12 @@ namespace Mufasa.Pages
         private Button bbSearchButton;
 
         /// <summary>
-        /// List of fragments.
+        /// Mufasa reaction designer object.
         /// </summary>
-        private ObservableCollection<Fragment> fragmentList;
+        private Designer designer;
 
         /// <summary>
-        /// List of fragment simple names.
-        /// </summary>
-        private ObservableCollection<String> fragmentNames;
-
-        /// <summary>
-        /// <paramref>OpenFragmentFileDialog</paramref> initialization.
+        /// OpenFragmentFileDialog initialization.
         /// </summary>
         private void InitializeOpenFragmentFileDialog()
         {
@@ -75,12 +69,11 @@ namespace Mufasa.Pages
             this.openFragmentFileDialog.Filter = "Fasta files (.fa, .fas, .fasta)|*.fa;*.fas;*.fasta|GenBank files (.gb)|*.gb|All files|*.*"; // Filter files by extension
             this.openFragmentFileDialog.Multiselect = true;
             this.openFragmentFileDialog.Title = "Open fragment file...";
+            
         }
 
         /// <summary>
-        /// <paramref>bbLabel</paramref> initialozation.
-        /// <paramref>bbInputTextBox</paramref> initialization.
-        /// <paramref>bbAcceptButton</paramref> initialization.
+        /// Bb-related components initialization.
         /// </summary>
         private void InitializeBbSearching()
         {
@@ -110,17 +103,15 @@ namespace Mufasa.Pages
         }
 
         /// <summary>
-        /// <paramref></paramref> initialozation.
-        /// <paramref></paramref> initialization.
-        /// <paramref></paramref> initialization.
+        /// bb information initialization.
         /// </summary>
-        private void InitializeBbInformations()
+        private void InitializeBbInformation()
         {
 
         } 
         
         /// <summary>
-        /// <paramref>openFileButton</paramref> click event handler.
+        /// openFileButton click event handler.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -142,12 +133,7 @@ namespace Mufasa.Pages
                     String name = System.IO.Path.GetFileNameWithoutExtension(file);
                     try
                     {
-                        if (fragmentNames.Contains(name))
-                        {
-                            throw new FragmentNamingException(name);
-                        }
-                        fragmentNames.Add(name);
-                        fragmentList.Add(new Fragment(file, name));
+                        CheckFragment(file, name);
                     }
                     catch (FragmentNamingException fne)
                     {
@@ -165,11 +151,26 @@ namespace Mufasa.Pages
                     }
                     message.AppendLine(Environment.NewLine + "Please choose other names.");
                     ModernDialog.ShowMessage(message.ToString(), "warning", MessageBoxButton.OK);
-                } 
-                fragmentListBox.ItemsSource = fragmentNames;
+                }
+                fragmentListBox.ItemsSource = designer.FragmentNames;
                 fragmentListBox.Items.Refresh();
 
             }
+        }
+
+        /// <summary>
+        /// Check if Fragment <paramref name="name"/> is valid.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="name"></param>
+        private void CheckFragment(String file, String name)
+        {
+            if (designer.FragmentNames.Contains(name))
+            {
+                throw new FragmentNamingException(name);
+            }
+            designer.FragmentNames.Add(name);
+            designer.FragmentList.Add(new Fragment(file, name));
         }
 
         private void fragmentListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -178,7 +179,7 @@ namespace Mufasa.Pages
         }
 
         /// <summary>
-        /// <paramref>searchButton</paramref> click event handler.
+        /// searchButton click event handler.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -188,7 +189,7 @@ namespace Mufasa.Pages
         }
 
         /// <summary>
-        /// <paramref>bbSearchButton</paramref> click event handler.
+        /// bbSearchButton click event handler.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
