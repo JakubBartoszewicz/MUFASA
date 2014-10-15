@@ -195,22 +195,25 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void deleteFragmentButton_Click(object sender, RoutedEventArgs e)
         {
+            if (fragmentListBox.SelectedItems.Count != 0)
+            {
 
-            StringBuilder message = new StringBuilder();
-            message.AppendLine("Do you really want to delete selected fragments?:" + Environment.NewLine);
-            foreach (String n in fragmentListBox.SelectedItems)
-            {
-                message.AppendLine("\t" + n);
-            }
-            MessageBoxResult result = ModernDialog.ShowMessage(message.ToString(), "confirm", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
-            {
-                foreach (String name in fragmentListBox.SelectedItems)
+                StringBuilder message = new StringBuilder();
+                message.AppendLine("Do you really want to delete selected fragments?:" + Environment.NewLine);
+                foreach (String n in fragmentListBox.SelectedItems)
                 {
-                    designer.FragmentDict.Remove(name);
+                    message.AppendLine("\t" + n);
                 }
-                fragmentListBox.ItemsSource = designer.FragmentDict.Keys;
-                fragmentListBox.Items.Refresh();
+                MessageBoxResult result = ModernDialog.ShowMessage(message.ToString(), "confirm", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    foreach (String name in fragmentListBox.SelectedItems)
+                    {
+                        designer.FragmentDict.Remove(name);
+                    }
+                    fragmentListBox.ItemsSource = designer.FragmentDict.Keys;
+                    fragmentListBox.Items.Refresh();
+                }
             }
 
         }
