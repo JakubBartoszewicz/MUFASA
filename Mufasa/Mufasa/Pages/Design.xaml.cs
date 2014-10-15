@@ -58,15 +58,6 @@ namespace Mufasa.Pages
             
         }
 
-        /// <summary>
-        /// Bb-related components initialization.
-        /// </summary>
-        private void InitializeBbSearching()
-        {
-            bbLabel.Visibility = System.Windows.Visibility.Visible;
-            bbInputTextBox.Visibility = System.Windows.Visibility.Visible;
-            bbSearchButton.Visibility = System.Windows.Visibility.Visible;
-        }
 
         /// <summary>
         /// Shows bb information.
@@ -119,6 +110,8 @@ namespace Mufasa.Pages
                 {
                     ModernDialog.ShowMessage(ex.Message, "Warning", MessageBoxButton.OK);
                 }
+                bbInputTextBox.Focus();
+                bbInputTextBox.Select(4, bbInputTextBox.Text.Length);
             }
         } 
         
@@ -129,9 +122,6 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void openFileButton_Click(object sender, RoutedEventArgs e)
         {
-            bbLabel.Visibility = System.Windows.Visibility.Hidden;
-            bbInputTextBox.Visibility = System.Windows.Visibility.Hidden;
-            bbSearchButton.Visibility = System.Windows.Visibility.Hidden;
 
             // Initialize
             InitializeOpenFragmentFileDialog();
@@ -196,27 +186,6 @@ namespace Mufasa.Pages
                 fragmentSequenceTextBox.Text = "";
             }
             
-        }
-
-        /// <summary>
-        /// searchButton click event handler.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void searchButton_Click(object sender, RoutedEventArgs e)
-        {
-            InitializeBbSearching();
-            bbInputTextBox.Focus();
-        }
-
-        /// <summary>
-        /// bbSearchButton click event handler.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void bbSearchButton_Click(object sender, RoutedEventArgs e)
-        {
-            ShowBbInformation();
         }
 
         /// <summary>

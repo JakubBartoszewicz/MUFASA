@@ -24,6 +24,7 @@ namespace Mufasa
         public MainWindow()
         {
             InitializeComponent();
+            Application.Current.MainWindow.WindowState = WindowState.Maximized;
         }
     }
 }
