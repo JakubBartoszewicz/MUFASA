@@ -69,11 +69,57 @@ namespace Mufasa.Pages
         }
 
         /// <summary>
-        /// bb information initialization.
+        /// Shows bb information.
         /// </summary>
-        private void InitializeBbInformation()
+        private void ShowBbInformation()
         {
+            if (bbInputTextBox.Text.Length > 0)
+            {
+                //Initialize url.
+                string url = "http://parts.igem.org/cgi/xml/part.cgi?part=" + bbInputTextBox.Text;
+                string message;
 
+                //Initialize parsing.
+                try
+                {
+                    XPathDocument oXPathDocument = new XPathDocument(url);
+                    XPathNavigator oXPathNavigator = oXPathDocument.CreateNavigator();
+
+                    //Checking for BioBrick.
+                    XPathNodeIterator oPartNodesIterator = oXPathNavigator.Select("/rsbpml/part_list/part");
+                    if (oPartNodesIterator.Count == 0)
+                    {
+                        ModernDialog.ShowMessage("BioBrick " + bbInputTextBox.Text + " not found!\nCheck the name of BioBrick and try again.", "warning", MessageBoxButton.OK);
+                    }
+                    else
+                    {
+                        foreach (XPathNavigator oCurrentPart in oPartNodesIterator)
+                        {
+                            message = "\nPart name: " + oCurrentPart.SelectSingleNode("part_name").Value + "\nPart type: " + oCurrentPart.SelectSingleNode("part_type").Value + "\nShort description: " + oCurrentPart.SelectSingleNode("part_short_desc").Value + "\n\nAdd this BioBrick to fragments list?";
+                            var result = ModernDialog.ShowMessage("Please check information about " + bbInputTextBox.Text + " and click Yes to add BioBrick to fragment list.\n" + message, bbInputTextBox.Text + " information", MessageBoxButton.YesNo);
+                            if (MessageBoxResult.Yes == result)
+                            {
+                                try
+                                {
+                                    designer.AddBrickFromRegistry(url, oCurrentPart.SelectSingleNode("sequences").Value, bbInputTextBox.Text);
+                                }
+                                catch (FragmentNamingException)
+                                {
+                                    ModernDialog.ShowMessage("Following fragment names already exist and will be ignored: " + bbInputTextBox.Text, "Warning", MessageBoxButton.OK);
+                                }
+
+                            }
+                            if (MessageBoxResult.No == result) { bbInputTextBox.Clear(); }
+                            fragmentListBox.ItemsSource = designer.FragmentDict.Keys;
+                            fragmentListBox.Items.Refresh();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModernDialog.ShowMessage(ex.Message, "Warning", MessageBoxButton.OK);
+                }
+            }
         } 
         
         /// <summary>
@@ -160,6 +206,7 @@ namespace Mufasa.Pages
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
             InitializeBbSearching();
+            bbInputTextBox.Focus();
         }
 
         /// <summary>
@@ -169,53 +216,7 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void bbSearchButton_Click(object sender, RoutedEventArgs e)
         {
-            if (bbInputTextBox.Text.Length > 0)
-            {
-                //Initialize url.
-                string url = "http://parts.igem.org/cgi/xml/part.cgi?part=" + bbInputTextBox.Text;
-                string message;
-
-                //Initialize parsing.
-                try
-                {
-                    XPathDocument oXPathDocument = new XPathDocument(url);
-                    XPathNavigator oXPathNavigator = oXPathDocument.CreateNavigator();
-
-                    //Checking for BioBrick.
-                    XPathNodeIterator oPartNodesIterator = oXPathNavigator.Select("/rsbpml/part_list/part");
-                    if (oPartNodesIterator.Count == 0)
-                    {
-                        ModernDialog.ShowMessage("BioBrick " + bbInputTextBox.Text + " not found!\nCheck the name of BioBrick and try again.", "warning", MessageBoxButton.OK);
-                    }
-                    else
-                    {
-                        foreach (XPathNavigator oCurrentPart in oPartNodesIterator)
-                        {
-                            message = "\nPart name: " + oCurrentPart.SelectSingleNode("part_name").Value + "\nPart type: " + oCurrentPart.SelectSingleNode("part_type").Value + "\nShort description: " + oCurrentPart.SelectSingleNode("part_short_desc").Value + "\n\nAdd this BioBrick to fragments list?";
-                            var result = ModernDialog.ShowMessage("Please check information about " + bbInputTextBox.Text + " and click Yes to add BioBrick to fragment list.\n" + message, bbInputTextBox.Text + " information", MessageBoxButton.YesNo);
-                            if (MessageBoxResult.Yes == result)
-                            {
-                                try
-                                {
-                                    designer.AddBrickFromRegistry(url, oCurrentPart.SelectSingleNode("sequences").Value, bbInputTextBox.Text);
-                                }
-                                catch (FragmentNamingException)
-                                {
-                                    ModernDialog.ShowMessage("Following fragment names already exist and will be ignored: " + bbInputTextBox.Text, "Warning", MessageBoxButton.OK);
-                                }
-
-                            }
-                            if (MessageBoxResult.No == result) { bbInputTextBox.Clear(); }
-                            fragmentListBox.ItemsSource = designer.FragmentDict.Keys;
-                            fragmentListBox.Items.Refresh();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ModernDialog.ShowMessage(ex.Message, "Warning", MessageBoxButton.OK);
-                }
-            }
+            ShowBbInformation();
         }
 
         /// <summary>
@@ -244,6 +245,14 @@ namespace Mufasa.Pages
             }
 
         }
+
+        private void bbInputTextBox_KeyDown(object sender, KeyEventArgs e)
+        {            
+            if (e.Key == Key.Return)
+            {
+                ShowBbInformation();
+            }
+        } 
 
     }
 }
