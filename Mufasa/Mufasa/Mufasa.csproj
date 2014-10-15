@@ -46,11 +46,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bio">
-      <HintPath>..\packages\.NET Bio\Bin\Bio.dll</HintPath>
+    <Reference Include="Bio, Version=1.1.4948.24595, Culture=neutral, PublicKeyToken=13335e9abfbf69d0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\.NET Bio\lib\Bio.dll</HintPath>
     </Reference>
-    <Reference Include="Bio.IO">
-      <HintPath>..\packages\.NET Bio\Bin\Bio.IO.dll</HintPath>
+    <Reference Include="Bio.IO, Version=1.1.4948.24628, Culture=neutral, PublicKeyToken=13335e9abfbf69d0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\.NET Bio\lib\Bio.IO.dll</HintPath>
     </Reference>
     <Reference Include="FirstFloor.ModernUI">
       <HintPath>..\packages\ModernUI.WPF.1.0.6\lib\net45\FirstFloor.ModernUI.dll</HintPath>
