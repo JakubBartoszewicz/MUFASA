@@ -14,6 +14,9 @@ using System.Net;
 
 namespace Mufasa.BackEnd.Designer
 {
+    /// <remarks>
+    /// Construct designer class.
+    /// </remarks>
     class Designer
     {
         /// <summary>
@@ -30,9 +33,14 @@ namespace Mufasa.BackEnd.Designer
         private ISequenceParser parser;
 
         /// <summary>
-        /// Dictionary of fragments.
+        /// Dictionary of pooled fragments.
         /// </summary>
         public Dictionary<String,Fragment> FragmentDict { get; set; }
+
+        /// <summary>
+        /// Dictionary of construction fragments.
+        /// </summary>
+        public Dictionary<String, Fragment> ConstructionDict { get; set; }
 
         /// <summary>
         /// Adds Fragment <paramref name="name"/> if valid.

@@ -224,6 +224,16 @@ namespace Mufasa.Pages
             {
                 ShowBbInformation();
             }
+        }
+
+        private void deleteCounstructionFragmentButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void saveButton_Click(object sender, RoutedEventArgs e)
+        {
+
         } 
 
     }

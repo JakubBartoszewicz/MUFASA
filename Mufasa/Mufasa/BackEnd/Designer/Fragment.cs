@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Mufasa.BackEnd.Designer
 {
+    /// <remarks>
+    /// DNA fragment class.
+    /// </remarks>
     class Fragment
     {
         /// <value>
