@@ -25,6 +25,7 @@ namespace Mufasa.BackEnd.Designer
         public Designer()
         {
             FragmentDict = new Dictionary<String, Fragment>();
+            ConstructionList = new ObservableCollection<String>();
         }
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace Mufasa.BackEnd.Designer
         /// <summary>
         /// Dictionary of construction fragments.
         /// </summary>
-        public Dictionary<String, Fragment> ConstructionDict { get; set; }
+        public ObservableCollection<String> ConstructionList { get; set; }
 
         /// <summary>
         /// Adds Fragment <paramref name="name"/> if valid.
@@ -75,7 +76,7 @@ namespace Mufasa.BackEnd.Designer
         /// <returns></returns>
         private void SequenceTooShort(String source, String name, SequenceLengthException sle)
         {
-            MessageBoxResult result = ModernDialog.ShowMessage(sle.Message + Environment.NewLine + "Do you really want to use it?", "warning", MessageBoxButton.YesNo);
+            MessageBoxResult result = ModernDialog.ShowMessage(sle.Message + Environment.NewLine + "Do you really want to use it?", "warning: " + name, MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
                 this.FragmentDict.Add(name, new Fragment(source, name, sle.Sequence));
@@ -144,7 +145,21 @@ namespace Mufasa.BackEnd.Designer
             {
                 this.FragmentDict.Add(name, new Fragment(url, name, new Sequence(Alphabets.DNA, sequenceString)));
             }
-        }                 
+        } 
+        
+        /// <summary>
+        /// Adds a fragment to construction dictionary.
+        /// </summary>
+        /// <param name="fragment">Name of the fragment to add.</param>
+        public void AddConstructionFragment(String fragmentName)
+        {
+            if (this.ConstructionList.Contains(fragmentName))
+            {
+                throw new FragmentNamingException(fragmentName);
+            }
+
+            this.ConstructionList.Add(fragmentName);
+        }
     }
 }
 

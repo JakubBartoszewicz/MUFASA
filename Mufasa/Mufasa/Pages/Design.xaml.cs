@@ -30,8 +30,15 @@ namespace Mufasa.Pages
     {
         public Design()
         {
-            designer = new Designer();
             InitializeComponent();
+
+            designer = new Designer();
+
+            Style itemContainerStyle = new Style(typeof(ListBoxItem), constructionListBox.ItemContainerStyle);
+            itemContainerStyle.Setters.Add(new Setter(ListBoxItem.AllowDropProperty, true));
+            itemContainerStyle.Setters.Add(new EventSetter(ListBoxItem.PreviewMouseMoveEvent, new MouseEventHandler(s_PreviewMouseMove)));
+            itemContainerStyle.Setters.Add(new EventSetter(ListBoxItem.DropEvent, new DragEventHandler(constructionListBox_Drop)));
+            constructionListBox.ItemContainerStyle = itemContainerStyle;
         }
 
         /// <summary>
@@ -80,7 +87,7 @@ namespace Mufasa.Pages
                     XPathNodeIterator oPartNodesIterator = oXPathNavigator.Select("/rsbpml/part_list/part");
                     if (oPartNodesIterator.Count == 0)
                     {
-                        ModernDialog.ShowMessage("BioBrick " + bbInputTextBox.Text + " not found!\nCheck the name of BioBrick and try again.", "warning", MessageBoxButton.OK);
+                        ModernDialog.ShowMessage("BioBrick " + bbInputTextBox.Text + " not found!\nCheck the name of BioBrick and try again.", "warning: " + bbInputTextBox.Text, MessageBoxButton.OK);
                     }
                     else
                     {
@@ -108,7 +115,7 @@ namespace Mufasa.Pages
                 }
                 catch (Exception ex)
                 {
-                    ModernDialog.ShowMessage(ex.Message, "Warning", MessageBoxButton.OK);
+                    ModernDialog.ShowMessage(ex.Message, "Warning: " + bbInputTextBox.Text, MessageBoxButton.OK);
                 }
                 bbInputTextBox.Focus();
                 bbInputTextBox.Select(4, bbInputTextBox.Text.Length);
@@ -147,7 +154,7 @@ namespace Mufasa.Pages
                     }
                     catch (Exception ex)
                     {
-                        ModernDialog.ShowMessage(ex.Message, "warning", MessageBoxButton.OK);
+                        ModernDialog.ShowMessage(ex.Message, "warning: " + name, MessageBoxButton.OK);
                     }
                     
                 }
@@ -218,6 +225,11 @@ namespace Mufasa.Pages
 
         }
 
+        /// <summary>
+        /// Search event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bbInputTextBox_KeyDown(object sender, KeyEventArgs e)
         {            
             if (e.Key == Key.Return)
@@ -226,15 +238,109 @@ namespace Mufasa.Pages
             }
         }
 
-        private void deleteCounstructionFragmentButton_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Delete construction fragment event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void deleteConstructionFragmentButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<String> listItems = new List<String>();
+            foreach (String str in constructionListBox.SelectedItems)
+            {
+                listItems.Add(str);
+            } 
+
+            foreach (String str in listItems )
+            {
+                designer.ConstructionList.Remove(str);
+            }
+            constructionListBox.ItemsSource = designer.ConstructionList;
+            constructionListBox.Items.Refresh();
+        }
+
+        /// <summary>
+        /// Save button click event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void saveButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void saveButton_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Add construction fragment event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void addConstructionFragmentButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<String> invalidNames = new List<String>();
+            foreach (String name in fragmentListBox.SelectedItems)
+            {                
+                try
+                {
+                    designer.AddConstructionFragment(name);
+                }
+                catch (FragmentNamingException fne)
+                {
+                    invalidNames.Add(fne.Message);
+                }
+                catch (Exception ex)
+                {
+                    ModernDialog.ShowMessage(ex.Message, "warning", MessageBoxButton.OK);
+                }
+
+            }
+            if (invalidNames.Count > 0)
+            {
+                StringBuilder message = new StringBuilder();
+                message.AppendLine("Following fragment names already exist and will be ignored:" + Environment.NewLine);
+                foreach (String n in invalidNames)
+                {
+                    message.AppendLine("\t" + n);
+                }
+                message.AppendLine(Environment.NewLine + "Please choose other fragments.");
+                ModernDialog.ShowMessage(message.ToString(), "warning", MessageBoxButton.OK);
+            }
+            constructionListBox.ItemsSource = designer.ConstructionList;
+            constructionListBox.Items.Refresh();
+        }
+
+        void s_PreviewMouseMove(object sender, MouseEventArgs e)
         {
 
-        } 
+            if (sender is ListBoxItem && e.LeftButton == MouseButtonState.Pressed)
+            {
+                ListBoxItem draggedItem = sender as ListBoxItem;
+                DragDrop.DoDragDrop(draggedItem, draggedItem.DataContext, DragDropEffects.Move);
+                draggedItem.IsSelected = true;
+            }
+        }
 
+        void constructionListBox_Drop(object sender, DragEventArgs e)
+        {
+            String droppedData = e.Data.GetData(typeof(String)) as String;
+            String target = ((ListBoxItem)(sender)).DataContext as String;
+
+            int removedIdx = constructionListBox.Items.IndexOf(droppedData);
+            int targetIdx = constructionListBox.Items.IndexOf(target);
+
+            if (removedIdx < targetIdx)
+            {
+                designer.ConstructionList.Insert(targetIdx + 1, droppedData);
+                designer.ConstructionList.RemoveAt(removedIdx);
+            }
+            else
+            {
+                int remIdx = removedIdx + 1;
+                if (designer.ConstructionList.Count + 1 > remIdx)
+                {
+                    designer.ConstructionList.Insert(targetIdx, droppedData);
+                    designer.ConstructionList.RemoveAt(remIdx);
+                }
+            }
+        }
     }
 }
