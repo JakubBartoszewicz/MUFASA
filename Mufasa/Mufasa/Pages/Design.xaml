@@ -4,8 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="536">
+             mc:Ignorable="d" Height="314.778" Width="811.307">
     <Grid x:Name ="mainGrid" Style="{StaticResource ContentRoot}">
         <ScrollViewer Margin="0,25,0,0">
             <Grid MinWidth="200" >
@@ -27,9 +26,14 @@
                 <TextBox x:Name="fragmentSequenceTextBox" Grid.Column="2" Margin="20,0,0,0" FontFamily="Courier New" FontSize="12" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" ToolTip="This is the selected fragment sequence." Grid.Row="2"/>
                 <Label x:Name="bbLabel" Content="Add from registry: " Height="20" HorizontalAlignment="Left" Margin="0,20,0,0" VerticalAlignment="Top"  Grid.Column="1" Grid.Row="0"/>
                 <TextBox x:Name="bbInputTextBox" KeyDown="bbInputTextBox_KeyDown" Text="BBa_" HorizontalAlignment="Left" Width="150" Height="30" Margin="0,0,20,10" VerticalAlignment="Top"  Grid.Column="1" Grid.Row="1" ToolTip="Press enter to search the Registry."/>
-                
+
+                <Canvas x:Name="visualisation" HorizontalAlignment="Center" Height="163" Margin="15,36,35,47"  VerticalAlignment="Center" Width="163" Grid.Column="3" Visibility= "Hidden" Grid.RowSpan="4">
+
+                </Canvas>
+
+                <Button x:Name="testButton" Content="test Button" HorizontalAlignment="Left" Margin="20,95,0,0" VerticalAlignment="Top" Width="137" ToolTip="Show beautiful circles." Height="26" Grid.Column="0" Click="testButton_Click" Grid.Row="2" Grid.RowSpan="2"/>
             </Grid>
         </ScrollViewer>
-        
+
     </Grid>
 </UserControl>

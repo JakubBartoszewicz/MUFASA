@@ -20,6 +20,7 @@ using System.Net;
 using System.Xml;
 using System.Xml.XPath;
 using System.IO;
+using FirstFloor.ModernUI.Presentation;
 
 namespace Mufasa.Pages
 {
@@ -31,8 +32,14 @@ namespace Mufasa.Pages
         public Design()
         {
             designer = new Designer();
+            fragmentCurveEndPoints = new List<Point>();
             InitializeComponent();
         }
+
+        /// <summary>
+        /// List of fragment visualisation curves end points.
+        /// </summary>
+        private List<Point> fragmentCurveEndPoints;
 
         /// <summary>
         /// Open fragment file dialog.
@@ -43,6 +50,7 @@ namespace Mufasa.Pages
         /// Mufasa reaction designer object.
         /// </summary>
         private Designer designer;
+        private Circle circle;
 
         /// <summary>
         /// OpenFragmentFileDialog initialization.
@@ -223,6 +231,45 @@ namespace Mufasa.Pages
             if (e.Key == Key.Return)
             {
                 ShowBbInformation();
+            }
+        }
+        private void testButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(fragmentListBox.SelectedItem!=null)
+            {
+                List<Fragment> testlist = new List<Fragment>();
+                Point center = new Point(80, 80);
+                this.circle = new Circle(testlist,75.0,center);
+                fragmentCurveEndPoints = this.circle.computeFragmentEndPoints();
+                PathFigure pathFigure = new PathFigure();
+                pathFigure.StartPoint = new Point(100,100);
+                foreach (Point i in fragmentCurveEndPoints )
+                {
+                    ArcSegment curve = new ArcSegment();
+                    curve.Size = new Size(circle.Radius, circle.Radius);
+                    curve.Point = i;
+
+                    pathFigure.Segments.Add(curve);
+                }
+                // Create pen.
+                Color accentColor= Color.FromRgb(AppearanceManager.Current.AccentColor.R, AppearanceManager.Current.AccentColor.G, AppearanceManager.Current.AccentColor.B);
+                SolidColorBrush brush = new SolidColorBrush(accentColor);
+                Pen mufasaPen = new Pen(brush, 3);
+
+                System.Windows.Shapes.Path path = new System.Windows.Shapes.Path();
+                PathGeometry g = new PathGeometry();
+                PathFigureCollection pathFigureCollection = new PathFigureCollection();
+                pathFigureCollection.Add(pathFigure);
+                g.Figures = pathFigureCollection;
+                path.Data = g;
+
+                visualisation.Children.Add(path);
+
+
+                // Draw graphics path to screen.
+                //e.DrawPath(mufasaPen, pathFigure);
+                
+                visualisation.Visibility = System.Windows.Visibility.Visible;
             }
         } 
 
