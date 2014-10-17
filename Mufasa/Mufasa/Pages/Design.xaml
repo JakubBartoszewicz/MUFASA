@@ -4,8 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+<<<<<<< HEAD
              mc:Ignorable="d" 
              d:DesignHeight="768" d:DesignWidth="800">
+=======
+             mc:Ignorable="d" Height="314.778" Width="811.307">
+>>>>>>> origin/circle
     <Grid x:Name ="mainGrid" Style="{StaticResource ContentRoot}">
         <ScrollViewer Margin="0,25,0,0">
             <Grid MinWidth="200" >
@@ -28,6 +32,7 @@
                 <TextBox x:Name="fragmentSequenceTextBox" Grid.Column="2" Margin="20,0,0,0" FontFamily="Courier New" FontSize="12" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" ToolTip="Selected fragment sequence." Grid.Row="2" ClipToBounds="True"/>
                 <Label x:Name="bbLabel" Content="Add from registry: " Height="20" HorizontalAlignment="Left" Margin="0,20,0,0" VerticalAlignment="Top"  Grid.Column="1" Grid.Row="0"/>
                 <TextBox x:Name="bbInputTextBox" KeyDown="bbInputTextBox_KeyDown" Text="BBa_" HorizontalAlignment="Left" Width="150" Height="30" Margin="0,0,20,10" VerticalAlignment="Top"  Grid.Column="1" Grid.Row="1" ToolTip="Press enter to search the Registry."/>
+<<<<<<< HEAD
                 <ListView x:Name="constructionListBox" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" SelectionMode="Extended" IsSynchronizedWithCurrentItem="True" ToolTip="Fragments of your construct." Grid.Column="1" Grid.Row="4" MinHeight="200" MinWidth="177" BorderThickness="1" ClipToBounds="True"/>
                 <DataGrid x:Name="overlapDataGrid" Grid.Column="2" Margin="20,0,0,0" FontFamily="Courier New" FontSize="12" IsReadOnly="True"  VerticalScrollBarVisibility="Visible" ToolTip="Generated overlaps." Grid.Row="4" ClipToBounds="True" MinHeight="200"/>
                 <Button x:Name="saveButton" Content="Save as..." HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" Width="137" ToolTip="Save your construct project" Height="26" Grid.Column="0" Grid.Row="4" Click="saveButton_Click"/>
@@ -52,8 +57,16 @@
                     </Button.RenderTransform>
                 </Button>
 
+=======
+
+                <Canvas x:Name="visualisation" HorizontalAlignment="Center" Height="163" Margin="15,36,35,47"  VerticalAlignment="Center" Width="163" Grid.Column="3" Visibility= "Hidden" Grid.RowSpan="4">
+
+                </Canvas>
+
+                <Button x:Name="testButton" Content="test Button" HorizontalAlignment="Left" Margin="20,95,0,0" VerticalAlignment="Top" Width="137" ToolTip="Show beautiful circles." Height="26" Grid.Column="0" Click="testButton_Click" Grid.Row="2" Grid.RowSpan="2"/>
+>>>>>>> origin/circle
             </Grid>
         </ScrollViewer>
-        
+
     </Grid>
 </UserControl>
