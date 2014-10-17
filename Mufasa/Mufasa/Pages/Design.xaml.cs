@@ -31,11 +31,10 @@ namespace Mufasa.Pages
     {
         public Design()
         {
-<<<<<<< HEAD
-=======
+
             designer = new Designer();
             fragmentCurveEndPoints = new List<Point>();
->>>>>>> origin/circle
+
             InitializeComponent();
 
             designer = new Designer();
@@ -249,8 +248,7 @@ namespace Mufasa.Pages
                 ShowBbInformation();
             }
         }
-<<<<<<< HEAD
-=======
+
         private void testButton_Click(object sender, RoutedEventArgs e)
         {
             if(fragmentListBox.SelectedItem!=null)
@@ -290,7 +288,6 @@ namespace Mufasa.Pages
                 visualisation.Visibility = System.Windows.Visibility.Visible;
             }
         } 
->>>>>>> origin/circle
 
         /// <summary>
         /// Delete construction fragment event handler.
