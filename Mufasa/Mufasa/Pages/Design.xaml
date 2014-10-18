@@ -22,6 +22,9 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="200"/>
                 </Grid.RowDefinitions>
+                
+                
+                
                 <Button x:Name="openFileButton" Content="Open fragments..." HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" Width="137" ToolTip="Open fragment sequence file." Click="openFileButton_Click" Height="26" Grid.Column="0" Grid.Row="2"/>
                 <Button x:Name="deleteFragmentButton" Content="Delete fragments" HorizontalAlignment="Left" Margin="20,64,20,20" VerticalAlignment="Top" Width="137" ToolTip="Delete selected fragments." Height="26" Grid.Column="0" Click="deleteFragmentButton_Click" Grid.Row="2"/>
                 <ListView x:Name="fragmentListBox" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" SelectionChanged="fragmentListBox_SelectionChanged" SelectionMode="Extended" IsSynchronizedWithCurrentItem="True" ToolTip="Your fragments pool." Grid.Column="1" Grid.Row="2" MinHeight="200" MinWidth="177" BorderThickness="1" ClipToBounds="True"/>
@@ -29,7 +32,9 @@
                 <Label x:Name="bbLabel" Content="Add from registry: " Height="20" HorizontalAlignment="Left" Margin="0,20,0,0" VerticalAlignment="Top"  Grid.Column="1" Grid.Row="0"/>
                 <TextBox x:Name="bbInputTextBox" KeyDown="bbInputTextBox_KeyDown" Text="BBa_" HorizontalAlignment="Left" Width="150" Height="30" Margin="0,0,20,10" VerticalAlignment="Top"  Grid.Column="1" Grid.Row="1" ToolTip="Press enter to search the Registry."/>
 
-                <ListView x:Name="constructionListBox" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" SelectionMode="Extended" IsSynchronizedWithCurrentItem="True" ToolTip="Fragments of your construct." Grid.Column="1" Grid.Row="4" MinHeight="200" MinWidth="177" BorderThickness="1" ClipToBounds="True"/>
+                <ListView x:Name="constructionListBox" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" SelectionMode="Extended" IsSynchronizedWithCurrentItem="True" ToolTip="Fragments of your construct." Grid.Column="1" Grid.Row="4" MinHeight="200" MinWidth="177" BorderThickness="1" ClipToBounds="True">
+                
+                </ListView>
                 <DataGrid x:Name="overlapDataGrid" Grid.Column="2" Margin="20,0,0,0" FontFamily="Courier New" FontSize="12" IsReadOnly="True"  VerticalScrollBarVisibility="Visible" ToolTip="Generated overlaps." Grid.Row="4" ClipToBounds="True" MinHeight="200"/>
                 <Button x:Name="saveButton" Content="Save as..." HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" Width="137" ToolTip="Save your construct project" Height="26" Grid.Column="0" Grid.Row="4" Click="saveButton_Click"/>
                 <Button x:Name="deleteConstructionFragmentButton" Content="&gt;&gt;;" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,20,20,20"  Width="50" ToolTip="Delete selected fragments." Height="26" Grid.Column="1" Grid.Row="3" Click="deleteConstructionFragmentButton_Click" RenderTransformOrigin="0.5,0.5">
@@ -57,6 +62,6 @@
                 
             </Grid>
         </ScrollViewer>
-
+        
     </Grid>
 </UserControl>

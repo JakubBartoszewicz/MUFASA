@@ -39,12 +39,31 @@ namespace Mufasa.Pages
 
             designer = new Designer();
 
-            Style itemContainerStyle = new Style(typeof(ListBoxItem), constructionListBox.ItemContainerStyle);
+            
+            Style itemContainerStyle = new Style(typeof(ListBoxItem), fragmentListBox.ItemContainerStyle);
             itemContainerStyle.Setters.Add(new Setter(ListBoxItem.AllowDropProperty, true));
+
+            itemContainerStyle.Setters.Add(new EventSetter(ListBoxItem.DragOverEvent, new DragEventHandler(s_DragOver)));
             itemContainerStyle.Setters.Add(new EventSetter(ListBoxItem.PreviewMouseMoveEvent, new MouseEventHandler(s_PreviewMouseMove)));
             itemContainerStyle.Setters.Add(new EventSetter(ListBoxItem.DropEvent, new DragEventHandler(constructionListBox_Drop)));
+            
+            black.Color = Color.FromRgb(0x0a, 0x0a, 0x0a);
+            white.Color = Color.FromRgb(0xe5, 0xe5, 0xe5);
+            grey.Color = Color.FromRgb(0x3e, 0x3e, 0x3e);
+            bkgd.Color = Color.FromRgb(0x25, 0x25, 0x25);
+            accent.Color = Color.FromRgb(AppearanceManager.Current.AccentColor.R, AppearanceManager.Current.AccentColor.G, AppearanceManager.Current.AccentColor.B);
+            itemContainerStyle.Resources.Add(SystemColors.HighlightBrushKey, accent);
+            itemContainerStyle.Resources.Add(SystemColors.InactiveSelectionHighlightBrushKey, accent);
+
+            constructionListBox.Foreground = white;
             constructionListBox.ItemContainerStyle = itemContainerStyle;
         }
+
+        SolidColorBrush black = new SolidColorBrush();
+        SolidColorBrush white = new SolidColorBrush();
+        SolidColorBrush grey = new SolidColorBrush();
+        SolidColorBrush bkgd = new SolidColorBrush();
+        SolidColorBrush accent = new SolidColorBrush();
 
         /// <summary>
         /// List of fragment visualisation curves end points.
@@ -287,6 +306,7 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void addConstructionFragmentButton_Click(object sender, RoutedEventArgs e)
         {
+            
             List<String> invalidNames = new List<String>();
             foreach (String name in fragmentListBox.SelectedItems)
             {                
@@ -321,12 +341,42 @@ namespace Mufasa.Pages
 
         void s_PreviewMouseMove(object sender, MouseEventArgs e)
         {
-
-            if (sender is ListBoxItem && e.LeftButton == MouseButtonState.Pressed)
+            if (sender is ListBoxItem)
             {
                 ListBoxItem draggedItem = sender as ListBoxItem;
-                DragDrop.DoDragDrop(draggedItem, draggedItem.DataContext, DragDropEffects.Move);
-                draggedItem.IsSelected = true;
+                if (e.GetPosition(sender as ListBoxItem).X > 0 && e.GetPosition(sender as ListBoxItem).X <= 177 && e.GetPosition(sender as ListBoxItem).Y > 0 && e.GetPosition(sender as ListBoxItem).Y <= 12)
+                {
+                    
+                    draggedItem.Background = grey;
+                }
+                else
+                {
+                    draggedItem.Background = bkgd;
+                }
+
+                if ( e.LeftButton == MouseButtonState.Pressed)
+                {
+                    DragDrop.DoDragDrop(draggedItem, draggedItem.DataContext, DragDropEffects.Move);
+                    draggedItem.IsSelected = true;
+                }
+            }
+        }
+
+        void s_DragOver(object sender, DragEventArgs e)
+        {
+            if (sender is ListBoxItem)
+            {
+                ListBoxItem draggedItem = sender as ListBoxItem;
+                if (e.GetPosition(sender as ListBoxItem).X > 0 && e.GetPosition(sender as ListBoxItem).X <= 177 && e.GetPosition(sender as ListBoxItem).Y > 0 && e.GetPosition(sender as ListBoxItem).Y <= 12)
+                {
+
+                    draggedItem.Background = grey;
+                }
+                else
+                {
+                    draggedItem.Background = bkgd;
+                }
+
             }
         }
 
