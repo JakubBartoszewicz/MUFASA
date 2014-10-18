@@ -10,6 +10,7 @@ namespace Mufasa.BackEnd.Exceptions
     /// Exception thrown if sequence count in a file is invalid.
     /// <see cref="BackEnd.Designer.Designer.cs"/>
     /// </remarks>
+    [Serializable]
     class SequenceCountException : Exception
     {
         /// <summary>

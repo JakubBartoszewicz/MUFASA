@@ -11,6 +11,7 @@ namespace Mufasa.BackEnd.Exceptions
     /// Exception thrown if sequence length in a file is invalid.
     /// <see cref="BackEnd.Designer.Designer.cs"/>
     /// </remarks>
+    [Serializable]
     class SequenceLengthException : Exception
     {
         /// <summary>

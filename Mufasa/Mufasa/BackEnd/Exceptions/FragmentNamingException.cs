@@ -10,6 +10,7 @@ namespace Mufasa.BackEnd.Exceptions
     /// Exception thrown if a fragment name is invalid.
     /// <see cref="BackEnd.Designer.Designer.cs"/>
     /// </remarks>
+    [Serializable]
     class FragmentNamingException : Exception
     {
         /// <summary>
