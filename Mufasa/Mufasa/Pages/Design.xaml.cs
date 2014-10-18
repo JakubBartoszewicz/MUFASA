@@ -33,7 +33,6 @@ namespace Mufasa.Pages
         {
 
             designer = new Designer();
-            fragmentCurveEndPoints = new List<Point>();
 
             InitializeComponent();
 
@@ -57,6 +56,7 @@ namespace Mufasa.Pages
 
             constructionListBox.Foreground = white;
             constructionListBox.ItemContainerStyle = itemContainerStyle;
+
         }
 
         SolidColorBrush black = new SolidColorBrush();
@@ -65,20 +65,32 @@ namespace Mufasa.Pages
         SolidColorBrush bkgd = new SolidColorBrush();
         SolidColorBrush accent = new SolidColorBrush();
 
-        /// <summary>
-        /// List of fragment visualisation curves end points.
-        /// </summary>
-        private List<Point> fragmentCurveEndPoints;
 
+  
         /// <summary>
         /// Open fragment file dialog.
         /// </summary>
         private Microsoft.Win32.OpenFileDialog openFragmentFileDialog;
 
         /// <summary>
+        /// Save fragment file dialog.
+        /// </summary>
+        private Microsoft.Win32.SaveFileDialog saveConstructFileDialog;
+
+        /// <summary>
+        /// Save overlap file dialog.
+        /// </summary>
+        private Microsoft.Win32.SaveFileDialog saveOverlapsDialog;
+
+        /// <summary>
         /// Mufasa reaction designer object.
         /// </summary>
         private Designer designer;
+
+        /// <summary>
+        /// Mufasa construct object.
+        /// </summary>
+        private Construct construct;
 
         /// <summary>
         /// OpenFragmentFileDialog initialization.
@@ -94,6 +106,33 @@ namespace Mufasa.Pages
             
         }
 
+        /// <summary>
+        /// SaveFragmentFileDialog initialization.
+        /// </summary>
+        private void InitializeSaveFragmentFileDialog()
+        {
+            this.saveConstructFileDialog = new Microsoft.Win32.SaveFileDialog();
+            this.saveConstructFileDialog.FileName = ""; // Default file name
+            this.saveConstructFileDialog.DefaultExt = ".fa"; // Default file extension
+            this.saveConstructFileDialog.Filter = "Fasta files (.fa, .fas, .fasta)|*.fa;*.fas;*.fasta|All files|*.*"; // Filter files by extension
+
+            this.saveConstructFileDialog.Title = "Save construct...";
+
+        }
+
+        /// <summary>
+        /// SaveOverlapsDialog initialization.
+        /// </summary>
+        private void InitializeSaveOverlapsDialog()
+        {
+            this.saveOverlapsDialog = new Microsoft.Win32.SaveFileDialog();
+            this.saveOverlapsDialog.FileName = ""; // Default file name
+            this.saveOverlapsDialog.DefaultExt = ".txt"; // Default file extension
+            this.saveOverlapsDialog.Filter = "Text files| *.txt|All files|*.*"; // Filter files by extension
+
+            this.saveOverlapsDialog.Title = "Save overlaps...";
+
+        }
 
         /// <summary>
         /// Shows bb information.
@@ -296,6 +335,26 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void saveButton_Click(object sender, RoutedEventArgs e)
         {
+            if (construct != null)
+            {
+                InitializeSaveFragmentFileDialog();
+
+                // Show save file dialog box
+                Nullable<bool> openResult = saveConstructFileDialog.ShowDialog();
+
+                // Process open file dialog box results 
+                if (openResult == true)
+                {
+                    try
+                    {
+                        construct.SaveAsBio(saveConstructFileDialog.FileName);
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBoxResult result = ModernDialog.ShowMessage(ex.Message, "Exception", MessageBoxButton.OK);
+                    }
+                }
+            }
 
         }
 
@@ -400,6 +459,38 @@ namespace Mufasa.Pages
                 {
                     designer.ConstructionList.Insert(targetIdx, droppedData);
                     designer.ConstructionList.RemoveAt(remIdx);
+                }
+            }
+        }
+
+        private void makeButton_Click(object sender, RoutedEventArgs e)
+        {
+            construct = new Construct(designer.ConstructionList, designer.FragmentDict);
+            overlapListView.ItemsSource = construct.Overlaps;
+            overlapListView.Items.Refresh();
+        }
+
+        private void overButton_Click(object sender, RoutedEventArgs e)
+        {
+            InitializeSaveOverlapsDialog();
+            if (construct != null)
+            {
+                InitializeSaveFragmentFileDialog();
+
+                // Show save file dialog box
+                Nullable<bool> openResult = saveOverlapsDialog.ShowDialog();
+
+                // Process open file dialog box results 
+                if (openResult == true)
+                {
+                    using (StreamWriter sw = new StreamWriter(saveOverlapsDialog.FileName))
+                    {
+                        foreach (System.Collections.Generic.KeyValuePair<String,String> item in overlapListView.Items)
+                        {
+                            sw.WriteLine(item.ToString());
+
+                        }
+                    }
                 }
             }
         }

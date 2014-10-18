@@ -28,13 +28,20 @@ namespace Mufasa.BackEnd.Designer
         /// <summary>
         /// Fragment constructor.
         /// </summary>
-        /// <param name="filename"></param>
-        /// <param name="name"></param>
+        /// <param name="source">Filename or URL.</param>
+        /// <param name="name">Fragment name.</param>
         public Fragment(String source, String name, ISequence sequence)
         {
             this.Source = source;
             this.Name = name;
             this.Sequence = sequence;
+        }
+
+        /// <summary>
+        /// Fragment constructor.
+        /// </summary>
+        public Fragment()
+        {
         }
 
         /// <summary>
