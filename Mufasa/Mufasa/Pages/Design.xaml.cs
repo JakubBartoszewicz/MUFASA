@@ -100,7 +100,7 @@ namespace Mufasa.Pages
             this.openFragmentFileDialog = new Microsoft.Win32.OpenFileDialog();
             this.openFragmentFileDialog.FileName = ""; // Default file name
             this.openFragmentFileDialog.DefaultExt = ".fa"; // Default file extension
-            this.openFragmentFileDialog.Filter = "Fasta files (.fa, .fas, .fasta)|*.fa;*.fas;*.fasta|GenBank files (.gb)|*.gb|All files|*.*"; // Filter files by extension
+            this.openFragmentFileDialog.Filter = "Fasta files|*.fa;*.fas;*.fasta|GenBank files|*.gb;*.gbk|All files|*.*"; // Filter files by extension
             this.openFragmentFileDialog.Multiselect = true;
             this.openFragmentFileDialog.Title = "Open fragment file...";
             
@@ -113,8 +113,8 @@ namespace Mufasa.Pages
         {
             this.saveConstructFileDialog = new Microsoft.Win32.SaveFileDialog();
             this.saveConstructFileDialog.FileName = ""; // Default file name
-            this.saveConstructFileDialog.DefaultExt = ".fa"; // Default file extension
-            this.saveConstructFileDialog.Filter = "Fasta files (.fa, .fas, .fasta)|*.fa;*.fas;*.fasta|All files|*.*"; // Filter files by extension
+            this.saveConstructFileDialog.DefaultExt = ".gb"; // Default file extension
+            this.saveConstructFileDialog.Filter = "GenBank files| *.gb;*.gbk|Fasta files|*.fa;*.fas;*.fasta|All files|*.*"; // Filter files by extension
 
             this.saveConstructFileDialog.Title = "Save construct...";
 
@@ -345,14 +345,14 @@ namespace Mufasa.Pages
                 // Process open file dialog box results 
                 if (openResult == true)
                 {
-                    try
-                    {
+                    //try
+                   // {
                         construct.SaveAsBio(saveConstructFileDialog.FileName);
-                    }
-                    catch(Exception ex)
-                    {
-                        MessageBoxResult result = ModernDialog.ShowMessage(ex.Message, "Exception", MessageBoxButton.OK);
-                    }
+                    //}
+                  //  catch(Exception ex)
+                   // {
+                  //      MessageBoxResult result = ModernDialog.ShowMessage(ex.Message, "Exception", MessageBoxButton.OK);
+                   // }
                 }
             }
 

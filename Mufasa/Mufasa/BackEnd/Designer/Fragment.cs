@@ -45,15 +45,40 @@ namespace Mufasa.BackEnd.Designer
         }
 
         /// <summary>
+        /// Copying Fragment constructor.
+        /// </summary>
+        public Fragment(Fragment frag)
+        {
+            this.Name = frag.Name;
+            this.Sequence = new Sequence(frag.Sequence);
+            this.Source = frag.Source;
+        }
+
+        /// <summary>
         /// Returns full fragment sequence as a string. Based on .NET Bio Programming Guide.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Sequence string.</returns>
         public string GetString()
         {
             char[] symbols = new char[this.Sequence.Count];
             for (long index = 0; index < this.Sequence.Count; index++)
             {
                 symbols[index] = (char)this.Sequence[index]; 
+            }
+            return new String(symbols); 
+        }
+
+        /// <summary>
+        /// Returns full fragment reverse complement sequence as a string.
+        /// </summary>
+        /// <returns>Reverse complement sequence string.</returns>
+        public string GetReverseComplementString()
+        {
+            ISequence revComp = this.Sequence.GetReverseComplementedSequence();
+            char[] symbols = new char[revComp.Count];
+            for (long index = 0; index < revComp.Count; index++)
+            {
+                symbols[index] = (char)revComp[index];
             }
             return new String(symbols); 
         }
