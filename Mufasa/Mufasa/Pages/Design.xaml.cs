@@ -127,8 +127,8 @@ namespace Mufasa.Pages
         {
             this.saveOverlapsDialog = new Microsoft.Win32.SaveFileDialog();
             this.saveOverlapsDialog.FileName = ""; // Default file name
-            this.saveOverlapsDialog.DefaultExt = ".txt"; // Default file extension
-            this.saveOverlapsDialog.Filter = "Text files| *.txt|All files|*.*"; // Filter files by extension
+            this.saveOverlapsDialog.DefaultExt = ".csv"; // Default file extension
+            this.saveOverlapsDialog.Filter = "CSV| *.csv|Text files| *.txt|All files|*.*"; // Filter files by extension
 
             this.saveOverlapsDialog.Title = "Save overlaps...";
 

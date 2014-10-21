@@ -69,7 +69,7 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="minLen">Minimum overlap length.</param>
         private void Init(ObservableCollection<Fragment> fragList, int minLen = 20)
         {
-            this.Overlaps = new Dictionary<string, string>();
+            this.Overlaps = new List<Overlap>();
             
             //forward
             String seq5 = "";
@@ -89,7 +89,7 @@ namespace Mufasa.BackEnd.Designer
                 gene.StandardName = fragList[i].Name;
                 featList.Add(gene);
                 seq5 += seq3;
-                Overlaps.Add(fragList[i].Name + "_fwd", overlap);                     
+                Overlaps.Add(new Overlap(fragList[i].Name + "_fwd", new Sequence(Alphabets.DNA, overlap)));                     
             }
 
             this.Sequence = new Sequence(Alphabets.DNA, seq5);
@@ -122,7 +122,7 @@ namespace Mufasa.BackEnd.Designer
                 int len5 = Math.Min(minLen, seq5.Length);
                 overlap = seq3.Substring(seq3.Length - len3, len3) + seq5.Substring(0, len5);
                 seq3 += seq5;
-                Overlaps.Add(fragList[i].Name + "_rev", overlap);
+                Overlaps.Add(new Overlap(fragList[i].Name + "_rev", new Sequence(Alphabets.DNA, overlap)));
             }
 
 
@@ -134,7 +134,7 @@ namespace Mufasa.BackEnd.Designer
         /// <value>
         /// Generated overlaps collection.
         /// </value>
-        public Dictionary<String, String> Overlaps { get; set; }
+        public List<Overlap> Overlaps { get; set; }
 
 
         /// <summary>

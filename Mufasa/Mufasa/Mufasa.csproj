@@ -60,7 +60,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Bio, Version=1.1.4948.24595, Culture=neutral, PublicKeyToken=13335e9abfbf69d0, processorArchitecture=MSIL">
@@ -108,6 +108,7 @@
     </Page>
     <Compile Include="BackEnd\Designer\Construct.cs" />
     <Compile Include="BackEnd\Designer\Designer.cs" />
+    <Compile Include="BackEnd\Designer\Overlap.cs" />
     <Compile Include="BackEnd\Exceptions\FragmentNamingException.cs" />
     <Compile Include="BackEnd\Designer\Fragment.cs" />
     <Compile Include="BackEnd\Exceptions\SequenceCountException.cs" />
