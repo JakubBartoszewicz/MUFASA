@@ -39,7 +39,7 @@
 
                 </ListView>
                 <Button x:Name="saveButton" Content="Save as..." HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" Width="137" ToolTip="Save your construct project." Height="26" Grid.Column="0" Grid.Row="4" Click="saveButton_Click"/>
-                <Button x:Name="makeButton" Content="Assemble" HorizontalAlignment="Left" Margin="20,64,20,20" VerticalAlignment="Top" Width="137" ToolTip="Assemble your construct." Height="26" Grid.Column="0" Grid.Row="4" Click="makeButton_Click"/>
+                <Button x:Name="assembleButton" Content="Assemble" HorizontalAlignment="Left" Margin="20,64,20,20" VerticalAlignment="Top" Width="137" ToolTip="Assemble your construct." Height="26" Grid.Column="0" Grid.Row="4" Click="assembleButton_Click"/>
                 <Button x:Name="overButton" Content="Save overlaps..." HorizontalAlignment="Left" Margin="20,108,20,20" VerticalAlignment="Top" Width="137" ToolTip="Save your overlaps." Height="26" Grid.Column="0" Grid.Row="4" Click="overButton_Click"/>
 
                 <Button x:Name="deleteConstructionFragmentButton" Content="&gt;&gt;;" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,20,20,20"  Width="50" ToolTip="Delete selected fragments." Height="26" Grid.Column="1" Grid.Row="3" Click="deleteConstructionFragmentButton_Click" RenderTransformOrigin="0.5,0.5">

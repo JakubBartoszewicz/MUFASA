@@ -19,30 +19,11 @@ namespace Mufasa.BackEnd.Designer
         /// <summary>
         /// Construct constructor.
         /// </summary>
-        /// <param name="source">Filename or URL.</param>
-        /// <param name="name">Construct name.</param>
-        public Construct(String source, String name, ISequence sequence) : base(source,name,sequence)
-        {
-            
-        }
-
-        /// <summary>
-        /// Construct constructor.
-        /// </summary>
-        public Construct()
-            : base()
-        {
-
-        }
-
-        /// <summary>
-        /// Construct constructor.
-        /// </summary>
         /// <param name="fragList">Fragment list.</param>
-        public Construct(ObservableCollection<Fragment> fragList)
+        public Construct(ObservableCollection<Fragment> fragList, DesignerSettings settings)
             : base()
         {
-            Init(fragList);
+            Init(fragList, settings);
         }
 
         /// <summary>
@@ -50,7 +31,7 @@ namespace Mufasa.BackEnd.Designer
         /// </summary>
         /// <param name="fragDict">Fragment Dictionary.</param>
         /// <param name="nameList">Fragment names. Dictionary keys.</param>
-        public Construct(ObservableCollection<String> nameList, Dictionary<String, Fragment> fragDict)
+        public Construct(ObservableCollection<String> nameList, Dictionary<String, Fragment> fragDict, DesignerSettings settings)
             : base()
         {
             ObservableCollection<Fragment > fragList = new ObservableCollection<Fragment>();
@@ -58,38 +39,50 @@ namespace Mufasa.BackEnd.Designer
             {
                 fragList.Add(fragDict[name]);
             }
-            Init(fragList);
+            Init(fragList, settings);
         }
 
+        /// <value>
+        /// Designer settings.
+        /// </value>
+        public DesignerSettings Settings { get; set; }
 
         /// <summary>
         /// Construct initialization.
         /// </summary>
         /// <param name="fragList">Fragment list.</param>
-        /// <param name="minLen">Minimum overlap length.</param>
-        private void Init(ObservableCollection<Fragment> fragList, int minLen = 20)
+        /// <param name="maxOverlapLen">Minimum overlap length.</param>
+        private void Init(ObservableCollection<Fragment> fragList, DesignerSettings settings)
         {
             this.Overlaps = new List<Overlap>();
-            
+            this.Settings = settings;
             //forward
             String seq5 = "";
             String seq3 = "";
-            String overlap = "";
             String name = "";
             List<MiscFeature> featList = new List<MiscFeature>();
             for (int i = 0; i < fragList.Count; i++)
             {
                 name += fragList[i].Name;
                 seq3 = fragList[i].GetString();
-                int len5 = Math.Min(minLen, seq5.Length);
-                int len3 = Math.Min(minLen, seq3.Length);
-                overlap = seq5.Substring(seq5.Length - len5, len5) + seq3.Substring(0, len3);
+                int len5 = Math.Min(settings.MaxOverlapLen, seq5.Length);
+                int len3 = Math.Min(settings.MaxGeneSpecificLen, seq3.Length);
+                String overlapping = seq5.Substring(seq5.Length - len5, len5);
+                String geneSpecific = seq3.Substring(0, len3);
                 String loc = (seq5.Length + 1).ToString() + ".." + (seq5.Length + seq3.Length).ToString();
                 MiscFeature gene = new MiscFeature(loc);
                 gene.StandardName = fragList[i].Name;
                 featList.Add(gene);
                 seq5 += seq3;
-                Overlaps.Add(new Overlap(fragList[i].Name + "_fwd", new Sequence(Alphabets.DNA, overlap)));                     
+                if (i == 0)
+                {
+                    Overlaps.Add(new Overlap(fragList[i].Name + "_fwd", new Sequence(Alphabets.DNA, geneSpecific)));
+                }
+                else
+                {
+
+                    Overlaps.Add(new Overlap(fragList[i].Name + "_fwd", new Sequence(Alphabets.DNA, overlapping), new Sequence(Alphabets.DNA, geneSpecific)));
+                }                 
             }
 
             this.Sequence = new Sequence(Alphabets.DNA, seq5);
@@ -114,21 +107,25 @@ namespace Mufasa.BackEnd.Designer
             fragList.RemoveAt(0);
             seq5 = "";
             seq3 = "";
-            overlap = "";
             for (int i = fragList.Count-1; i >= 0; i--)
             {
                 seq5 = fragList[i].GetReverseComplementString();
-                int len3 = Math.Min(minLen, seq3.Length);
-                int len5 = Math.Min(minLen, seq5.Length);
-                overlap = seq3.Substring(seq3.Length - len3, len3) + seq5.Substring(0, len5);
+                int len3 = Math.Min(settings.MaxOverlapLen, seq3.Length);
+                int len5 = Math.Min(settings.MaxGeneSpecificLen, seq5.Length);
+                String overlapping = seq3.Substring(seq3.Length - len3, len3);
+                String geneSpecific = seq5.Substring(0, len5);
                 seq3 += seq5;
-                Overlaps.Add(new Overlap(fragList[i].Name + "_rev", new Sequence(Alphabets.DNA, overlap)));
+                if (i == fragList.Count - 1)
+                {
+                    Overlaps.Add(new Overlap(fragList[i].Name + "_rev", new Sequence(Alphabets.DNA, geneSpecific)));
+                }
+                else
+                {
+
+                    Overlaps.Add(new Overlap(fragList[i].Name + "_rev", new Sequence(Alphabets.DNA, overlapping), new Sequence(Alphabets.DNA, geneSpecific)));
+                }
             }
-
-
-
-
-
+            TermoOptimizeOverlaps();
         }
 
         /// <value>
@@ -146,6 +143,33 @@ namespace Mufasa.BackEnd.Designer
             ISequenceFormatter formatter = SequenceFormatters.FindFormatterByFileName(path);
             formatter.Write(this.Sequence);
             formatter.Close();
+        }
+
+        /// <summary>
+        /// Overlap temperature optimization.
+        /// </summary>
+        private void TermoOptimizeOverlaps()
+        {
+            byte end = 255;
+            for (int i = 0; i < this.Overlaps.Count; i++)
+            {
+                byte item = 0;
+                bool tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetOverlapTm);
+                while ((item != end) && tmTooHigh)
+                {
+                    item = this.Overlaps[i].Dequeue(Settings.MinOverlapLen);
+                    tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetOverlapTm);
+                }
+
+                item = 0;
+                tmTooHigh = (this.Overlaps[i].PrimerTemperature > this.Settings.TargetPrimerTm);
+                while ((item != end) && tmTooHigh)
+                {
+                    // not vector primers
+                    item = this.Overlaps[i].Pop(Settings.MinGeneSpecificLen);
+                    tmTooHigh = (this.Overlaps[i].PrimerTemperature > this.Settings.TargetPrimerTm);
+                }
+            }
         }
     }
 }

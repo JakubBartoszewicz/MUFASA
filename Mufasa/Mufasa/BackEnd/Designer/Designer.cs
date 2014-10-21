@@ -24,24 +24,30 @@ namespace Mufasa.BackEnd.Designer
         /// </summary>
         public Designer()
         {
-            FragmentDict = new Dictionary<String, Fragment>();
-            ConstructionList = new ObservableCollection<String>();
+            this.FragmentDict = new Dictionary<String, Fragment>();
+            this.ConstructionList = new ObservableCollection<String>();
+            this.Settings = new DesignerSettings();
         }
 
-        /// <summary>
+        /// <value>
         /// Fragment file parser
-        /// </summary>
+        /// </value>
         private ISequenceParser parser;
 
-        /// <summary>
+        /// <value>
         /// Dictionary of pooled fragments.
-        /// </summary>
+        /// </value>
         public Dictionary<String,Fragment> FragmentDict { get; set; }
 
-        /// <summary>
+        /// <value>
         /// Dictionary of construction fragments.
-        /// </summary>
+        /// </value>
         public ObservableCollection<String> ConstructionList { get; set; }
+
+        /// <value>
+        /// Designer settings.
+        /// </value>
+        public DesignerSettings Settings { get; set; }
 
         /// <summary>
         /// Adds Fragment <paramref name="name"/> if valid.

@@ -32,8 +32,6 @@ namespace Mufasa.Pages
         public Design()
         {
 
-            designer = new Designer();
-
             InitializeComponent();
 
             designer = new Designer();
@@ -398,6 +396,11 @@ namespace Mufasa.Pages
             constructionListBox.Items.Refresh();
         }
 
+        /// <summary>
+        /// PreviewMouseMove event handler for construction list drag&drop.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void s_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             if (sender is ListBoxItem)
@@ -421,6 +424,11 @@ namespace Mufasa.Pages
             }
         }
 
+        /// <summary>
+        /// DragOver event handler for construction list drag&drop.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void s_DragOver(object sender, DragEventArgs e)
         {
             if (sender is ListBoxItem)
@@ -439,6 +447,11 @@ namespace Mufasa.Pages
             }
         }
 
+        /// <summary>
+        /// Drop event handler for construction list drag&drop.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void constructionListBox_Drop(object sender, DragEventArgs e)
         {
             String droppedData = e.Data.GetData(typeof(String)) as String;
@@ -463,13 +476,23 @@ namespace Mufasa.Pages
             }
         }
 
-        private void makeButton_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Assemble button click event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void assembleButton_Click(object sender, RoutedEventArgs e)
         {
-            construct = new Construct(designer.ConstructionList, designer.FragmentDict);
+            construct = new Construct(designer.ConstructionList, designer.FragmentDict, designer.Settings);
             overlapListView.ItemsSource = construct.Overlaps;
             overlapListView.Items.Refresh();
         }
 
+        /// <summary>
+        /// Save overlaps button click event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void overButton_Click(object sender, RoutedEventArgs e)
         {
             InitializeSaveOverlapsDialog();
@@ -485,7 +508,7 @@ namespace Mufasa.Pages
                 {
                     using (StreamWriter sw = new StreamWriter(saveOverlapsDialog.FileName))
                     {
-                        foreach (System.Collections.Generic.KeyValuePair<String,String> item in overlapListView.Items)
+                        foreach (Overlap item in overlapListView.Items)
                         {
                             sw.WriteLine(item.ToString());
 
