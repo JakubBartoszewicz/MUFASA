@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,6 +20,7 @@ using System.Xml;
 using System.Xml.XPath;
 using System.IO;
 using FirstFloor.ModernUI.Presentation;
+using System.Text;
 
 namespace Mufasa.Pages
 {
@@ -343,14 +343,14 @@ namespace Mufasa.Pages
                 // Process open file dialog box results 
                 if (openResult == true)
                 {
-                    //try
-                   // {
+                    try
+                    {
                         construct.SaveAsBio(saveConstructFileDialog.FileName);
-                    //}
-                  //  catch(Exception ex)
-                   // {
-                  //      MessageBoxResult result = ModernDialog.ShowMessage(ex.Message, "Exception", MessageBoxButton.OK);
-                   // }
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBoxResult result = ModernDialog.ShowMessage(ex.Message, "Exception", MessageBoxButton.OK);
+                    }
                 }
             }
 
@@ -506,13 +506,21 @@ namespace Mufasa.Pages
                 // Process open file dialog box results 
                 if (openResult == true)
                 {
-                    using (StreamWriter sw = new StreamWriter(saveOverlapsDialog.FileName))
+                    try
                     {
-                        foreach (Overlap item in overlapListView.Items)
+                        using (StreamWriter sw = new StreamWriter(saveOverlapsDialog.FileName))
                         {
-                            sw.WriteLine(item.ToString());
+                            sw.WriteLine("Name;Sequence;3'Tm;5'Tm");
+                            foreach (Overlap item in overlapListView.Items)
+                            {
+                                sw.WriteLine(item.ToString());
 
+                            }
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        ModernDialog.ShowMessage(ex.Message, "Warning: ", MessageBoxButton.OK);
                     }
                 }
             }
