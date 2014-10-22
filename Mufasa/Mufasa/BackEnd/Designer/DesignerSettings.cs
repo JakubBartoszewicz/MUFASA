@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Mufasa.BackEnd.Designer
 {
+    /// <remarks>
+    /// Design settings class.
+    /// </remarks>
     class DesignerSettings
     {
         /// <value>
@@ -48,13 +51,13 @@ namespace Mufasa.BackEnd.Designer
         /// </summary>
         public DesignerSettings()
         {
-            MinGeneSpecificLen = 18;
-            MaxGeneSpecificLen = 25;
-            MinOverlapLen = 20;
-            MaxOverlapLen = 30;
-            TargetOverlapTm = 60;
-            TargetPrimerTm = 60;
-            ReactionVolume = 50;
+            this.MinGeneSpecificLen = 18;
+            this.MaxGeneSpecificLen = 25;
+            this.MinOverlapLen = 20;
+            this.MaxOverlapLen = 30;
+            this.TargetOverlapTm = 60;
+            this.TargetPrimerTm = 60;
+            this.ReactionVolume = 50;
         }
 
     }

@@ -94,6 +94,9 @@ namespace Mufasa.BackEnd.Designer
             return result;
         }
 
+        /// <value>
+        /// Sequence string.
+        /// </value>
         public String SequenceString
         {
             get { return this.Sequence.ToString(); }

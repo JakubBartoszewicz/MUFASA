@@ -31,6 +31,9 @@ namespace Mufasa.Pages
             this.Model = m;
         }
 
+        /// <value>
+        /// Fragment model.
+        /// </value>
         public Fragment Model { get; private set; }
 
         /// <summary>

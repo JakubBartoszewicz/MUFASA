@@ -10,9 +10,19 @@ using System.Windows.Data;
 
 namespace Mufasa.Pages
 {
-
+    /// <remarks>
+    /// Volume converter class. Computes Reaction volumes from fragment lengths and concentrations.
+    /// </remarks>
     class VolumeConverter : IMultiValueConverter
     {
+        /// <summary>
+        /// Valume convertion.
+        /// </summary>
+        /// <param name="values">Values produced by the FragmentViewModel.</param>
+        /// <param name="targetType">Target type.</param>
+        /// <param name="parameter">Parameter.</param>
+        /// <param name="culture">Culture info.</param>
+        /// <returns></returns>
         public object Convert(object[] values, Type targetType,
                     object parameter, CultureInfo culture)
         {
@@ -32,6 +42,14 @@ namespace Mufasa.Pages
             return Math.Round(volume,1).ToString();
         }
 
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="value">Not implemented.</param>
+        /// <param name="targetTypes">Not implemented.</param>
+        /// <param name="parameter">Not implemented.</param>
+        /// <param name="culture">Not implemented.</param>
+        /// <returns></returns>
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new Exception("The method or operation is not implemented.");
