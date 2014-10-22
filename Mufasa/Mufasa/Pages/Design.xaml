@@ -34,9 +34,50 @@
                 <ListView x:Name="constructionListBox" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" SelectionMode="Extended" IsSynchronizedWithCurrentItem="True" ToolTip="Fragments of your construct." Grid.Column="1" Grid.Row="4" MinHeight="200" MinWidth="177" BorderThickness="1" ClipToBounds="True">
                 
                 </ListView>
-                <ListView x:Name="overlapListView" Grid.Column="2" Margin="20,0,0,0" FontFamily="Courier New" FontSize="12"   ToolTip="Generated overlaps." Grid.Row="4" ClipToBounds="True" MinHeight="200">
-
-                </ListView>
+                <DataGrid x:Name="overlapDataGrid" Grid.Column="2" Margin="20,0,0,0" FontFamily="Courier New" FontSize="12"   ToolTip="Generated overlaps." Grid.Row="4" ClipToBounds="True" MinHeight="200" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False" CanUserResizeColumns="False">
+                    <DataGrid.RowHeaderStyle>
+                        <Style TargetType="DataGridRowHeader">
+                            <Setter Property="Content" Value="{Binding Name}" />
+                            <Setter Property="Width" Value="150"/>
+                            <Setter Property="Height" Value="25"/>
+                            <Setter Property="Background" Value="#252525"/>
+                            <Setter Property="Foreground" Value="#F0A30A"/>
+                            <Setter Property="MaxWidth" Value="150px"/>
+                            <Setter Property="MinWidth" Value="50px"/>
+                        </Style>
+                    </DataGrid.RowHeaderStyle>
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Height" Value="25"/>
+                            <Setter Property="Background" Value="#333333"/>
+                            <Setter Property="Foreground" Value="#F0A30A"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.Columns>                        
+                        <DataGridTextColumn Header="Sequence" Width ="400" Binding="{Binding Path=SequenceString, Mode=OneWay}" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="3'Tm" Width ="75" Binding="{Binding Path=Temperature, Mode=OneWay}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>                            
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="5'Tm" Width ="75" Binding="{Binding Path=PrimerTemperature, Mode=OneWay}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
                 <Button x:Name="saveButton" Content="Save project as..." HorizontalAlignment="Left" Margin="20,64,20,20" VerticalAlignment="Top" Width="137" ToolTip="Save your construct project." Height="26" Grid.Column="0" Grid.Row="4" Click="saveButton_Click"/>
                 <Button x:Name="assembleButton" Content="Assemble" HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" Width="137" ToolTip="Assemble your construct." Height="26" Grid.Column="0" Grid.Row="4" Click="assembleButton_Click"/>
                 <Button x:Name="overButton" Content="Save overlaps..." HorizontalAlignment="Left" Margin="20,108,20,20" VerticalAlignment="Top" Width="137" ToolTip="Save your overlaps." Height="26" Grid.Column="0" Grid.Row="4" Click="overButton_Click"/>

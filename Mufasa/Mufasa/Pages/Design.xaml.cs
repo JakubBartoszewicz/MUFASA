@@ -492,13 +492,14 @@ namespace Mufasa.Pages
             try
             {
                 construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
+                overlapDataGrid.ItemsSource = construct.Overlaps;
+                overlapDataGrid.Items.Refresh();
             }
             catch(Exception)
             {
                 ModernDialog.ShowMessage("Unable to assemble.", "Warning: ", MessageBoxButton.OK);
             }
-            overlapListView.ItemsSource = construct.Overlaps;
-            overlapListView.Items.Refresh();
+            
         }
 
         /// <summary>
@@ -524,7 +525,7 @@ namespace Mufasa.Pages
                         using (StreamWriter sw = new StreamWriter(saveOverlapsDialog.FileName))
                         {
                             sw.WriteLine("Name;Sequence;3'Tm;5'Tm");
-                            foreach (Overlap item in overlapListView.Items)
+                            foreach (Overlap item in overlapDataGrid.Items)
                             {
                                 sw.WriteLine(item.ToString());
 

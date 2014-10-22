@@ -94,6 +94,12 @@ namespace Mufasa.BackEnd.Designer
             return result;
         }
 
+        public String SequenceString
+        {
+            get { return this.Sequence.ToString(); }
+        }
+
+
         /// <summary>
         /// Compute overlap's simple-style melting temperature.
         /// </summary>
