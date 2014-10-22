@@ -7,14 +7,34 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:local="clr-namespace:Mufasa.Pages"
              mc:Ignorable="d" 
-             d:DesignHeight="768" d:DesignWidth="800">
+             d:DesignHeight="768" d:DesignWidth="800" IsVisibleChanged="UserControl_IsVisibleChanged" >
     <UserControl.Resources>
         <local:VolumeConverter x:Key="VolumeConverter"/>
     </UserControl.Resources>
     <Grid Style="{StaticResource ContentRoot}">
         <ScrollViewer>
             <Grid MinWidth="200">
-                <DataGrid x:Name="concentrationsDataGrid" ItemsSource="{Binding Path=Fragments}" Width="600" Height ="auto" HorizontalAlignment="Left" Margin="30, 40, 0, 0" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="False" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label x:Name="bufferLabel" Content="Buffer 5x:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="0"/>
+                <Label x:Name="waterLabel" Content="Water:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="1"/>
+                <Label x:Name="dNTPLabel" Content="dNTP:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="2"/>
+                <Label x:Name="polyLabel" Content="Polymerase:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="3"/>
+                <TextBlock x:Name="bufferTextBlock" Text="{Binding}" Margin="480, 0, 20, 20" Grid.Column="0" Grid.Row="0"/>
+                <TextBlock x:Name="waterTextBlock" Text="{Binding}" Margin="480, 0, 20, 20" Grid.Column="0" Grid.Row="1"/>
+                <TextBlock x:Name="dNTPTextBlock" Text="{Binding}" Margin="480, 0, 20, 20" Grid.Column="0" Grid.Row="2"/>
+                <TextBlock x:Name="polyTextBlock" Text="{Binding}" Margin="480, 0, 20, 20" Grid.Column="0" Grid.Row="3"/>
+                <DataGrid x:Name="concentrationsDataGrid" ItemsSource="{Binding Path=Fragments}" Width="600" Height ="auto"  VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Margin="30, 40, 20, 20" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="False" Grid.Column="0" Grid.Row="4">
                     <DataGrid.RowHeaderStyle>
                         <Style TargetType="DataGridRowHeader">
                             <Setter Property="Content" Value="{Binding Name}" />

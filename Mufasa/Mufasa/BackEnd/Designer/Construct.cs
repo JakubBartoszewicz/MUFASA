@@ -35,9 +35,14 @@ namespace Mufasa.BackEnd.Designer
             : base()
         {
             ObservableCollection<Fragment > fragList = new ObservableCollection<Fragment>();
-            foreach (String name in nameList)
+            for (int i = 0; i < nameList.Count; i++ )
             {
-                fragList.Add(fragDict[name]);
+                Fragment f = fragDict[nameList[i]];
+                if (i==0)
+                {
+                    f.IsVector = true;
+                }
+                fragList.Add(f);
             }
             Init(fragList, settings);
         }

@@ -25,6 +25,10 @@ namespace Mufasa.Pages
                 return null;
 
             var volume = item.Length * 0.1 / item.Concentration;
+            if (item.IsVector)
+            {
+                volume /= 2;
+            }
             return Math.Round(volume,1).ToString();
         }
 

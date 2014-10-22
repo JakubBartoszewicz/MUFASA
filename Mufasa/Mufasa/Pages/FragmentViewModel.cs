@@ -14,11 +14,18 @@ namespace Mufasa.Pages
     /// </summary>
     public class FragmentViewModel
     {
+        /// <summary>
+        /// FragmentViewModel constructor.
+        /// </summary>
         public FragmentViewModel()
         {
             this.Model = new Fragment();
         }
 
+        /// <summary>
+        /// FragmentViewModel constructor.
+        /// </summary>
+        /// <param name="m">Fragment model.</param>
         public FragmentViewModel(Fragment m)
         {
             this.Model = m;
@@ -26,6 +33,9 @@ namespace Mufasa.Pages
 
         public Fragment Model { get; private set; }
 
+        /// <summary>
+        /// Concentration.
+        /// </summary>
         public double Concentration
         {
             get { return this.Model.Concentration; }
@@ -36,6 +46,9 @@ namespace Mufasa.Pages
             }
         }
 
+        /// <summary>
+        /// Volume.
+        /// </summary>
         public double Volume
         {
             get { return this.Model.Volume; }
@@ -46,6 +59,22 @@ namespace Mufasa.Pages
             }
         }
 
+        /// <summary>
+        /// True if a vector fragment.
+        /// </summary>
+        public bool IsVector
+        {
+            get { return this.Model.IsVector; }
+            set
+            {
+                this.Model.IsVector = value;
+                OnPropertyChanged("IsVector");
+            }
+        }
+
+        /// <summary>
+        /// Fragment length.
+        /// </summary>
         public long Length
         {
             get { return this.Model.Length; }
@@ -93,9 +122,15 @@ namespace Mufasa.Pages
             }
         }
 
-
+        /// <summary>
+        /// PropertyChanged event.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// PropertyChanged trigger.
+        /// </summary>
+        /// <param name="propertyName"></param>
         protected virtual void OnPropertyChanged(string propertyName)
         {
             if (this.PropertyChanged != null)

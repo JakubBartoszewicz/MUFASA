@@ -32,6 +32,12 @@ namespace Mufasa.BackEnd.Designer
         /// Length.
         /// </summary>
         public long Length { get; set; }
+
+        /// <summary>
+        /// True if this is a vector sequence.
+        /// </summary>
+        public bool IsVector { get; set; }
+
         /// <summary>
         /// Reaction volume.
         /// </summary>
@@ -41,13 +47,13 @@ namespace Mufasa.BackEnd.Designer
         /// </summary>
         /// <param name="source">Filename or URL.</param>
         /// <param name="name">Fragment name.</param>
-        public Fragment(String source, String name, ISequence sequence)
+        public Fragment(String source, String name, ISequence sequence, bool vector = false)
         {
-            this.Volume = 666;
             this.Source = source;
             this.Name = name;
             this.Sequence = sequence;
             this.Length = sequence.Count;
+            this.IsVector = vector;
         }
 
         /// <summary>

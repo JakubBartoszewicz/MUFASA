@@ -54,6 +54,7 @@ namespace Mufasa.BackEnd.Designer
             MaxOverlapLen = 30;
             TargetOverlapTm = 60;
             TargetPrimerTm = 60;
+            ReactionVolume = 50;
         }
 
     }
