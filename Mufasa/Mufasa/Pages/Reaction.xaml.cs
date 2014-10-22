@@ -30,7 +30,7 @@ namespace Mufasa.Pages
             InitializeComponent();
             if (Design.Designer.ConstructionList.Count() != 0)
             {
-                fragmentsListBoxInitialize();
+                InitializeFragmentsListBox();
             }
         }
 
@@ -50,7 +50,7 @@ namespace Mufasa.Pages
         /// <summary>
         /// Reaction list box initialization.
         /// </summary>
-        private void fragmentsListBoxInitialize()
+        private void InitializeFragmentsListBox()
         {
             dNTP = (double)Design.Designer.Settings.ReactionVolume / 100.0;
             poly = (double)Design.Designer.Settings.ReactionVolume / 50.0;
@@ -141,9 +141,7 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            this.fragmentsListBoxInitialize();
-        }    
-        
-   
+            this.InitializeFragmentsListBox();
+        }           
     }
 }

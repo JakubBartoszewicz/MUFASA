@@ -11,6 +11,7 @@ using Bio;
 using FirstFloor.ModernUI.Windows.Controls;
 using System.Windows;
 using System.Net;
+using Bio.IO.GenBank;
 
 namespace Mufasa.BackEnd.Designer
 {
@@ -166,6 +167,25 @@ namespace Mufasa.BackEnd.Designer
 
             this.ConstructionList.Add(fragmentName);
         }
+
+        public void openProject(String file)
+        {
+            Sequence sequence = null;
+
+            parser = SequenceParsers.GenBank;
+            parser.Open(file);
+            sequence = (Sequence)parser.Parse().ToList()[0];
+            parser.Close();
+
+            Fragment project = new Fragment(file, "project", sequence);
+            GenBankMetadata meta = sequence.Metadata["GenBank"] as GenBankMetadata;
+            FragmentDict = new Dictionary<string, Fragment>();
+            foreach (var feat in meta.Features.MiscFeatures)
+            {
+                String subseq = project.GetString().Substring(feat.Location.LocationStart-1, feat.Location.LocationEnd - feat.Location.LocationStart + 1);
+                FragmentDict.Add(feat.StandardName, new Fragment(file, feat.StandardName, new Sequence(Alphabets.DNA, subseq)));
+            }
+        }        
     }
 }
 

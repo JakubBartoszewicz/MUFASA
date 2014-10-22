@@ -98,9 +98,6 @@ namespace Mufasa.BackEnd.Designer
             meta.Locus.Name = name;
             meta.Locus.Date = System.DateTime.Now;
             meta.Locus.SequenceLength = seq5.Length;
-            meta.Source = new SequenceSource();
-            meta.Source.Organism = new OrganismInfo();
-            meta.Source.Organism.Species = "synthetic";
             meta.Comments.Add("designed with mufasa");
             meta.Definition = "synthetic construct";
             meta.Features = new SequenceFeatures();

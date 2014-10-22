@@ -71,6 +71,12 @@ namespace Mufasa.Pages
         private Microsoft.Win32.OpenFileDialog openFragmentFileDialog;
 
         /// <summary>
+        /// Open fragment file dialog.
+        /// </summary>
+        private Microsoft.Win32.OpenFileDialog openProjectFileDialog;
+
+
+        /// <summary>
         /// Save fragment file dialog.
         /// </summary>
         private Microsoft.Win32.SaveFileDialog saveConstructFileDialog;
@@ -483,7 +489,14 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void assembleButton_Click(object sender, RoutedEventArgs e)
         {
-            construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
+            try
+            {
+                construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
+            }
+            catch(Exception)
+            {
+                ModernDialog.ShowMessage("Unable to assemble.", "Warning: ", MessageBoxButton.OK);
+            }
             overlapListView.ItemsSource = construct.Overlaps;
             overlapListView.Items.Refresh();
         }
@@ -523,6 +536,52 @@ namespace Mufasa.Pages
                         ModernDialog.ShowMessage(ex.Message, "Warning: ", MessageBoxButton.OK);
                     }
                 }
+            }
+        }
+
+
+        /// <summary>
+        /// OpenFragmentProjectDialog initialization.
+        /// </summary>
+        private void InitializeOpenProjectFileDialog()
+        {
+            this.openProjectFileDialog = new Microsoft.Win32.OpenFileDialog();
+            this.openProjectFileDialog.FileName = ""; // Default file name
+            this.openProjectFileDialog.DefaultExt = ".gb"; // Default file extension
+            this.openProjectFileDialog.Filter = "GenBank files|*.gb;*.gbk|All files|*.*"; // Filter files by extension
+            this.openProjectFileDialog.Multiselect = false;
+            this.openProjectFileDialog.Title = "Open project file...";
+
+        }
+
+        /// <summary>
+        /// openProjectButton event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void openProjectButton_Click(object sender, RoutedEventArgs e)
+        {
+            InitializeOpenProjectFileDialog();
+
+            // Show open file dialog box
+            Nullable<bool> openResult = openProjectFileDialog.ShowDialog();
+
+            // Process open file dialog box results 
+            if (openResult == true)
+            {
+
+                try
+                {
+                    Designer.openProject(openProjectFileDialog.FileName);
+
+                }
+                catch(Exception ex)
+                {
+                    ModernDialog.ShowMessage(ex.Message, "Warning: ", MessageBoxButton.OK);
+                }
+                fragmentListBox.ItemsSource = Designer.FragmentDict.Keys;
+                fragmentListBox.Items.Refresh();
+
             }
         }
     }

@@ -22,6 +22,6 @@
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="settings" Source="/Pages/SettingsPage.xaml" />
         <mui:Link DisplayName="about" Source="/Pages/Settings/About.xaml" />
-        <mui:Link DisplayName="help" Source="http://2014.igem.org/Team:PoznanSoft" />
+        <mui:Link DisplayName="help" Source="http://poznanbioinf.pl" />
     </mui:ModernWindow.TitleLinks>
 </mui:ModernWindow>
