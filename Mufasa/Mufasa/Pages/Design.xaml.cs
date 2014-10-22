@@ -32,9 +32,9 @@ namespace Mufasa.Pages
         public Design()
         {
 
-            InitializeComponent();
+            Designer = new Designer();
 
-            designer = new Designer();
+            InitializeComponent();
 
             
             Style itemContainerStyle = new Style(typeof(ListBoxItem), fragmentListBox.ItemContainerStyle);
@@ -83,7 +83,7 @@ namespace Mufasa.Pages
         /// <summary>
         /// Mufasa reaction designer object.
         /// </summary>
-        private Designer designer;
+        internal static Designer Designer {get; set;}
 
         /// <summary>
         /// Mufasa construct object.
@@ -165,7 +165,7 @@ namespace Mufasa.Pages
                             {
                                 try
                                 {
-                                    designer.AddBrickFromRegistry(url, oCurrentPart.SelectSingleNode("sequences").Value, bbInputTextBox.Text);
+                                    Designer.AddBrickFromRegistry(url, oCurrentPart.SelectSingleNode("sequences").Value, bbInputTextBox.Text);
                                 }
                                 catch (FragmentNamingException)
                                 {
@@ -174,7 +174,7 @@ namespace Mufasa.Pages
 
                             }
                             if (MessageBoxResult.No == result) { bbInputTextBox.Clear(); }
-                            fragmentListBox.ItemsSource = designer.FragmentDict.Keys;
+                            fragmentListBox.ItemsSource = Designer.FragmentDict.Keys;
                             fragmentListBox.Items.Refresh();
                         }
                     }
@@ -212,7 +212,7 @@ namespace Mufasa.Pages
                     String name = System.IO.Path.GetFileNameWithoutExtension(file);
                     try
                     {
-                        designer.AddFragment(file, name);
+                        Designer.AddFragment(file, name);
                     }
                     catch (FragmentNamingException fne)
                     {
@@ -235,7 +235,7 @@ namespace Mufasa.Pages
                     message.AppendLine(Environment.NewLine + "Please choose other names.");
                     ModernDialog.ShowMessage(message.ToString(), "warning", MessageBoxButton.OK);
                 }
-                fragmentListBox.ItemsSource = designer.FragmentDict.Keys;
+                fragmentListBox.ItemsSource = Designer.FragmentDict.Keys;
                 fragmentListBox.Items.Refresh();
 
             }
@@ -251,7 +251,7 @@ namespace Mufasa.Pages
         {
             if(fragmentListBox.SelectedItem!=null)
             { 
-                Fragment sel = designer.FragmentDict[fragmentListBox.SelectedItem.ToString()];
+                Fragment sel = Designer.FragmentDict[fragmentListBox.SelectedItem.ToString()];
                 fragmentSequenceTextBox.Text = sel.GetString();
             }
             else
@@ -282,9 +282,9 @@ namespace Mufasa.Pages
                 {
                     foreach (String name in fragmentListBox.SelectedItems)
                     {
-                        designer.FragmentDict.Remove(name);
+                        Designer.FragmentDict.Remove(name);
                     }
-                    fragmentListBox.ItemsSource = designer.FragmentDict.Keys;
+                    fragmentListBox.ItemsSource = Designer.FragmentDict.Keys;
                     fragmentListBox.Items.Refresh();
                 }
             }
@@ -320,9 +320,9 @@ namespace Mufasa.Pages
 
             foreach (String str in listItems )
             {
-                designer.ConstructionList.Remove(str);
+                Designer.ConstructionList.Remove(str);
             }
-            constructionListBox.ItemsSource = designer.ConstructionList;
+            constructionListBox.ItemsSource = Designer.ConstructionList;
             constructionListBox.Items.Refresh();
         }
 
@@ -369,7 +369,7 @@ namespace Mufasa.Pages
             {                
                 try
                 {
-                    designer.AddConstructionFragment(name);
+                    Designer.AddConstructionFragment(name);
                 }
                 catch (FragmentNamingException fne)
                 {
@@ -392,7 +392,7 @@ namespace Mufasa.Pages
                 message.AppendLine(Environment.NewLine + "Please choose other fragments.");
                 ModernDialog.ShowMessage(message.ToString(), "warning", MessageBoxButton.OK);
             }
-            constructionListBox.ItemsSource = designer.ConstructionList;
+            constructionListBox.ItemsSource = Designer.ConstructionList;
             constructionListBox.Items.Refresh();
         }
 
@@ -462,16 +462,16 @@ namespace Mufasa.Pages
 
             if (removedIdx < targetIdx)
             {
-                designer.ConstructionList.Insert(targetIdx + 1, droppedData);
-                designer.ConstructionList.RemoveAt(removedIdx);
+                Designer.ConstructionList.Insert(targetIdx + 1, droppedData);
+                Designer.ConstructionList.RemoveAt(removedIdx);
             }
             else
             {
                 int remIdx = removedIdx + 1;
-                if (designer.ConstructionList.Count + 1 > remIdx)
+                if (Designer.ConstructionList.Count + 1 > remIdx)
                 {
-                    designer.ConstructionList.Insert(targetIdx, droppedData);
-                    designer.ConstructionList.RemoveAt(remIdx);
+                    Designer.ConstructionList.Insert(targetIdx, droppedData);
+                    Designer.ConstructionList.RemoveAt(remIdx);
                 }
             }
         }
@@ -483,7 +483,7 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void assembleButton_Click(object sender, RoutedEventArgs e)
         {
-            construct = new Construct(designer.ConstructionList, designer.FragmentDict, designer.Settings);
+            construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
             overlapListView.ItemsSource = construct.Overlaps;
             overlapListView.Items.Refresh();
         }

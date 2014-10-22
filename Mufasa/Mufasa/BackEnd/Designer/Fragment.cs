@@ -10,7 +10,7 @@ namespace Mufasa.BackEnd.Designer
     /// <remarks>
     /// DNA fragment class.
     /// </remarks>
-    class Fragment
+    public class Fragment
     {
         /// <value>
         /// Path to the file or url containing the fragment.
@@ -24,7 +24,18 @@ namespace Mufasa.BackEnd.Designer
         /// Fragment sequence.
         /// </summary>
         public ISequence Sequence { get; set; }
-
+        /// <summary>
+        /// Concentration.
+        /// </summary>
+        public double Concentration { get; set; }
+        /// <summary>
+        /// Length.
+        /// </summary>
+        public long Length { get; set; }
+        /// <summary>
+        /// Reaction volume.
+        /// </summary>
+        public double Volume { get; set; }  
         /// <summary>
         /// Fragment constructor.
         /// </summary>
@@ -32,9 +43,11 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="name">Fragment name.</param>
         public Fragment(String source, String name, ISequence sequence)
         {
+            this.Volume = 666;
             this.Source = source;
             this.Name = name;
             this.Sequence = sequence;
+            this.Length = sequence.Count;
         }
 
         /// <summary>
