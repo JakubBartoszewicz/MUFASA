@@ -21,8 +21,8 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="geneSpecific">Gene specific sequence.</param>
         public Overlap(String name, ISequence overlapping, ISequence geneSpecific)
         {
-            this.GeneSpecific = geneSpecific;
-            this.Overlapping = overlapping;
+            this.Seq_3 = geneSpecific;
+            this.Seq_5 = overlapping;
             this.Name = name;
             this.Sequence = new Sequence(Alphabets.DNA, overlapping.ToString() + geneSpecific.ToString());
             this.TempInit();
@@ -35,8 +35,8 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="primer">Primer sequence.</param>
         public Overlap(String name, ISequence primer)
         {
-            this.GeneSpecific = primer;
-            this.Overlapping = new Sequence(Alphabets.DNA, "");
+            this.Seq_3 = primer;
+            this.Seq_5 = new Sequence(Alphabets.DNA, "");
             this.Name = name;
             this.Sequence = new Sequence(Alphabets.DNA, primer.ToString());
             this.TempInit();
@@ -53,8 +53,8 @@ namespace Mufasa.BackEnd.Designer
             this.SimpleT.Add(Alphabets.DNA.G, 4);
             this.SimpleT.Add(Alphabets.DNA.C, 4);
             this.SimpleT.Add(Alphabets.DNA.Gap, 0);
-            this.Temperature = GetSimpleMeltingTemperature(Overlapping);
-            this.PrimerTemperature = GetSimpleMeltingTemperature(GeneSpecific);
+            this.Temperature_5 = GetSimpleMeltingTemperature(Seq_5);
+            this.Temperature_3 = GetSimpleMeltingTemperature(Seq_3);
         }
 
 
@@ -64,24 +64,25 @@ namespace Mufasa.BackEnd.Designer
         private Dictionary <byte,int> SimpleT;
 
         /// <value>
-        /// Overlap's temperature.
+        /// 3' ("gene-specific") subsequence melting temperature.
         /// </value>
-        public int Temperature { get; set; }
+        public int Temperature_3 { get; set; }
 
         /// <value>
-        /// Primer's temperature.
+        /// 5' ("overhang") subsequence melting temperature.
         /// </value>
-        public int PrimerTemperature { get; set; }
+        public int Temperature_5 { get; set; }
+
 
         /// <value>
-        /// Gene specific subsequence.
+        /// 3' ("gene-specific") subsequence.
         /// </value>
-        public ISequence GeneSpecific { get; set; }
+        public ISequence Seq_3 { get; set; }
 
         /// <value>
-        /// Overlapping subsequence.
+        /// 5' ("overhang") subsequence.
         /// </value>
-        public ISequence Overlapping { get; set; }
+        public ISequence Seq_5 { get; set; }
 
         /// <summary>
         /// Prints the overlap in a human-readable format.
@@ -90,7 +91,7 @@ namespace Mufasa.BackEnd.Designer
         public override string ToString()
         {
             String sep = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-            String result = this.Name + sep + this.Sequence + sep + this.Temperature + sep + this.PrimerTemperature;
+            String result = this.Name + sep + this.Sequence + sep + this.Temperature_5 + sep + this.Temperature_3;
             return result;
         }
 
@@ -129,10 +130,10 @@ namespace Mufasa.BackEnd.Designer
         {
             if (IsDequeAllowed(minLen))
             {
-                byte item = this.Overlapping[this.Overlapping.Count - 1];
-                this.Overlapping = this.Overlapping.GetSubSequence(1, this.Overlapping.Count - 1);
-                this.Sequence = new Sequence(Alphabets.DNA, Overlapping.ToString() + GeneSpecific.ToString());
-                this.Temperature = GetSimpleMeltingTemperature(Overlapping);
+                byte item = this.Seq_5[this.Seq_5.Count - 1];
+                this.Seq_5 = this.Seq_5.GetSubSequence(1, this.Seq_5.Count - 1);
+                this.Sequence = new Sequence(Alphabets.DNA, Seq_5.ToString() + Seq_3.ToString());
+                this.Temperature_5 = GetSimpleMeltingTemperature(Seq_5);
                 return item;
             }
             else
@@ -150,10 +151,10 @@ namespace Mufasa.BackEnd.Designer
         {
             if (IsPopAllowed(minLen))
             {
-                byte item = this.GeneSpecific[0];
-                this.GeneSpecific = this.GeneSpecific.GetSubSequence(0, this.GeneSpecific.Count - 1);
-                this.Sequence = new Sequence(Alphabets.DNA, Overlapping.ToString() + GeneSpecific.ToString());
-                this.PrimerTemperature = GetSimpleMeltingTemperature(GeneSpecific);
+                byte item = this.Seq_3[0];
+                this.Seq_3 = this.Seq_3.GetSubSequence(0, this.Seq_3.Count - 1);
+                this.Sequence = new Sequence(Alphabets.DNA, Seq_5.ToString() + Seq_3.ToString());
+                this.Temperature_3 = GetSimpleMeltingTemperature(Seq_3);
                 return item;
             }
             else
@@ -169,7 +170,7 @@ namespace Mufasa.BackEnd.Designer
         private bool IsPopAllowed(int minLen)
         {
             //To modify.
-            if (this.GeneSpecific.Count > minLen )
+            if (this.Seq_3.Count > minLen )
             {
                 return true;
             }
@@ -187,7 +188,7 @@ namespace Mufasa.BackEnd.Designer
         private bool IsDequeAllowed(int minLen)
         {
             //To modify.
-            if (this.Overlapping.Count > minLen)
+            if (this.Seq_5.Count > minLen)
             {
                 return true;
             }

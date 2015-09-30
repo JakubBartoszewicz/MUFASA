@@ -70,8 +70,8 @@ namespace Mufasa.BackEnd.Designer
             {
                 name += fragList[i].Name;
                 seq3 = fragList[i].GetString();
-                int len5 = Math.Min(settings.MaxOverlapLen, seq5.Length);
-                int len3 = Math.Min(settings.MaxGeneSpecificLen, seq3.Length);
+                int len5 = Math.Min(settings.MaxLen_5, seq5.Length);
+                int len3 = Math.Min(settings.MaxLen_3, seq3.Length);
                 String overlapping = seq5.Substring(seq5.Length - len5, len5);
                 String geneSpecific = seq3.Substring(0, len3);
                 String loc = (seq5.Length + 1).ToString() + ".." + (seq5.Length + seq3.Length).ToString();
@@ -112,8 +112,8 @@ namespace Mufasa.BackEnd.Designer
             for (int i = fragList.Count-1; i >= 0; i--)
             {
                 seq5 = fragList[i].GetReverseComplementString();
-                int len3 = Math.Min(settings.MaxOverlapLen, seq3.Length);
-                int len5 = Math.Min(settings.MaxGeneSpecificLen, seq5.Length);
+                int len3 = Math.Min(settings.MaxLen_5, seq3.Length);
+                int len5 = Math.Min(settings.MaxLen_3, seq5.Length);
                 String overlapping = seq3.Substring(seq3.Length - len3, len3);
                 String geneSpecific = seq5.Substring(0, len5);
                 seq3 += seq5;
@@ -156,20 +156,20 @@ namespace Mufasa.BackEnd.Designer
             for (int i = 0; i < this.Overlaps.Count; i++)
             {
                 byte item = 0;
-                bool tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetOverlapTm);
+                bool tmTooHigh = (this.Overlaps[i].Temperature_5 > this.Settings.TargetTm);
                 while ((item != end) && tmTooHigh)
                 {
-                    item = this.Overlaps[i].Dequeue(Settings.MinOverlapLen);
-                    tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetOverlapTm);
+                    item = this.Overlaps[i].Dequeue(Settings.MinLen_5);
+                    tmTooHigh = (this.Overlaps[i].Temperature_5 > this.Settings.TargetTm);
                 }
 
                 item = 0;
-                tmTooHigh = (this.Overlaps[i].PrimerTemperature > this.Settings.TargetPrimerTm);
+                tmTooHigh = (this.Overlaps[i].Temperature_3 > this.Settings.TargetTm);
                 while ((item != end) && tmTooHigh)
                 {
                     // not vector primers
-                    item = this.Overlaps[i].Pop(Settings.MinGeneSpecificLen);
-                    tmTooHigh = (this.Overlaps[i].PrimerTemperature > this.Settings.TargetPrimerTm);
+                    item = this.Overlaps[i].Pop(Settings.MinLen_3);
+                    tmTooHigh = (this.Overlaps[i].Temperature_3 > this.Settings.TargetTm);
                 }
             }
         }

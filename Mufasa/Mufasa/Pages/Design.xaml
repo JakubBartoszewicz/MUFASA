@@ -62,14 +62,14 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="3'Tm" Width ="75" Binding="{Binding Path=Temperature, Mode=OneWay}">
+                        <DataGridTextColumn Header="3'Tm" Width ="75" Binding="{Binding Path=Temperature_5, Mode=OneWay}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>                            
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="5'Tm" Width ="75" Binding="{Binding Path=PrimerTemperature, Mode=OneWay}">
+                        <DataGridTextColumn Header="5'Tm" Width ="75" Binding="{Binding Path=Temperature_3, Mode=OneWay}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Center" />

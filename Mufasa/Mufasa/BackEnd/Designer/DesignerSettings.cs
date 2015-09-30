@@ -12,24 +12,24 @@ namespace Mufasa.BackEnd.Designer
     class DesignerSettings
     {
         /// <value>
-        /// Minimal length of the gene-specific part of a primer.
+        /// Minimal length of the 3' ("gene-specific") part of an overlap.
         /// </value>
-        public int MinGeneSpecificLen { get; set; }
+        public int MinLen_3 { get; set; }
 
         /// <value>
-        /// Maximal length of the gene-specific part of a primer.
+        /// Maximal length of the 3' ("gene-specific") part of an overlap.
         /// </value>
-        public int MaxGeneSpecificLen { get; set; }
+        public int MaxLen_3 { get; set; }
 
         /// <value>
-        /// Minimal length of the overlapping part of a primer.
+        /// Minimal length of the 5' ("overhang") part of an overlap.
         /// </value>
-        public int MinOverlapLen { get; set; }
+        public int MinLen_5 { get; set; }
 
         /// <value>
-        /// Maximal length of the overlapping part of a primer.
+        /// Maximal length of the 5' ("overhang") part of an overlap.
         /// </value>
-        public int MaxOverlapLen { get; set; }
+        public int MaxLen_5 { get; set; }
 
         /// <value>
         /// CPEC/Gibson assembly reaction volume.
@@ -37,26 +37,20 @@ namespace Mufasa.BackEnd.Designer
         public int ReactionVolume { get; set; }
 
         /// <value>
-        /// Target overlaps melting temperature.
+        /// Target overlap melting temperature.
         /// </value>
-        public int TargetOverlapTm { get; set; }
-
-        /// <value>
-        /// Target primer melting temperature.
-        /// </value>
-        public int TargetPrimerTm { get; set; }
+        public int TargetTm { get; set; }
 
         /// <summary>
         /// Designer settings constructor.
         /// </summary>
         public DesignerSettings()
         {
-            this.MinGeneSpecificLen = 18;
-            this.MaxGeneSpecificLen = 25;
-            this.MinOverlapLen = 20;
-            this.MaxOverlapLen = 30;
-            this.TargetOverlapTm = 60;
-            this.TargetPrimerTm = 60;
+            this.MinLen_3 = 18;
+            this.MaxLen_3 = 25;
+            this.MinLen_5 = 20;
+            this.MaxLen_5 = 30;
+            this.TargetTm = 65;
             this.ReactionVolume = 50;
         }
 
