@@ -44,7 +44,6 @@
 #include <setjmp.h>
 #include <ctype.h>
 #include <math.h>
-#include <unistd.h>
 
 #if defined(__sun)
 #include <ieeefp.h>
@@ -101,7 +100,7 @@
 #ifdef INTEGER
 # define isFinite(x) (x < _INFINITY / 2)
 #else
-# define isFinite(x) finite(x)
+# define isFinite(x) isfinite(x)
 #endif
 
 #define isPositive(x) ((x) > 0 ? (1) : (0))
@@ -2812,7 +2811,7 @@ equal(double a, double b)
    return a == b;
 #endif
 
-   if (!finite(a) || !finite(b))
+   if (!isFinite(a) || !isFinite(b))
      return 0;
    return fabs(a - b) < 1e-5;
 
