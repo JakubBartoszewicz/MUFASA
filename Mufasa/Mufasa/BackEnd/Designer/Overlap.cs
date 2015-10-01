@@ -47,31 +47,31 @@ namespace Mufasa.BackEnd.Designer
         /// </summary>
         private void TempInit()
         {
-            this.SimpleT = new Dictionary<byte, int>();
-            this.SimpleT.Add(Alphabets.DNA.A, 2);
-            this.SimpleT.Add(Alphabets.DNA.T, 2);
-            this.SimpleT.Add(Alphabets.DNA.G, 4);
-            this.SimpleT.Add(Alphabets.DNA.C, 4);
-            this.SimpleT.Add(Alphabets.DNA.Gap, 0);
-            this.Temperature_5 = GetSimpleMeltingTemperature(Seq_5);
-            this.Temperature_3 = GetSimpleMeltingTemperature(Seq_3);
+            this.SimpleT = new Dictionary<byte, double>();
+            this.SimpleT.Add(Alphabets.DNA.A, 2.0);
+            this.SimpleT.Add(Alphabets.DNA.T, 2.0);
+            this.SimpleT.Add(Alphabets.DNA.G, 4.0);
+            this.SimpleT.Add(Alphabets.DNA.C, 4.0);
+            this.SimpleT.Add(Alphabets.DNA.Gap, 0.0);
+            this.Temperature_5 = GetMeltingTemperature(Seq_5);
+            this.Temperature_3 = GetMeltingTemperature(Seq_3);
         }
 
 
         /// <value>
         /// Nucleotide temperature dictionary.
         /// </value>
-        private Dictionary <byte,int> SimpleT;
+        private Dictionary <byte,double> SimpleT;
 
         /// <value>
         /// 3' ("gene-specific") subsequence melting temperature.
         /// </value>
-        public int Temperature_3 { get; set; }
+        public double Temperature_3 { get; set; }
 
         /// <value>
         /// 5' ("overhang") subsequence melting temperature.
         /// </value>
-        public int Temperature_5 { get; set; }
+        public double Temperature_5 { get; set; }
 
 
         /// <value>
@@ -108,15 +108,39 @@ namespace Mufasa.BackEnd.Designer
         /// Compute overlap's simple-style melting temperature.
         /// </summary>
         /// <returns>Overlap's Tm.</returns>
-        public int GetSimpleMeltingTemperature(ISequence sequence)
+        public double GetSimpleMeltingTemperature(ISequence sequence)
         {
-            int T = 0;
+            double T = 0.0;
             Sequence upper = null;
             upper = new Sequence(Alphabets.DNA, sequence.ToString().ToUpper());            
             
             for (long index = 0; index < upper.Count; index++)
             {
                 T += SimpleT[upper[index]];
+            }
+            return T;
+        }
+
+        /// <summary>
+        /// Compute overlap's NN-model melting temperature.
+        /// </summary>
+        /// <returns>Overlap's Tm.</returns>
+        public double GetMeltingTemperature(ISequence sequence)
+        {
+            double T = 0.0;
+            Sequence upper = null;
+            upper = new Sequence(Alphabets.DNA, sequence.ToString().ToUpper());
+            unsafe
+            {
+                char* seq = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(upper.ToString());
+                        String ct = System.Runtime.InteropServices.Marshal.PtrToStringAnsi((System.IntPtr)seq);
+                        System.Console.WriteLine(ct);
+                        T = Tm_thal.p3_seqtm(seq, 50.0, 50.0, 0.0, 0.0, 36, Tm_thal.p3_tm_method_type.p3_breslauer_auto, Tm_thal.p3_salt_correction_type.p3_schildkraut);
+            }
+            T = Math.Round(T, 5);
+            if (T < -9999.0)
+            {
+                T = 0.0;
             }
             return T;
         }
@@ -133,7 +157,7 @@ namespace Mufasa.BackEnd.Designer
                 byte item = this.Seq_5[this.Seq_5.Count - 1];
                 this.Seq_5 = this.Seq_5.GetSubSequence(1, this.Seq_5.Count - 1);
                 this.Sequence = new Sequence(Alphabets.DNA, Seq_5.ToString() + Seq_3.ToString());
-                this.Temperature_5 = GetSimpleMeltingTemperature(Seq_5);
+                this.Temperature_5 = GetMeltingTemperature(Seq_5);
                 return item;
             }
             else
@@ -154,7 +178,7 @@ namespace Mufasa.BackEnd.Designer
                 byte item = this.Seq_3[0];
                 this.Seq_3 = this.Seq_3.GetSubSequence(0, this.Seq_3.Count - 1);
                 this.Sequence = new Sequence(Alphabets.DNA, Seq_5.ToString() + Seq_3.ToString());
-                this.Temperature_3 = GetSimpleMeltingTemperature(Seq_3);
+                this.Temperature_3 = GetMeltingTemperature(Seq_3);
                 return item;
             }
             else

@@ -15,7 +15,7 @@ namespace Mufasa.BackEnd.Designer
     /// </remarks>
     class Construct : Fragment
     {
-
+       
         /// <summary>
         /// Construct constructor.
         /// </summary>

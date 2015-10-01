@@ -368,8 +368,7 @@ destroy_thal_structures()
 
 /* central method: execute all sub-methods for calculating secondary
    structure for dimer or for monomer */
-void 
-thal(const unsigned char *oligo_f, 
+void thal(const unsigned char *oligo_f, 
      const unsigned char *oligo_r, 
      const thal_args *a, 
      thal_results *o)
