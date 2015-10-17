@@ -20,6 +20,7 @@
                     <RowDefinition Height="200"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="200"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
 
@@ -36,7 +37,7 @@
                 <DataGrid x:Name="overlapDataGrid" Grid.Column="2" Margin="20,0,0,0" FontFamily="Courier New" FontSize="12"   ToolTip="Generated overlaps." Grid.Row="4" ClipToBounds="True" MinHeight="200" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False" CanUserResizeColumns="False">
                     <DataGrid.RowHeaderStyle>
                         <Style TargetType="DataGridRowHeader">
-                            <Setter Property="Content" Value="{Binding Name}" />
+                            <Setter Property="Content" Value="" />
                             <Setter Property="Width" Value="0"/>
                             <Setter Property="Height" Value="25"/>
                             <Setter Property="Background" Value="#252525"/>
@@ -112,9 +113,58 @@
                         </TransformGroup>
                     </Button.RenderTransform>
                 </Button>
-
-
-                
+                <DataGrid x:Name="scoreDataGrid" Grid.Column="2" Margin="20,20,0,0" FontFamily="Courier New" FontSize="12"  Grid.Row="5" ClipToBounds="True" MinHeight="200" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False" CanUserResizeColumns="False">
+                    <DataGrid.RowHeaderStyle>
+                        <Style TargetType="DataGridRowHeader">
+                            <Setter Property="Content" Value="" />
+                            <Setter Property="Width" Value="0"/>
+                            <Setter Property="Height" Value="25"/>
+                            <Setter Property="Background" Value="#252525"/>
+                            <Setter Property="Foreground" Value="#F0A30A"/>
+                            <Setter Property="MaxWidth" Value="0px"/>
+                            <Setter Property="MinWidth" Value="0px"/>
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </Style>
+                    </DataGrid.RowHeaderStyle>
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Height" Value="25"/>
+                            <Setter Property="Background" Value="#333333"/>
+                            <Setter Property="Foreground" Value="#F0A30A"/>
+                            <Setter Property="Padding" Value="5,0,0,0" />
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="ToolTip" Value="{Binding Path=Description}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Scores:" Width ="4*" Binding="{Binding Path=Label, Mode=OneWay}" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Raw score" Width ="5*" Binding="{Binding Path=RawScore, Mode=OneWay, StringFormat=N2}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Normalized score" Width ="5*" Binding="{Binding Path=NormalizedScore, Mode=OneWay, StringFormat=N2}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </Grid>
         </ScrollViewer>
         

@@ -110,13 +110,17 @@
     <Compile Include="BackEnd\Designer\Construct.cs" />
     <Compile Include="BackEnd\Designer\Designer.cs" />
     <Compile Include="BackEnd\Designer\DesignerSettings.cs" />
+    <Compile Include="BackEnd\Scores\Score.cs" />
     <Compile Include="BackEnd\Designer\Overlap.cs" />
     <Compile Include="BackEnd\Designer\OverlapOptimizer.cs" />
+    <Compile Include="BackEnd\Scores\ScoreMean.cs" />
+    <Compile Include="BackEnd\Scores\ScoreOptimum.cs" />
     <Compile Include="BackEnd\Exceptions\FragmentNamingException.cs" />
     <Compile Include="BackEnd\Designer\Fragment.cs" />
     <Compile Include="BackEnd\Exceptions\SequenceCountException.cs" />
     <Compile Include="BackEnd\Exceptions\SequenceLengthException.cs" />
     <Compile Include="BackEnd\Exceptions\TmException.cs" />
+    <Compile Include="BackEnd\Scores\ScoreTotal.cs" />
     <Compile Include="BackEnd\Tm_thal.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

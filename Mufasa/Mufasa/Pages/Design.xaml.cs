@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Mufasa.BackEnd.Designer;
 using Mufasa.BackEnd.Exceptions;
+using Mufasa.BackEnd.Scores;
 using FirstFloor.ModernUI.Windows.Controls;
 using System.Net;
 using System.Xml;
@@ -100,6 +101,12 @@ namespace Mufasa.Pages
         /// Mufasa OverlapOptimizer object.
         /// </summary>
         private OverlapOptimizer overlapOptimizer;
+
+        /// <summary>
+        /// Mufasa Scores list.
+        /// </summary>
+        //private List<Score> scoreList;
+
 
 
         /// <summary>
@@ -495,17 +502,23 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void assembleButton_Click(object sender, RoutedEventArgs e)
         {
-            overlapOptimizer = new OverlapOptimizer(Designer.Settings);
+            overlapOptimizer = new OverlapOptimizer();
             try
             {
                 construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
-                construct.Overlaps = overlapOptimizer.GreedyOptimizeOverlaps(construct.Overlaps);
+                ScoreTotal score = overlapOptimizer.GreedyOptimizeOverlaps(ref construct);
                 overlapDataGrid.ItemsSource = construct.Overlaps;
                 overlapDataGrid.Items.Refresh();
+                List<Score> scoreList = new List<Score>();
+                scoreList.Add(score.Sm);
+                scoreList.Add(score.So);
+                scoreList.Add(score);
+                scoreDataGrid.ItemsSource = scoreList;
+                scoreDataGrid.Items.Refresh();
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                ModernDialog.ShowMessage("Unable to assemble.", "Warning: ", MessageBoxButton.OK);
+                ModernDialog.ShowMessage("Unable to assemble. (" + ex.Message + ")", "Warning: ", MessageBoxButton.OK);
             }
             
         }
