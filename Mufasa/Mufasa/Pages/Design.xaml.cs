@@ -339,7 +339,7 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void saveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (construct != null)
+            if (construct != null && construct.IsEmpty())
             {
                 InitializeSaveFragmentFileDialog();
 
@@ -510,7 +510,7 @@ namespace Mufasa.Pages
         private void overButton_Click(object sender, RoutedEventArgs e)
         {
             InitializeSaveOverlapsDialog();
-            if (construct != null)
+            if (construct !=null && construct.IsEmpty())
             {
                 InitializeSaveFragmentFileDialog();
 
@@ -524,7 +524,7 @@ namespace Mufasa.Pages
                     {
                         using (StreamWriter sw = new StreamWriter(saveOverlapsDialog.FileName))
                         {
-                            sw.WriteLine("Name;Sequence;3'Tm;5'Tm");
+                            sw.WriteLine("Name;Sequence;Tm;");
                             foreach (Overlap item in overlapDataGrid.Items)
                             {
                                 sw.WriteLine(item.ToString());

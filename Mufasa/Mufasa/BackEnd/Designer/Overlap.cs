@@ -29,9 +29,6 @@ namespace Mufasa.BackEnd.Designer
             this.Sequence = new Sequence(Alphabets.DNA, this.Seq_5.ToString() + this.Seq_3.ToString());
             this.TempInit();
             this.Temperature = GetMeltingTemperature(this.Sequence);
-            this.Temperature_5 = GetMeltingTemperature(this.Seq_5);
-            this.Temperature_3 = GetMeltingTemperature(this.Seq_3);
-
         }
 
         /// <summary>
@@ -67,17 +64,6 @@ namespace Mufasa.BackEnd.Designer
         /// </value>
         public double Temperature { get; set; }
 
-
-        /// <value>
-        /// 3' ("gene-specific") subsequence melting temperature.
-        /// </value>
-        public double Temperature_3 { get; set; }
-
-        /// <value>
-        /// 5' ("overhang") subsequence melting temperature.
-        /// </value>
-        public double Temperature_5 { get; set; }
-
         /// <value>
         /// 3' ("gene-specific") subsequence template.
         /// </value>
@@ -105,7 +91,7 @@ namespace Mufasa.BackEnd.Designer
         public override string ToString()
         {
             String sep = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-            String result = this.Name + sep + this.Sequence + sep + this.Temperature_5 + sep + this.Temperature_3;
+            String result = this.Name + sep + this.Sequence + sep + this.Temperature;
             return result;
         }
 
@@ -170,7 +156,7 @@ namespace Mufasa.BackEnd.Designer
                 byte item = this.Seq_5[this.Seq_5.Count - 1];
                 this.Seq_5 = this.Seq_5.GetSubSequence(1, this.Seq_5.Count - 1);
                 this.Sequence = new Sequence(Alphabets.DNA, Seq_5.ToString() + Seq_3.ToString());
-                this.Temperature_5 = GetMeltingTemperature(Seq_5);
+                this.Temperature = GetMeltingTemperature(Sequence);
                 return item;
             }
             else
@@ -191,7 +177,7 @@ namespace Mufasa.BackEnd.Designer
                 byte item = this.Seq_3[0];
                 this.Seq_3 = this.Seq_3.GetSubSequence(0, this.Seq_3.Count - 1);
                 this.Sequence = new Sequence(Alphabets.DNA, Seq_5.ToString() + Seq_3.ToString());
-                this.Temperature_3 = GetMeltingTemperature(Seq_3);
+                this.Temperature = GetMeltingTemperature(Sequence);
                 return item;
             }
             else

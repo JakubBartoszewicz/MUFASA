@@ -15,6 +15,16 @@ namespace Mufasa.BackEnd.Designer
     /// </remarks>
     class Construct : Fragment
     {
+        /// <summary>
+        /// Empty Construct constructor.
+        /// </summary>
+        /// <param name="fragList">Fragment list.</param>
+        public Construct()
+            : base()
+        {
+            this.Overlaps = new List<Overlap>();
+            Overlaps.Add(new Overlap("",new Sequence(Alphabets.DNA,"")));
+        }
        
         /// <summary>
         /// Construct constructor.
@@ -127,7 +137,29 @@ namespace Mufasa.BackEnd.Designer
                     Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.DNA, overhang_5), new Sequence(Alphabets.DNA, geneSpecific_3)));
                 }
             }
-            TermoOptimizeOverlaps();
+            GreedyOptimizeOverlaps();
+        }
+
+        /// <summary>
+        /// Cheks if the construct is empty.
+        /// <summary>
+        public bool IsEmpty()
+        {
+            if (this.Sequence == null)
+            {
+                return true;
+            }
+            else
+            {
+                if (this.Sequence.Count == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         /// <value>
@@ -150,27 +182,51 @@ namespace Mufasa.BackEnd.Designer
         /// <summary>
         /// Overlap temperature optimization.
         /// </summary>
-        private void TermoOptimizeOverlaps()
+        private void GreedyOptimizeOverlaps()
         {
-            byte end = 255;
+            const byte end_3 = 255;
+            const byte end_5 = 255;
+            
             for (int i = 0; i < this.Overlaps.Count; i++)
             {
-                byte item = 0;
-                bool tmTooHigh = (this.Overlaps[i].Temperature_5 > this.Settings.TargetTm);
-                while ((item != end) && tmTooHigh)
-                {
-                    item = this.Overlaps[i].Dequeue(Settings.MinLen_5);
-                    tmTooHigh = (this.Overlaps[i].Temperature_5 > this.Settings.TargetTm);
-                }
+                byte item_3 = 0;
+                byte item_5 = 0;
+                bool done_3 = false;
+                bool done_5 = false;
 
-                item = 0;
-                tmTooHigh = (this.Overlaps[i].Temperature_3 > this.Settings.TargetTm);
-                while ((item != end) && tmTooHigh)
+                bool tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetTm);
+                do
                 {
-                    // not vector primers
-                    item = this.Overlaps[i].Pop(Settings.MinLen_3);
-                    tmTooHigh = (this.Overlaps[i].Temperature_3 > this.Settings.TargetTm);
-                }
+                    if ((item_5 != end_5) && tmTooHigh)
+                    {
+                        item_5 = this.Overlaps[i].Dequeue(Settings.MinLen_5);
+                        tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetTm);
+                    }
+                    else
+                    {
+                        done_5 = true;
+                    }
+
+                    if ((item_3 != end_3) && tmTooHigh)
+                    {
+                        item_3 = this.Overlaps[i].Pop(Settings.MinLen_3);
+                        tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetTm);
+                    }
+                    else
+                    {
+                        done_3 = true;
+                    }
+
+                } while (!done_5 || !done_3);
+
+                //item = 0;
+                //tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetTm);
+                //while ((item != end) && tmTooHigh)
+                //{
+                //    // not vector primers
+                //    item = this.Overlaps[i].Pop(Settings.MinLen_3);
+                //    tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetTm);
+                //}
             }
         }
     }

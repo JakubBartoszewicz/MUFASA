@@ -7,13 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="768" d:DesignWidth="800">
     <Grid x:Name ="mainGrid" Style="{StaticResource ContentRoot}">
-        <ScrollViewer Margin="0,25,0,0">
+        <ScrollViewer Margin="0,25,25,0">
             <Grid MinWidth="200" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>                   
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -38,12 +37,13 @@
                     <DataGrid.RowHeaderStyle>
                         <Style TargetType="DataGridRowHeader">
                             <Setter Property="Content" Value="{Binding Name}" />
-                            <Setter Property="Width" Value="150"/>
+                            <Setter Property="Width" Value="0"/>
                             <Setter Property="Height" Value="25"/>
                             <Setter Property="Background" Value="#252525"/>
                             <Setter Property="Foreground" Value="#F0A30A"/>
-                            <Setter Property="MaxWidth" Value="150px"/>
-                            <Setter Property="MinWidth" Value="50px"/>
+                            <Setter Property="MaxWidth" Value="0px"/>
+                            <Setter Property="MinWidth" Value="0px"/>
+                            <Setter Property="Visibility" Value="Collapsed"/>
                         </Style>
                     </DataGrid.RowHeaderStyle>
                     <DataGrid.ColumnHeaderStyle>
@@ -51,31 +51,33 @@
                             <Setter Property="Height" Value="25"/>
                             <Setter Property="Background" Value="#333333"/>
                             <Setter Property="Foreground" Value="#F0A30A"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="Padding" Value="5,0,0,0" />
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
                         </Style>
                     </DataGrid.ColumnHeaderStyle>
-                    <DataGrid.Columns>                        
-                        <DataGridTextColumn Header="Sequence" Width ="400" Binding="{Binding Path=SequenceString, Mode=OneWay}" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Width ="*" Binding="{Binding Path=Name, Mode=OneWay}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="3'Tm" Width ="75" Binding="{Binding Path=Temperature_5, Mode=OneWay}">
+                        <DataGridTextColumn Header="Tm" Width ="*" Binding="{Binding Path=Temperature, Mode=OneWay}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>                            
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="5'Tm" Width ="75" Binding="{Binding Path=Temperature_3, Mode=OneWay}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
+                        <DataGridTextColumn Header="Sequence" Width ="5*" Binding="{Binding Path=SequenceString, Mode=OneWay}" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                                                
                     </DataGrid.Columns>
                 </DataGrid>
                 <Button x:Name="saveButton" Content="Save project as..." HorizontalAlignment="Left" Margin="20,64,20,20" VerticalAlignment="Top" Width="137" ToolTip="Save your construct project." Height="26" Grid.Column="0" Grid.Row="4" Click="saveButton_Click"/>
