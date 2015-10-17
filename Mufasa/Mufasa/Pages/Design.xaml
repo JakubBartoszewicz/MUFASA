@@ -56,7 +56,7 @@
                         </Style>
                     </DataGrid.ColumnHeaderStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" Width ="*" Binding="{Binding Path=Name, Mode=OneWay}" >
+                        <DataGridTextColumn Header="Name" Width ="2*" Binding="{Binding Path=Name, Mode=OneWay}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -70,7 +70,14 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Sequence" Width ="5*" Binding="{Binding Path=SequenceString, Mode=OneWay}" >
+                        <DataGridTextColumn Header="Length" Width ="*" Binding="{Binding Path=SequenceString.Length, Mode=OneWay}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Sequence" Width ="10*" Binding="{Binding Path=SequenceString, Mode=OneWay}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />

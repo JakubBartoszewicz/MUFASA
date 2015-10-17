@@ -97,7 +97,7 @@ namespace Mufasa.BackEnd.Designer
         public override string ToString()
         {
             String sep = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-            String result = this.Name + sep + this.Temperature + sep + this.Sequence;
+            String result = this.Name + sep + this.Temperature + sep + this.Sequence.Count + sep + this.Sequence;
             return result;
         }
 

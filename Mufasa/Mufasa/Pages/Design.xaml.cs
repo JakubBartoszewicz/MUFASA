@@ -97,6 +97,12 @@ namespace Mufasa.Pages
         private Construct construct;
 
         /// <summary>
+        /// Mufasa OverlapOptimizer object.
+        /// </summary>
+        private OverlapOptimizer overlapOptimizer;
+
+
+        /// <summary>
         /// OpenFragmentFileDialog initialization.
         /// </summary>
         private void InitializeOpenFragmentFileDialog()
@@ -489,10 +495,11 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void assembleButton_Click(object sender, RoutedEventArgs e)
         {
+            overlapOptimizer = new OverlapOptimizer(Designer.Settings);
             try
             {
                 construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
-                construct.GreedyOptimizeOverlaps();
+                construct.Overlaps = overlapOptimizer.GreedyOptimizeOverlaps(construct.Overlaps);
                 overlapDataGrid.ItemsSource = construct.Overlaps;
                 overlapDataGrid.Items.Refresh();
             }
