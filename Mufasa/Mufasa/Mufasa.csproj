@@ -121,7 +121,7 @@
     <Compile Include="BackEnd\Exceptions\SequenceLengthException.cs" />
     <Compile Include="BackEnd\Exceptions\TmException.cs" />
     <Compile Include="BackEnd\Scores\ScoreTotal.cs" />
-    <Compile Include="BackEnd\Tm_thal.cs" />
+    <Compile Include="BackEnd\TmThal.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

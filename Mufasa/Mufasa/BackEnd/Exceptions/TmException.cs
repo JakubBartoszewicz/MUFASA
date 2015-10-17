@@ -8,7 +8,7 @@ namespace Mufasa.BackEnd.Exceptions
 {
     /// <remarks>
     /// Exception thrown by oligotm.
-    /// <see cref="BackEnd.Tm_thal.cs"/>
+    /// <see cref="BackEnd.TmThal.Thermodynamics.cs"/>
     /// </remarks>
     [Serializable]
     public class TmException : Exception

@@ -146,11 +146,11 @@ namespace Mufasa.BackEnd.Designer
 
             if (sequenceString.Length < 150)
             {
-                SequenceTooShort(url, name, new SequenceLengthException("Sequence in " + name + " is shorter than 150nt. It should not be used as a fragment.", new Sequence(Alphabets.DNA, sequenceString)));
+                SequenceTooShort(url, name, new SequenceLengthException("Sequence in " + name + " is shorter than 150nt. It should not be used as a fragment.", new Sequence(Alphabets.AmbiguousDNA, sequenceString)));
             }
             else
             {
-                this.FragmentDict.Add(name, new Fragment(url, name, new Sequence(Alphabets.DNA, sequenceString)));
+                this.FragmentDict.Add(name, new Fragment(url, name, new Sequence(Alphabets.AmbiguousDNA, sequenceString)));
             }
         } 
         
@@ -183,7 +183,7 @@ namespace Mufasa.BackEnd.Designer
             foreach (var feat in meta.Features.MiscFeatures)
             {
                 String subseq = project.GetString().Substring(feat.Location.LocationStart-1, feat.Location.LocationEnd - feat.Location.LocationStart + 1);
-                FragmentDict.Add(feat.StandardName, new Fragment(file, feat.StandardName, new Sequence(Alphabets.DNA, subseq)));
+                FragmentDict.Add(feat.StandardName, new Fragment(file, feat.StandardName, new Sequence(Alphabets.AmbiguousDNA, subseq)));
             }
         }        
     }

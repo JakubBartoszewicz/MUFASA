@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
-namespace Mufasa.BackEnd
+namespace Mufasa.BackEnd.TmThal
 {
-    static class Tm_thal
+    static class Thermodynamics
     {
         /*
            For olgigotm() and seqtm()

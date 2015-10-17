@@ -23,7 +23,7 @@ namespace Mufasa.BackEnd.Designer
             : base()
         {
             this.Overlaps = new List<Overlap>();
-            Overlaps.Add(new Overlap("", new Sequence(Alphabets.DNA, "")));
+            Overlaps.Add(new Overlap("", new Sequence(Alphabets.AmbiguousDNA, "")));
         }
 
         /// <summary>
@@ -91,16 +91,16 @@ namespace Mufasa.BackEnd.Designer
                 seq_5 += seq_3;
                 if (i == 0)
                 {
-                    Overlaps.Add(new Overlap(fragList[i].Name + "-fwd", new Sequence(Alphabets.DNA, geneSpecific_3)));
+                    Overlaps.Add(new Overlap(fragList[i].Name + "-fwd", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3)));
                 }
                 else
                 {
 
-                    Overlaps.Add(new Overlap(fragList[i].Name + "-fwd", new Sequence(Alphabets.DNA, overhang_5), new Sequence(Alphabets.DNA, geneSpecific_3)));
+                    Overlaps.Add(new Overlap(fragList[i].Name + "-fwd", new Sequence(Alphabets.AmbiguousDNA, overhang_5), new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3)));
                 }
             }
 
-            this.Sequence = new Sequence(Alphabets.DNA, seq_5);
+            this.Sequence = new Sequence(Alphabets.AmbiguousDNA, seq_5);
             //meta
             GenBankMetadata meta = new GenBankMetadata();
             meta.Locus = new GenBankLocusInfo();
@@ -129,12 +129,12 @@ namespace Mufasa.BackEnd.Designer
                 seq_3 += seq_5;
                 if (i == fragList.Count - 1)
                 {
-                    Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.DNA, geneSpecific_3)));
+                    Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3)));
                 }
                 else
                 {
 
-                    Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.DNA, overhang_5), new Sequence(Alphabets.DNA, geneSpecific_3)));
+                    Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.AmbiguousDNA, overhang_5), new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3)));
                 }
             }
         }

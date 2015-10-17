@@ -503,22 +503,25 @@ namespace Mufasa.Pages
         private void assembleButton_Click(object sender, RoutedEventArgs e)
         {
             overlapOptimizer = new OverlapOptimizer();
-            try
+            if (Designer.ConstructionList != null && Designer.ConstructionList.Count > 0)
             {
-                construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
-                ScoreTotal score = overlapOptimizer.GreedyOptimizeOverlaps(ref construct);
-                overlapDataGrid.ItemsSource = construct.Overlaps;
-                overlapDataGrid.Items.Refresh();
-                List<Score> scoreList = new List<Score>();
-                scoreList.Add(score.Sm);
-                scoreList.Add(score.So);
-                scoreList.Add(score);
-                scoreDataGrid.ItemsSource = scoreList;
-                scoreDataGrid.Items.Refresh();
-            }
-            catch(Exception ex)
-            {
-                ModernDialog.ShowMessage("Unable to assemble. (" + ex.Message + ")", "Warning: ", MessageBoxButton.OK);
+                try
+                {
+                    construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
+                    ScoreTotal score = overlapOptimizer.GreedyOptimizeOverlaps(ref construct);
+                    overlapDataGrid.ItemsSource = construct.Overlaps;
+                    overlapDataGrid.Items.Refresh();
+                    List<Score> scoreList = new List<Score>();
+                    scoreList.Add(score.Sm);
+                    scoreList.Add(score.So);
+                    scoreList.Add(score);
+                    scoreDataGrid.ItemsSource = scoreList;
+                    scoreDataGrid.Items.Refresh();
+                }
+                catch (Exception ex)
+                {
+                    ModernDialog.ShowMessage("Unable to assemble. (" + ex.Message + ")", "Warning: ", MessageBoxButton.OK);
+                }
             }
             
         }
