@@ -23,9 +23,9 @@ namespace Mufasa.BackEnd.Designer
             : base()
         {
             this.Overlaps = new List<Overlap>();
-            Overlaps.Add(new Overlap("",new Sequence(Alphabets.DNA,"")));
+            Overlaps.Add(new Overlap("", new Sequence(Alphabets.DNA, "")));
         }
-       
+
         /// <summary>
         /// Construct constructor.
         /// </summary>
@@ -44,11 +44,11 @@ namespace Mufasa.BackEnd.Designer
         public Construct(ObservableCollection<String> nameList, Dictionary<String, Fragment> fragDict, DesignerSettings settings)
             : base()
         {
-            ObservableCollection<Fragment > fragList = new ObservableCollection<Fragment>();
-            for (int i = 0; i < nameList.Count; i++ )
+            ObservableCollection<Fragment> fragList = new ObservableCollection<Fragment>();
+            for (int i = 0; i < nameList.Count; i++)
             {
                 Fragment f = fragDict[nameList[i]];
-                if (i==0)
+                if (i == 0)
                 {
                     f.IsVector = true;
                 }
@@ -97,7 +97,7 @@ namespace Mufasa.BackEnd.Designer
                 {
 
                     Overlaps.Add(new Overlap(fragList[i].Name + "-fwd", new Sequence(Alphabets.DNA, overhang_5), new Sequence(Alphabets.DNA, geneSpecific_3)));
-                }                 
+                }
             }
 
             this.Sequence = new Sequence(Alphabets.DNA, seq_5);
@@ -119,7 +119,7 @@ namespace Mufasa.BackEnd.Designer
             fragList.RemoveAt(0);
             seq_5 = "";
             seq_3 = "";
-            for (int i = fragList.Count-1; i >= 0; i--)
+            for (int i = fragList.Count - 1; i >= 0; i--)
             {
                 seq_5 = fragList[i].GetReverseComplementString();
                 int len_5 = Math.Min(settings.MaxLen_5, seq_3.Length);
@@ -137,7 +137,6 @@ namespace Mufasa.BackEnd.Designer
                     Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.DNA, overhang_5), new Sequence(Alphabets.DNA, geneSpecific_3)));
                 }
             }
-            GreedyOptimizeOverlaps();
         }
 
         /// <summary>
@@ -180,13 +179,16 @@ namespace Mufasa.BackEnd.Designer
         }
 
         /// <summary>
-        /// Overlap temperature optimization.
+        /// Overlap Greedy temperature optimization.
         /// </summary>
-        private void GreedyOptimizeOverlaps()
+        /// <summary>
+        /// Overlap greedy temperature optimization.
+        /// </summary>
+        public void GreedyOptimizeOverlaps()
         {
             const byte end_3 = 255;
             const byte end_5 = 255;
-            
+
             for (int i = 0; i < this.Overlaps.Count; i++)
             {
                 byte item_3 = 0;
@@ -194,23 +196,54 @@ namespace Mufasa.BackEnd.Designer
                 bool done_3 = false;
                 bool done_5 = false;
 
-                bool tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetTm);
+                double _diff = this.Overlaps[i].Temperature - this.Settings.TargetTm;
+                double diff = _diff;
+                Overlap _previous;
+
                 do
                 {
-                    if ((item_5 != end_5) && tmTooHigh)
+                    if ((item_5 != end_5))
                     {
+                        _previous = new Overlap(this.Overlaps[i]);
                         item_5 = this.Overlaps[i].Dequeue(Settings.MinLen_5);
-                        tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetTm);
+                        diff = this.Overlaps[i].Temperature - this.Settings.TargetTm;
+
+                        //if previous was more optimal, do not accept the candidate solution and stop
+                        if (Math.Abs(_diff) < Math.Abs(diff))
+                        {
+                            this.Overlaps[i] = _previous;
+                            diff = _diff;
+                            done_5 = true;
+                        }
+                        else
+                        {
+                            _diff = diff;
+                            done_5 = false;
+                        }
                     }
                     else
                     {
                         done_5 = true;
                     }
 
-                    if ((item_3 != end_3) && tmTooHigh)
+                    if ((item_3 != end_3))
                     {
+                        _previous = new Overlap(this.Overlaps[i]);
                         item_3 = this.Overlaps[i].Pop(Settings.MinLen_3);
-                        tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetTm);
+                        diff = this.Overlaps[i].Temperature - this.Settings.TargetTm;
+
+                        //if previous was more optimal, do not accept the candidate solution and stop
+                        if (Math.Abs(_diff) < Math.Abs(diff))
+                        {
+                            this.Overlaps[i] = _previous;
+                            diff = _diff;
+                            done_3 = true;
+                        }
+                        else
+                        {
+                            _diff = diff;
+                            done_3 = false;
+                        }
                     }
                     else
                     {
@@ -218,15 +251,6 @@ namespace Mufasa.BackEnd.Designer
                     }
 
                 } while (!done_5 || !done_3);
-
-                //item = 0;
-                //tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetTm);
-                //while ((item != end) && tmTooHigh)
-                //{
-                //    // not vector primers
-                //    item = this.Overlaps[i].Pop(Settings.MinLen_3);
-                //    tmTooHigh = (this.Overlaps[i].Temperature > this.Settings.TargetTm);
-                //}
             }
         }
     }

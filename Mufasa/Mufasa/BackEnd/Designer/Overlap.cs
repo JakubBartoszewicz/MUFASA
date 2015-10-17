@@ -39,6 +39,12 @@ namespace Mufasa.BackEnd.Designer
         public Overlap(String name, ISequence primer)
             : this(name, new Sequence(Alphabets.DNA, ""), primer) { }
 
+        /// <summary>
+        /// Overlap copying constructor.
+        /// </summary>
+        /// <param name="overlap">Overlap.</param>
+        public Overlap(Overlap overlap)
+            : this(overlap.Name, overlap.Seq_5, overlap.Seq_3) { }
 
         /// <summary>
         /// Simple temperature computation initialization.
@@ -91,7 +97,7 @@ namespace Mufasa.BackEnd.Designer
         public override string ToString()
         {
             String sep = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-            String result = this.Name + sep + this.Sequence + sep + this.Temperature;
+            String result = this.Name + sep + this.Temperature + sep + this.Sequence;
             return result;
         }
 
@@ -147,14 +153,15 @@ namespace Mufasa.BackEnd.Designer
         /// <summary>
         /// Cut the first nucleotide off.
         /// </summary>
-        /// <param name="minLen">Minimum overlap length.</param>
+        /// <param name="minLen">Minimum overhang length.</param>
         /// <returns>First nucleotide or 255 if oligo too short to dequeue.</returns>
-        public byte Dequeue(int minLen)
+        public byte Dequeue(int minLen, int length = 1)
         {
-            if (IsDequeueAllowed(minLen))
+            if (IsDequeueAllowed(minLen, length))
             {
-                byte item = this.Seq_5[this.Seq_5.Count - 1];
-                this.Seq_5 = this.Seq_5.GetSubSequence(1, this.Seq_5.Count - 1);
+                long index = length;
+                byte item = this.Seq_5[length];
+                this.Seq_5 = this.Seq_5.GetSubSequence(index, this.Seq_5.Count - index);
                 this.Sequence = new Sequence(Alphabets.DNA, Seq_5.ToString() + Seq_3.ToString());
                 this.Temperature = GetMeltingTemperature(Sequence);
                 return item;
@@ -170,12 +177,57 @@ namespace Mufasa.BackEnd.Designer
         /// </summary>
         /// <param name="minLen">Minimum primer length.</param>
         /// <returns>Last nucleotide or 255 if oligo too short to pop.</returns>
-        public byte Pop(int minLen)
+        public byte Pop(int minLen, int length = 1)
         {
-            if (IsPopAllowed(minLen))
+            if (IsPopAllowed(minLen, length))
             {
-                byte item = this.Seq_3[0];
-                this.Seq_3 = this.Seq_3.GetSubSequence(0, this.Seq_3.Count - 1);
+                long index = this.Seq_3.Count - length;
+                byte item = this.Seq_3[index];
+                this.Seq_3 = this.Seq_3.GetSubSequence(0, index);
+                this.Sequence = new Sequence(Alphabets.DNA, Seq_5.ToString() + Seq_3.ToString());
+                this.Temperature = GetMeltingTemperature(Sequence);
+                return item;
+            }
+            else
+            {
+                return 255;
+            }
+        }
+
+        /// <summary>
+        /// Add a nucleotide to the oligo's 3' end.
+        /// </summary>
+        /// <param name="maxLen">Maximum primer length.</param>
+        /// <returns>New nucleotide or 255 if oligo too long to push.</returns>
+        public byte Push(int maxLen, int length = 1)
+        {
+            if (IsPushAllowed(maxLen, length))
+            {
+                long index = this.Seq_3.Count + length - 1;
+                byte item = this.TemplateSeq_3[index];
+                this.Seq_3 = new Sequence(Alphabets.DNA, Seq_3.ToString() + this.TemplateSeq_3.GetSubSequence(this.Seq_3.Count, length));
+                this.Sequence = new Sequence(Alphabets.DNA, Seq_5.ToString() + Seq_3.ToString());
+                this.Temperature = GetMeltingTemperature(Sequence);
+                return item;
+            }
+            else
+            {
+                return 255;
+            }
+        }
+
+        /// <summary>
+        /// Add a nucleotide to the oligo's 5' end.
+        /// </summary>
+        /// <param name="maxLen">Maximum overhang length.</param>
+        /// <returns>New nucleotide or 255 if oligo too long to enqueue.</returns>
+        public byte Enqueue(int maxLen, int length = 1)
+        {
+            if (IsEnqueueAllowed(maxLen, length))
+            {
+                long index = this.TemplateSeq_5.Count - this.Seq_5.Count - length;
+                byte item = this.TemplateSeq_5[index];
+                this.Seq_5 = new Sequence(Alphabets.DNA, this.TemplateSeq_5.GetSubSequence(index, length) +  Seq_5.ToString());
                 this.Sequence = new Sequence(Alphabets.DNA, Seq_5.ToString() + Seq_3.ToString());
                 this.Temperature = GetMeltingTemperature(Sequence);
                 return item;
@@ -190,10 +242,10 @@ namespace Mufasa.BackEnd.Designer
         /// Check if pop is allowed.
         /// </summary>
         /// <returns>True if conditions satisfied.</returns>
-        private bool IsPopAllowed(int minLen)
+        private bool IsPopAllowed(int minLen, int length = 1)
         {
             //To modify.
-            if (this.Seq_3.Count > minLen)
+            if (this.Seq_3.Count - length > minLen)
             {
                 return true;
             }
@@ -205,13 +257,47 @@ namespace Mufasa.BackEnd.Designer
         }
 
         /// <summary>
-        /// Check if deque is allowed.
+        /// Check if dequeue is allowed.
         /// </summary>
         /// <returns>True if conditions satisfied.</returns>
-        private bool IsDequeueAllowed(int minLen)
+        private bool IsDequeueAllowed(int minLen, int length = 1)
         {
             //To modify.
-            if (this.Seq_5.Count > minLen)
+            if (this.Seq_5.Count - length > minLen)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Check if enqueue is allowed.
+        /// </summary>
+        /// <returns>True if conditions satisfied.</returns>
+        private bool IsEnqueueAllowed(int maxLen, int length = 1)
+        {
+            //To modify.
+            if (this.Seq_5.Count + length - 1 < maxLen && this.Seq_5.Count + length - 1 < this.TemplateSeq_5.Count)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Check if push is allowed.
+        /// </summary>
+        /// <returns>True if conditions satisfied.</returns>
+        private bool IsPushAllowed(int maxLen, int length = 1)
+        {
+            //To modify.
+            if (this.Seq_3.Count + length - 1 < maxLen && this.Seq_3.Count + length - 1 < this.TemplateSeq_3.Count)
             {
                 return true;
             }

@@ -339,7 +339,7 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void saveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (construct != null && construct.IsEmpty())
+            if (construct != null)
             {
                 InitializeSaveFragmentFileDialog();
 
@@ -492,6 +492,7 @@ namespace Mufasa.Pages
             try
             {
                 construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
+                construct.GreedyOptimizeOverlaps();
                 overlapDataGrid.ItemsSource = construct.Overlaps;
                 overlapDataGrid.Items.Refresh();
             }
@@ -510,7 +511,7 @@ namespace Mufasa.Pages
         private void overButton_Click(object sender, RoutedEventArgs e)
         {
             InitializeSaveOverlapsDialog();
-            if (construct !=null && construct.IsEmpty())
+            if (construct !=null)
             {
                 InitializeSaveFragmentFileDialog();
 
@@ -520,11 +521,12 @@ namespace Mufasa.Pages
                 // Process open file dialog box results 
                 if (openResult == true)
                 {
+                    String sep = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
                     try
                     {
                         using (StreamWriter sw = new StreamWriter(saveOverlapsDialog.FileName))
                         {
-                            sw.WriteLine("Name;Sequence;Tm;");
+                            sw.WriteLine("Name" + sep + "Tm" + sep + "Sequence");
                             foreach (Overlap item in overlapDataGrid.Items)
                             {
                                 sw.WriteLine(item.ToString());
