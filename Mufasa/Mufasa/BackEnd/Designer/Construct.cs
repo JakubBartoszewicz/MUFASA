@@ -62,42 +62,42 @@ namespace Mufasa.BackEnd.Designer
             this.Overlaps = new List<Overlap>();
             this.Settings = settings;
             //forward
-            String seq5 = "";
-            String seq3 = "";
+            String seq_5 = "";
+            String seq_3 = "";
             String name = "";
             List<MiscFeature> featList = new List<MiscFeature>();
             for (int i = 0; i < fragList.Count; i++)
             {
                 name += fragList[i].Name;
-                seq3 = fragList[i].GetString();
-                int len5 = Math.Min(settings.MaxLen_5, seq5.Length);
-                int len3 = Math.Min(settings.MaxLen_3, seq3.Length);
-                String overlapping = seq5.Substring(seq5.Length - len5, len5);
-                String geneSpecific = seq3.Substring(0, len3);
-                String loc = (seq5.Length + 1).ToString() + ".." + (seq5.Length + seq3.Length).ToString();
+                seq_3 = fragList[i].GetString();
+                int len5 = Math.Min(settings.MaxLen_5, seq_5.Length);
+                int len3 = Math.Min(settings.MaxLen_3, seq_3.Length);
+                String overhang_5 = seq_5.Substring(seq_5.Length - len5, len5);
+                String geneSpecific_3 = seq_3.Substring(0, len3);
+                String loc = (seq_5.Length + 1).ToString() + ".." + (seq_5.Length + seq_3.Length).ToString();
                 MiscFeature gene = new MiscFeature(loc);
                 gene.StandardName = fragList[i].Name;
                 featList.Add(gene);
-                seq5 += seq3;
+                seq_5 += seq_3;
                 if (i == 0)
                 {
-                    Overlaps.Add(new Overlap(fragList[i].Name + "_fwd", new Sequence(Alphabets.DNA, geneSpecific)));
+                    Overlaps.Add(new Overlap(fragList[i].Name + "-fwd", new Sequence(Alphabets.DNA, geneSpecific_3)));
                 }
                 else
                 {
 
-                    Overlaps.Add(new Overlap(fragList[i].Name + "_fwd", new Sequence(Alphabets.DNA, overlapping), new Sequence(Alphabets.DNA, geneSpecific)));
+                    Overlaps.Add(new Overlap(fragList[i].Name + "-fwd", new Sequence(Alphabets.DNA, overhang_5), new Sequence(Alphabets.DNA, geneSpecific_3)));
                 }                 
             }
 
-            this.Sequence = new Sequence(Alphabets.DNA, seq5);
+            this.Sequence = new Sequence(Alphabets.DNA, seq_5);
             //meta
             GenBankMetadata meta = new GenBankMetadata();
             meta.Locus = new GenBankLocusInfo();
             meta.Locus.MoleculeType = MoleculeType.DNA;
             meta.Locus.Name = name;
             meta.Locus.Date = System.DateTime.Now;
-            meta.Locus.SequenceLength = seq5.Length;
+            meta.Locus.SequenceLength = seq_5.Length;
             meta.Comments.Add("designed with mufasa");
             meta.Definition = "synthetic construct";
             meta.Features = new SequenceFeatures();
@@ -107,24 +107,24 @@ namespace Mufasa.BackEnd.Designer
             //reverse
             fragList.Add(new Fragment(fragList[0]));
             fragList.RemoveAt(0);
-            seq5 = "";
-            seq3 = "";
+            seq_5 = "";
+            seq_3 = "";
             for (int i = fragList.Count-1; i >= 0; i--)
             {
-                seq5 = fragList[i].GetReverseComplementString();
-                int len3 = Math.Min(settings.MaxLen_5, seq3.Length);
-                int len5 = Math.Min(settings.MaxLen_3, seq5.Length);
-                String overlapping = seq3.Substring(seq3.Length - len3, len3);
-                String geneSpecific = seq5.Substring(0, len5);
-                seq3 += seq5;
+                seq_5 = fragList[i].GetReverseComplementString();
+                int len_5 = Math.Min(settings.MaxLen_5, seq_3.Length);
+                int len_3 = Math.Min(settings.MaxLen_3, seq_5.Length);
+                String overhang_5 = seq_3.Substring(seq_3.Length - len_5, len_5);
+                String geneSpecific_3 = seq_5.Substring(0, len_3);
+                seq_3 += seq_5;
                 if (i == fragList.Count - 1)
                 {
-                    Overlaps.Add(new Overlap(fragList[i].Name + "_rev", new Sequence(Alphabets.DNA, geneSpecific)));
+                    Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.DNA, geneSpecific_3)));
                 }
                 else
                 {
 
-                    Overlaps.Add(new Overlap(fragList[i].Name + "_rev", new Sequence(Alphabets.DNA, overlapping), new Sequence(Alphabets.DNA, geneSpecific)));
+                    Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.DNA, overhang_5), new Sequence(Alphabets.DNA, geneSpecific_3)));
                 }
             }
             TermoOptimizeOverlaps();

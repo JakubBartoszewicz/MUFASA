@@ -17,15 +17,21 @@ namespace Mufasa.BackEnd.Designer
         /// Overlap constructor.
         /// </summary>
         /// <param name="name">Overlap name.</param>
-        /// <param name="overlapping">Overlap sequence.</param>
-        /// <param name="geneSpecific">Gene specific sequence.</param>
-        public Overlap(String name, ISequence overlapping, ISequence geneSpecific)
+        /// <param name="overhang_5">Overhang sequence.</param>
+        /// <param name="geneSpecific_3">Gene specific sequence.</param>
+        public Overlap(String name, ISequence overhang_5, ISequence geneSpecific_3)
         {
-            this.Seq_3 = geneSpecific;
-            this.Seq_5 = overlapping;
             this.Name = name;
-            this.Sequence = new Sequence(Alphabets.DNA, overlapping.ToString() + geneSpecific.ToString());
+            this.TemplateSeq_3 = new Sequence(Alphabets.DNA, geneSpecific_3.ToString().ToUpper());
+            this.TemplateSeq_5 = new Sequence(Alphabets.DNA, overhang_5.ToString().ToLower());
+            this.Seq_3 = this.TemplateSeq_3;
+            this.Seq_5 = this.TemplateSeq_5;
+            this.Sequence = new Sequence(Alphabets.DNA, this.Seq_5.ToString() + this.Seq_3.ToString());
             this.TempInit();
+            this.Temperature = GetMeltingTemperature(this.Sequence);
+            this.Temperature_5 = GetMeltingTemperature(this.Seq_5);
+            this.Temperature_3 = GetMeltingTemperature(this.Seq_3);
+
         }
 
         /// <summary>
@@ -34,13 +40,8 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="name">Overlap name.</param>
         /// <param name="primer">Primer sequence.</param>
         public Overlap(String name, ISequence primer)
-        {
-            this.Seq_3 = primer;
-            this.Seq_5 = new Sequence(Alphabets.DNA, "");
-            this.Name = name;
-            this.Sequence = new Sequence(Alphabets.DNA, primer.ToString());
-            this.TempInit();
-        }
+            : this(name, new Sequence(Alphabets.DNA, ""), primer) { }
+
 
         /// <summary>
         /// Simple temperature computation initialization.
@@ -53,15 +54,19 @@ namespace Mufasa.BackEnd.Designer
             this.SimpleT.Add(Alphabets.DNA.G, 4.0);
             this.SimpleT.Add(Alphabets.DNA.C, 4.0);
             this.SimpleT.Add(Alphabets.DNA.Gap, 0.0);
-            this.Temperature_5 = GetMeltingTemperature(Seq_5);
-            this.Temperature_3 = GetMeltingTemperature(Seq_3);
         }
 
 
         /// <value>
         /// Nucleotide temperature dictionary.
         /// </value>
-        private Dictionary <byte,double> SimpleT;
+        private Dictionary<byte, double> SimpleT;
+
+        /// <value>
+        /// Overlap melting temperature.
+        /// </value>
+        public double Temperature { get; set; }
+
 
         /// <value>
         /// 3' ("gene-specific") subsequence melting temperature.
@@ -73,6 +78,15 @@ namespace Mufasa.BackEnd.Designer
         /// </value>
         public double Temperature_5 { get; set; }
 
+        /// <value>
+        /// 3' ("gene-specific") subsequence template.
+        /// </value>
+        public ISequence TemplateSeq_3 { get; set; }
+
+        /// <value>
+        /// 5' ("overhang") subsequence template.
+        /// </value>
+        public ISequence TemplateSeq_5 { get; set; }
 
         /// <value>
         /// 3' ("gene-specific") subsequence.
@@ -95,6 +109,7 @@ namespace Mufasa.BackEnd.Designer
             return result;
         }
 
+
         /// <value>
         /// Sequence string.
         /// </value>
@@ -112,8 +127,8 @@ namespace Mufasa.BackEnd.Designer
         {
             double T = 0.0;
             Sequence upper = null;
-            upper = new Sequence(Alphabets.DNA, sequence.ToString().ToUpper());            
-            
+            upper = new Sequence(Alphabets.DNA, sequence.ToString().ToUpper());
+
             for (long index = 0; index < upper.Count; index++)
             {
                 T += SimpleT[upper[index]];
@@ -133,12 +148,10 @@ namespace Mufasa.BackEnd.Designer
             unsafe
             {
                 char* seq = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(upper.ToString());
-                        String ct = System.Runtime.InteropServices.Marshal.PtrToStringAnsi((System.IntPtr)seq);
-                        System.Console.WriteLine(ct);
-                        T = Tm_thal.p3_seqtm(seq, 50.0, 50.0, 0.0, 0.0, 36, Tm_thal.p3_tm_method_type.p3_breslauer_auto, Tm_thal.p3_salt_correction_type.p3_schildkraut);
+                T = Tm_thal.p3_seqtm(seq, 50.0, 50.0, 0.0, 0.0, 36, Tm_thal.p3_tm_method_type.p3_breslauer_auto, Tm_thal.p3_salt_correction_type.p3_schildkraut);
             }
-            T = Math.Round(T, 5);
-            if (T < -9999.0)
+            T = Math.Round(T, 2);
+            if (T < -273.15)
             {
                 T = 0.0;
             }
@@ -152,7 +165,7 @@ namespace Mufasa.BackEnd.Designer
         /// <returns>First nucleotide or 255 if oligo too short to dequeue.</returns>
         public byte Dequeue(int minLen)
         {
-            if (IsDequeAllowed(minLen))
+            if (IsDequeueAllowed(minLen))
             {
                 byte item = this.Seq_5[this.Seq_5.Count - 1];
                 this.Seq_5 = this.Seq_5.GetSubSequence(1, this.Seq_5.Count - 1);
@@ -194,7 +207,7 @@ namespace Mufasa.BackEnd.Designer
         private bool IsPopAllowed(int minLen)
         {
             //To modify.
-            if (this.Seq_3.Count > minLen )
+            if (this.Seq_3.Count > minLen)
             {
                 return true;
             }
@@ -202,14 +215,14 @@ namespace Mufasa.BackEnd.Designer
             {
                 return false;
             }
-                
+
         }
 
         /// <summary>
         /// Check if deque is allowed.
         /// </summary>
         /// <returns>True if conditions satisfied.</returns>
-        private bool IsDequeAllowed(int minLen)
+        private bool IsDequeueAllowed(int minLen)
         {
             //To modify.
             if (this.Seq_5.Count > minLen)
