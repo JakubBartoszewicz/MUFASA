@@ -39,7 +39,7 @@ namespace Mufasa.Pages
             {
                 volume /= 2;
             }
-            return Math.Round(volume,1).ToString();
+            return Math.Round(volume,2).ToString();
         }
 
         /// <summary>

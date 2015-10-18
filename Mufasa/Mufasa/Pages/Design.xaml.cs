@@ -508,7 +508,7 @@ namespace Mufasa.Pages
                 try
                 {
                     construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
-                    ScoreTotal score = overlapOptimizer.NaiveOptimizeOverlaps(ref construct);
+                    ScoreTotal score = overlapOptimizer.SemiNaiveOptimizeOverlaps(ref construct);
                     overlapDataGrid.ItemsSource = construct.Overlaps;
                     overlapDataGrid.Items.Refresh();
                     List<Score> scoreList = new List<Score>();
@@ -549,7 +549,14 @@ namespace Mufasa.Pages
                     {
                         using (StreamWriter sw = new StreamWriter(saveOverlapsDialog.FileName))
                         {
-                            sw.WriteLine("Name" + sep + "Tm" + sep + "Sequence");
+                            sw.WriteLine("Scores:" + sep + "Raw score" + sep + "Normalized score");
+                            foreach (Score item in scoreDataGrid.Items)
+                            {
+                                sw.WriteLine(item.ToString());
+
+                            }
+                            sw.WriteLine();
+                            sw.WriteLine("Name" + sep + "Tm" + sep + "Length" + sep + "Sequence");
                             foreach (Overlap item in overlapDataGrid.Items)
                             {
                                 sw.WriteLine(item.ToString());

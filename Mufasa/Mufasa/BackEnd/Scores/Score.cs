@@ -45,5 +45,16 @@ namespace Mufasa.BackEnd.Scores
         /// </summary>
         /// <param name="overlaps">Overlap list.</param>
         abstract public void Rescore(List<Overlap> overlaps);
+
+        /// <summary>
+        /// Prints the overlap in a human-readable format.
+        /// </summary>
+        /// <returns>String represanting the overlap.</returns>
+        public override string ToString()
+        {
+            String sep = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+            String result = this.Label + sep + Math.Round(this._score, 2) + sep + Math.Round(this._normalizedScore, 2);
+            return result;
+        }
     }
 }
