@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mufasa.BackEnd.TmThal;
 
 namespace Mufasa.BackEnd.Designer
 {
@@ -42,6 +43,12 @@ namespace Mufasa.BackEnd.Designer
         public int TargetTm { get; set; }
 
         /// <summary>
+        /// TmThal settings
+        /// </summary>
+        public TmThalSettings TmThalSettings;
+
+
+        /// <summary>
         /// Designer settings constructor.
         /// </summary>
         public DesignerSettings()
@@ -52,6 +59,7 @@ namespace Mufasa.BackEnd.Designer
             this.MaxLen_5 = 30;
             this.TargetTm = 65;
             this.ReactionVolume = 50;
+            this.TmThalSettings = new TmThalSettings();
         }
 
     }

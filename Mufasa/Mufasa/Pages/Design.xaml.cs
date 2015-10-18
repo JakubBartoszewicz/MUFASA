@@ -508,7 +508,7 @@ namespace Mufasa.Pages
                 try
                 {
                     construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
-                    ScoreTotal score = overlapOptimizer.GreedyOptimizeOverlaps(ref construct);
+                    ScoreTotal score = overlapOptimizer.NaiveOptimizeOverlaps(ref construct);
                     overlapDataGrid.ItemsSource = construct.Overlaps;
                     overlapDataGrid.Items.Refresh();
                     List<Score> scoreList = new List<Score>();

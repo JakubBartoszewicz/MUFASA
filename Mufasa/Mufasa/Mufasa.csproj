@@ -119,9 +119,9 @@
     <Compile Include="BackEnd\Designer\Fragment.cs" />
     <Compile Include="BackEnd\Exceptions\SequenceCountException.cs" />
     <Compile Include="BackEnd\Exceptions\SequenceLengthException.cs" />
-    <Compile Include="BackEnd\Exceptions\TmException.cs" />
     <Compile Include="BackEnd\Scores\ScoreTotal.cs" />
-    <Compile Include="BackEnd\TmThal.cs" />
+    <Compile Include="BackEnd\TmThal\Thermodynamics.cs" />
+    <Compile Include="BackEnd\TmThal\TmThalSettings.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

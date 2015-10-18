@@ -20,8 +20,9 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="name">Overlap name.</param>
         /// <param name="overhang_5">Overhang sequence.</param>
         /// <param name="geneSpecific_3">Gene specific sequence.</param>
-        public Overlap(String name, ISequence overhang_5, ISequence geneSpecific_3)
+        public Overlap(String name, ISequence overhang_5, ISequence geneSpecific_3, TmThalSettings settings)
         {
+            this.Settings = settings;
             this.Name = name;
             this.TemplateSeq_3 = new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3.ToString().ToUpper());
             this.TemplateSeq_5 = new Sequence(Alphabets.AmbiguousDNA, overhang_5.ToString().ToLower());
@@ -37,15 +38,15 @@ namespace Mufasa.BackEnd.Designer
         /// </summary>
         /// <param name="name">Overlap name.</param>
         /// <param name="primer">Primer sequence.</param>
-        public Overlap(String name, ISequence primer)
-            : this(name, new Sequence(Alphabets.AmbiguousDNA, ""), primer) { }
+        public Overlap(String name, ISequence primer, TmThalSettings settings)
+            : this(name, new Sequence(Alphabets.AmbiguousDNA, ""), primer, settings) { }
 
         /// <summary>
         /// Overlap copying constructor.
         /// </summary>
         /// <param name="overlap">Overlap.</param>
         public Overlap(Overlap overlap)
-            : this(overlap.Name, overlap.Seq_5, overlap.Seq_3) { }
+            : this(overlap.Name, overlap.Seq_5, overlap.Seq_3, overlap.Settings) { }
 
         /// <summary>
         /// Simple temperature computation initialization.
@@ -70,6 +71,11 @@ namespace Mufasa.BackEnd.Designer
         /// Overlap melting temperature.
         /// </value>
         public double Temperature { get; set; }
+
+        /// <summary>
+        /// Settings for thermodynamic evaluation.
+        /// </summary>
+        public TmThalSettings Settings { get; set; }
 
         /// <value>
         /// 3' ("gene-specific") subsequence template.
@@ -141,7 +147,13 @@ namespace Mufasa.BackEnd.Designer
             unsafe
             {
                 char* seq = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(upper.ToString());
-                T = Thermodynamics.p3_seqtm(seq, 50.0, 50.0, 0.0, 0.0, 36, Thermodynamics.p3_tm_method_type.p3_breslauer_auto, Thermodynamics.p3_salt_correction_type.p3_schildkraut);
+                T = Thermodynamics.p3_seqtm(seq, this.Settings.TmSettings.dna_conc,
+                    this.Settings.TmSettings.salt_conc,
+                    this.Settings.TmSettings.divalent_conc,
+                    this.Settings.TmSettings.dntp_conc,
+                    this.Settings.TmSettings.nn_max_len,
+                    this.Settings.TmSettings.tm_method,
+                    this.Settings.TmSettings.salt_corrections);
             }
             T = Math.Round(T, 2);
             if (T < -273.15)

@@ -47,20 +47,20 @@ namespace Mufasa.BackEnd.TmThal
         /* Structure for passing arguments to THermodynamic ALignment calculation */
         public struct p3_thal_args
         {
-            int debug; /* if non zero, print debugging info to stderr */
-            p3_thal_alignment_type type; /* one of the
+            public int debug; /* if non zero, print debugging info to stderr */
+            public p3_thal_alignment_type type; /* one of the
 							          1 THAL_ANY, (by default)
 							          2 THAL_END1,
 							          3 THAL_END2,
 							          4 THAL_HAIRPIN */
-            int maxLoop;  /* maximum size of loop to consider; longer than 30 bp are not allowed */
-            double mv; /* concentration of monovalent cations */
-            double dv; /* concentration of divalent cations */
-            double dntp; /* concentration of dNTP-s */
-            double dna_conc; /* concentration of oligonucleotides */
-            double temp; /* temperature from which hairpin structures will be calculated */
-            int temponly; /* if non zero, print only temperature to stderr */
-            int dimer; /* if non zero, dimer structure is calculated */
+            public int maxLoop;  /* maximum size of loop to consider; longer than 30 bp are not allowed */
+            public double mv; /* concentration of monovalent cations */
+            public double dv; /* concentration of divalent cations */
+            public double dntp; /* concentration of dNTP-s */
+            public double dna_conc; /* concentration of oligonucleotides */
+            public double temp; /* temperature from which hairpin structures will be calculated */
+            public int temponly; /* if non zero, print only temperature to stderr */
+            public int dimer; /* if non zero, dimer structure is calculated */
         } ;
 
 
@@ -68,11 +68,30 @@ namespace Mufasa.BackEnd.TmThal
 
         public unsafe struct p3_thal_results
         {
-            fixed char msg[255];
-            double temp;
-            int align_end_1;
-            int align_end_2;
+            public fixed char msg[255];
+            public double temp;
+            public int align_end_1;
+            public int align_end_2;
         };
+
+        public struct p3_tm_args
+        {
+            public double dna_conc;   /* DNA concentration (nanomolar). */
+            public double salt_conc;  /* Concentration of divalent cations (millimolar). */
+            public double divalent_conc; /* Concentration of divalent cations (millimolar) */
+            public double dntp_conc;     /* Concentration of dNTPs (millimolar) */
+            public int nn_max_len;  /* The maximum sequence length for
+						    using the nearest neighbor model
+						    (as implemented in oligotm.  For
+						    sequences longer than this, seqtm
+						    uses the "GC%" formula implemented
+						    in long_seq_tm.
+						    */
+
+            public p3_tm_method_type tm_method;       /* See description above. */
+            public p3_salt_correction_type salt_corrections; /* See description above. */
+
+        }
 
 
         [DllImport("Tm_thal.dll", CallingConvention = CallingConvention.Cdecl)]
