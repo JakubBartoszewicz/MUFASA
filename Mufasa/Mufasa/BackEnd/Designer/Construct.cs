@@ -77,27 +77,35 @@ namespace Mufasa.BackEnd.Designer
             String seq_3 = "";
             String name = "";
             List<MiscFeature> featList = new List<MiscFeature>();
+
+            int pairIndex;
+            int len_5;
+            int len_3;
+
             for (int i = 0; i < fragList.Count; i++)
             {
                 name += fragList[i].Name;
                 seq_3 = fragList[i].GetString();
-                int len5 = Math.Min(settings.MaxLen_5, seq_5.Length);
-                int len3 = Math.Min(settings.MaxLen_3, seq_3.Length);
-                String overhang_5 = seq_5.Substring(seq_5.Length - len5, len5);
-                String geneSpecific_3 = seq_3.Substring(0, len3);
+                len_5 = Math.Min(settings.MaxLen_5, seq_5.Length);
+                len_3 = Math.Min(settings.MaxLen_3, seq_3.Length);
+                String overhang_5 = seq_5.Substring(seq_5.Length - len_5, len_5);
+                String geneSpecific_3 = seq_3.Substring(0, len_3);
                 String loc = (seq_5.Length + 1).ToString() + ".." + (seq_5.Length + seq_3.Length).ToString();
                 MiscFeature gene = new MiscFeature(loc);
                 gene.StandardName = fragList[i].Name;
                 featList.Add(gene);
                 seq_5 += seq_3;
+
+
                 if (i == 0)
                 {
-                    Overlaps.Add(new Overlap(fragList[i].Name + "-fwd", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings));
+                    pairIndex = fragList.Count;
+                    Overlaps.Add(new Overlap(fragList[i].Name + "-fwd", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings, pairIndex));
                 }
                 else
                 {
-
-                    Overlaps.Add(new Overlap(fragList[i].Name + "-fwd", new Sequence(Alphabets.AmbiguousDNA, overhang_5), new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings));
+                    pairIndex = 2 * fragList.Count - i;
+                    Overlaps.Add(new Overlap(fragList[i].Name + "-fwd", new Sequence(Alphabets.AmbiguousDNA, overhang_5), new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings, pairIndex));
                 }
             }
 
@@ -123,19 +131,21 @@ namespace Mufasa.BackEnd.Designer
             for (int i = fragList.Count - 1; i >= 0; i--)
             {
                 seq_5 = fragList[i].GetReverseComplementString();
-                int len_5 = Math.Min(settings.MaxLen_5, seq_3.Length);
-                int len_3 = Math.Min(settings.MaxLen_3, seq_5.Length);
+                len_5 = Math.Min(settings.MaxLen_5, seq_3.Length);
+                len_3 = Math.Min(settings.MaxLen_3, seq_5.Length);
                 String overhang_5 = seq_3.Substring(seq_3.Length - len_5, len_5);
                 String geneSpecific_3 = seq_5.Substring(0, len_3);
                 seq_3 += seq_5;
+
                 if (i == fragList.Count - 1)
                 {
-                    Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings));
+                    pairIndex = 0;
+                    Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings, pairIndex));
                 }
                 else
                 {
-
-                    Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.AmbiguousDNA, overhang_5), new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings));
+                    pairIndex = i + 1;
+                    Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.AmbiguousDNA, overhang_5), new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings, pairIndex));
                 }
             }
         }

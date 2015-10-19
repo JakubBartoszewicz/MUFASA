@@ -30,14 +30,14 @@ namespace Mufasa.BackEnd.Scores
 
             foreach (Overlap o in overlaps)
             {
-                sum += o.Temperature;
+                sum += o.MeltingTemperature;
             }
 
             double mean = sum / overlaps.Count;
 
             foreach (Overlap o in overlaps)
             {
-                _score += Math.Abs(o.Temperature - mean);
+                _score += Math.Abs(o.MeltingTemperature - mean);
             }
             
             this._normalizedScore = this._score / overlaps.Count;

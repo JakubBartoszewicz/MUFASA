@@ -64,7 +64,14 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Tm" Width ="*" Binding="{Binding Path=Temperature, Mode=OneWay}">
+                        <DataGridTextColumn Header="Tm" Width ="*" Binding="{Binding Path=Temperature, Mode=OneWay, StringFormat=N2}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Th" Width ="*" Binding="{Binding Path=HairpinTemperature, Mode=OneWay, StringFormat=N2}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -142,7 +149,7 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Scores:" Width ="4*" Binding="{Binding Path=Label, Mode=OneWay}" >
+                        <DataGridTextColumn Header="Scores:" Width ="5*" Binding="{Binding Path=Label, Mode=OneWay}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />

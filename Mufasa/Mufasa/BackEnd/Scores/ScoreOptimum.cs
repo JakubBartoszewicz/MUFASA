@@ -31,7 +31,7 @@ namespace Mufasa.BackEnd.Scores
 
             foreach (Overlap o in overlaps)
             {
-                _score += Math.Abs(o.Temperature - this.TargetTm);
+                _score += Math.Abs(o.MeltingTemperature - this.TargetTm);
             }
             
             this._normalizedScore = this._score / overlaps.Count;

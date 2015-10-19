@@ -9,26 +9,60 @@ namespace Mufasa.BackEnd.TmThal
 {
     static class Thermodynamics
     {
-        /*
-           For olgigotm() and seqtm()
-
-           Both functions return the melting temperature of the given oligo
-           calculated as specified by user, but oligotm _should_ only be used on
-           DNA sequences of length <= MAX_PRIMER_LENGTH (which is defined
-           elsewhere).  seqtm uses oligotm for sequences of length <=
-           MAX_PRIMER_LENGTH, and a different, G+C% based formula for longer
-           sequences.  For oligotm(), no error is generated on sequences
-           longer than MAX_PRIMER_LENGTH, but the formula becomes less
-           accurate as the sequence grows longer.  Caveat emptor.
-
-           We use the folowing typedefs:
-        */
+        /// <summary>
+        /// Melting temperature computation method.
+        /// </summary>
+        /// <remarks>
+        /// If tm_method==santalucia_auto, then the table of
+        /// nearest-neighbor thermodynamic parameters and method for Tm
+        /// calculation in the paper [SantaLucia JR (1998) &quot;A unified view of
+        /// polymer, dumbbell and oligonucleotide DNA nearest-neighbor
+        /// thermodynamics&quot;, Proc Natl Acad Sci 95:1460-65
+        /// http://dx.doi.org/10.1073/pnas.95.4.1460] is used.
+        /// *THIS IS THE RECOMMENDED VALUE*.
+        /// If tm_method==breslauer_auto, then method for Tm
+        /// calculations in the paper [Rychlik W, Spencer WJ and Rhoads RE
+        /// (1990) &quot;Optimization of the annealing temperature for DNA
+        /// amplification in vitro&quot;, Nucleic Acids Res 18:6409-12
+        /// http://www.pubmedcentral.nih.gov/articlerender.fcgi?tool=pubmed&amp;pubmedid=2243783].
+        /// and the thermodynamic parameters in the paper [Breslauer KJ, Frank
+        /// R, Blöcker H and Marky LA (1986) &quot;Predicting DNA duplex stability
+        /// from the base sequence&quot; Proc Natl Acad Sci 83:4746-50
+        /// http://dx.doi.org/10.1073/pnas.83.11.3746], are is used.  This is
+        /// the method and the table that primer3 used up to and including
+        /// version 1.0.1
+        /// </remarks>
         public enum p3_tm_method_type
         {
             p3_breslauer_auto = 0,
             p3_santalucia_auto = 1,
         };
 
+        /// <summary>
+        /// Salt correction method.
+        /// </summary>
+        /// <remarks>
+        /// If salt_corrections==schildkraut, then formula for
+        /// salt correction in the paper [Schildkraut, C, and Lifson, S (1965)
+        /// &quot;Dependence of the melting temperature of DNA on salt
+        /// concentration&quot;, Biopolymers 3:195-208 (not available on-line)] is
+        /// used.  This is the formula that primer3 used up to and including
+        /// version 1.0.1.
+        ///
+        /// If salt_corrections==santalucia, then formula for
+        /// salt correction suggested by the paper [SantaLucia JR (1998) "A
+        /// unified view of polymer, dumbbell and oligonucleotide DNA
+        /// nearest-neighbor thermodynamics", Proc Natl Acad Sci 95:1460-65
+        /// http://dx.doi.org/10.1073/pnas.95.4.1460] is used.
+        ///
+        /// *THIS IS THE RECOMMENDED VALUE*. 
+        ///
+        /// If salt_corrections==owczarzy, then formula for
+        /// salt correction in the paper [Owczarzy, R., Moreira, B.G., You, Y., 
+        /// Behlke, M.A., and Walder, J.A. (2008) &quot;Predicting stability of DNA 
+        /// duplexes in solutions containing magnesium and monovalent cations&quot;, 
+        /// Biochemistry 47:5336-53 http://dx.doi.org/10.1021/bi702363u] is used.
+        /// </remarks>
         public enum p3_salt_correction_type
         {
             p3_schildkraut = 0,
@@ -36,6 +70,13 @@ namespace Mufasa.BackEnd.TmThal
             p3_owczarzy = 2,
         };
 
+        /// <summary>
+        /// Alignment type.
+        /// 1 THAL_ANY, (by default)
+        /// 2 THAL_END1,
+        /// 3 THAL_END2,
+        /// 4 THAL_HAIRPIN
+        /// </summary>
         public enum p3_thal_alignment_type
         {
             thal_any = 1,
@@ -44,78 +85,179 @@ namespace Mufasa.BackEnd.TmThal
             thal_hairpin = 4,
         };
 
-        /* Structure for passing arguments to THermodynamic ALignment calculation */
-        public struct p3_thal_args
+        /// <summary>
+        /// Structure for passing arguments to THermodynamic ALignment calculation.
+        /// </summary>
+        public unsafe struct p3_thal_args
         {
-            public int debug; /* if non zero, print debugging info to stderr */
-            public p3_thal_alignment_type type; /* one of the
-							          1 THAL_ANY, (by default)
-							          2 THAL_END1,
-							          3 THAL_END2,
-							          4 THAL_HAIRPIN */
-            public int maxLoop;  /* maximum size of loop to consider; longer than 30 bp are not allowed */
-            public double mv; /* concentration of monovalent cations */
-            public double dv; /* concentration of divalent cations */
-            public double dntp; /* concentration of dNTP-s */
-            public double dna_conc; /* concentration of oligonucleotides */
-            public double temp; /* temperature from which hairpin structures will be calculated */
-            public int temponly; /* if non zero, print only temperature to stderr */
-            public int dimer; /* if non zero, dimer structure is calculated */
+            /// <summary>
+            /// If non zero, print debugging info to stderr. 
+            /// </summary>
+            public int debug;
+
+            /// <summary>
+            /// Alignment type. THAL_ANY, by default. See <see cref="p3_thal_alignment_type"/>
+            /// </summary>
+            //public p3_thal_alignment_type type;
+
+            /// <summary>
+            /// Maximum size of loop to consider; longer than 30 bp are not allowed.
+            /// </summary>
+            public int maxLoop;
+
+            /// <summary>
+            /// Concentration of monovalent cations. 
+            /// </summary>
+            public double mv;
+
+            /// <summary>
+            /// Concentration of divalent cations.
+            /// </summary>
+            public double dv;
+
+            /// <summary>
+            /// Concentration of dNTP-s.
+            /// </summary>
+            public double dntp;
+
+            /// <summary>
+            /// Concentration of oligonucleotides.
+            /// </summary>
+            public double dna_conc;
+
+            /// <summary>
+            /// Temperature from which hairpin structures will be calculated.
+            /// </summary>
+            public double temp;
+
+            /// <summary>
+            /// If non zero, print only temperature to stderr.
+            /// </summary>
+            public int temponly;
+
+            /// <summary>
+            /// If non zero, dimer structure is calculated. 
+            /// </summary>
+            public int dimer;
+            
         } ;
 
 
-        /* Structure for receiving results from the thermodynamic alignment calculation */
-
+        /// <summary>
+        /// Structure for receiving results from the thermodynamic alignment calculation.
+        /// </summary>
         public unsafe struct p3_thal_results
         {
+            /// <summary>
+            /// Message.
+            /// </summary>
             public fixed char msg[255];
+
+            /// <summary>
+            /// Melting temperature.
+            /// </summary>
             public double temp;
+
+            /// <summary>
+            /// Alignment end 1.
+            /// </summary>
             public int align_end_1;
+
+            /// <summary>
+            /// Alignment end 2.
+            /// </summary>
             public int align_end_2;
         };
 
+
+        /// <summary>
+        /// Primer3's thal arguments structure.
+        /// </summary>
         public struct p3_tm_args
         {
-            public double dna_conc;   /* DNA concentration (nanomolar). */
-            public double salt_conc;  /* Concentration of divalent cations (millimolar). */
-            public double divalent_conc; /* Concentration of divalent cations (millimolar) */
-            public double dntp_conc;     /* Concentration of dNTPs (millimolar) */
-            public int nn_max_len;  /* The maximum sequence length for
-						    using the nearest neighbor model
-						    (as implemented in oligotm.  For
-						    sequences longer than this, seqtm
-						    uses the "GC%" formula implemented
-						    in long_seq_tm.
-						    */
+            /// <summary>
+            /// DNA concentration (nanomolar).
+            /// </summary>
+            public double dna_conc;
 
-            public p3_tm_method_type tm_method;       /* See description above. */
+            /// <summary>
+            /// Concentration of divalent cations (millimolar).
+            /// </summary>
+            public double salt_conc;
+
+            /// <summary>
+            /// Concentration of divalent cations (millimolar).
+            /// </summary>
+            public double divalent_conc;
+
+            /// <summary>
+            /// Concentration of dNTPs (millimolar).
+            /// </summary>
+            public double dntp_conc;
+
+            /// <summary>
+            /// The maximum sequence length for
+			/// using the nearest neighbor model
+			/// (as implemented in oligotm.  For
+			/// sequences longer than this, seqtm
+			/// uses the "GC%" formula implemented
+            /// in long_seq_tm.
+            /// </summary>
+            public int nn_max_len; 
+			
+            /// <summary>
+            /// Melting temperature computation method. See <see cref="p3_tm_method_type"/>
+            /// </summary>
+            public p3_tm_method_type tm_method;
+
+            /// <summary>
+            /// Melting themperature method. See <see cref="p3_salt_correction_type"/>
+            /// </summary>
             public p3_salt_correction_type salt_corrections; /* See description above. */
 
         }
 
-
+        /// <summary>
+        /// Primer3's general melting temperature calulation function.
+        /// </summary>
+        /// <param name="seq">The sequence.</param>
+        /// <param name="dna_conc">DNA concentration (nanomolar).</param>
+        /// <param name="salt_conc">Concentration of divalent cations (millimolar).</param>
+        /// <param name="divalent_conc">Concentration of divalent cations (millimolar).</param>
+        /// <param name="dntp_conc">concentration of dNTPs (millimolar).</param>
+        /// <param name="nn_max_len"> The maximum sequence length for
+        /// using the nearest neighbor model
+        /// (as implemented in oligotm.  For
+        /// sequences longer than this, seqtm
+        /// uses the "GC%" formula implemented
+        /// in long_seq_tm.
+        /// </param>
+        /// <param name="tm_method">Melting themperature method. See <see cref="p3_tm_method_type"/></param>
+        /// <param name="salt_corrections">Melting themperature method. See <see cref="p3_salt_correction_type"/></param>
+        /// <returns>Oligo's melting temperature.</returns>
         [DllImport("Tm_thal.dll", CallingConvention = CallingConvention.Cdecl)]
-        public unsafe static extern double p3_seqtm(char* seq,  /* The sequence. */
-        double dna_conc,   /* DNA concentration (nanomolar). */
-        double salt_conc,  /* Concentration of divalent cations (millimolar). */
-        double divalent_conc, /* Concentration of divalent cations (millimolar) */
-        double dntp_conc,     /* Concentration of dNTPs (millimolar) */
-        int nn_max_len,  /* The maximum sequence length for
-						    using the nearest neighbor model
-						    (as implemented in oligotm.  For
-						    sequences longer than this, seqtm
-						    uses the "GC%" formula implemented
-						    in long_seq_tm.
-						    */
+        public unsafe static extern double p3_seqtm(char* seq,
+            double dna_conc,
+            double salt_conc,
+            double divalent_conc,
+            double dntp_conc,
+            int nn_max_len,
+            p3_tm_method_type tm_method,
+            p3_salt_correction_type salt_corrections
+        );
 
-                            p3_tm_method_type tm_method,       /* See description above. */
-                            p3_salt_correction_type salt_corrections /* See description above. */
-                            );
+        /// <summary>
+        /// Primer3's thermodynamic sequence alignment.
+        /// </summary>
+        /// <param name="oligo_f">Forward oligo.</param>
+        /// <param name="oligo_r">Reverse oligo.</param>
+        /// <param name="a">Thal arguments. See <see cref="p3_thal_args"/></param>
+        /// <param name="o">Thal results. See <see cref="p3_thal_results"/></param>
         [DllImport("Tm_thal.dll", CallingConvention = CallingConvention.Cdecl)]
         public unsafe static extern void p3_thal(char* oligo_f,
-        char* oligo_r,
-        p3_thal_args* a,
-        p3_thal_results* o);
-
+            char* oligo_r,
+            p3_thal_args* a,
+            p3_thal_results* o
+        );
     }
 }

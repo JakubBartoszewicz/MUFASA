@@ -20,8 +20,9 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="name">Overlap name.</param>
         /// <param name="overhang_5">Overhang sequence.</param>
         /// <param name="geneSpecific_3">Gene specific sequence.</param>
-        public Overlap(String name, ISequence overhang_5, ISequence geneSpecific_3, TmThalSettings settings)
+        public Overlap(String name, ISequence overhang_5, ISequence geneSpecific_3, TmThalSettings settings, int pairIndex = -1)
         {
+            this.PairIndex = pairIndex;
             this.Settings = settings;
             this.Name = name;
             this.TemplateSeq_3 = new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3.ToString().ToUpper());
@@ -30,7 +31,8 @@ namespace Mufasa.BackEnd.Designer
             this.Seq_5 = this.TemplateSeq_5;
             this.Sequence = new Sequence(Alphabets.AmbiguousDNA, this.Seq_5.ToString() + this.Seq_3.ToString());
             this.TempInit();
-            this.Temperature = GetMeltingTemperature(this.Sequence);
+            this.meltingTemperature = GetMeltingTemperature();
+            this.hairpinMeltingTemperature = GetHairpinTemperature();
         }
 
         /// <summary>
@@ -38,15 +40,16 @@ namespace Mufasa.BackEnd.Designer
         /// </summary>
         /// <param name="name">Overlap name.</param>
         /// <param name="primer">Primer sequence.</param>
-        public Overlap(String name, ISequence primer, TmThalSettings settings)
-            : this(name, new Sequence(Alphabets.AmbiguousDNA, ""), primer, settings) { }
+        public Overlap(String name, ISequence primer, TmThalSettings settings, int pairIndex = -1)
+            : this(name, new Sequence(Alphabets.AmbiguousDNA, ""), primer, settings, pairIndex) { }
 
         /// <summary>
         /// Overlap copying constructor.
         /// </summary>
         /// <param name="overlap">Overlap.</param>
         public Overlap(Overlap overlap)
-            : this(overlap.Name, overlap.Seq_5, overlap.Seq_3, overlap.Settings) { }
+            : this(overlap.Name, overlap.Seq_5, overlap.Seq_3, overlap.Settings, overlap.PairIndex)
+        { }
 
         /// <summary>
         /// Simple temperature computation initialization.
@@ -61,6 +64,10 @@ namespace Mufasa.BackEnd.Designer
             this.SimpleT.Add(Alphabets.AmbiguousDNA.Gap, 0.0);
         }
 
+        /// <summary>
+        /// Paired overlap index.
+        /// </summary>
+        public int PairIndex { get; set; }
 
         /// <value>
         /// Nucleotide temperature dictionary.
@@ -70,7 +77,22 @@ namespace Mufasa.BackEnd.Designer
         /// <value>
         /// Overlap melting temperature.
         /// </value>
-        public double Temperature { get; set; }
+        public double MeltingTemperature { get { return meltingTemperature; } }
+
+        /// <value>
+        /// Overlap melting temperature.
+        /// </value>
+        private double meltingTemperature;
+
+        /// <summary>
+        /// Overlap's hairpin melting temperature.
+        /// </summary>
+        public double HairpinMeltingTemperature { get { return hairpinMeltingTemperature; } }
+
+        /// <summary>
+        /// Overlap's hairpin melting temperature.
+        /// </summary>
+        private double hairpinMeltingTemperature;
 
         /// <summary>
         /// Settings for thermodynamic evaluation.
@@ -104,7 +126,7 @@ namespace Mufasa.BackEnd.Designer
         public override string ToString()
         {
             String sep = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-            String result = this.Name + sep + this.Temperature + sep + this.Sequence.Count + sep + this.Sequence;
+            String result = this.Name + sep + this.MeltingTemperature + sep + this.Sequence.Count + sep + this.Sequence;
             return result;
         }
 
@@ -122,11 +144,11 @@ namespace Mufasa.BackEnd.Designer
         /// Compute overlap's simple-style melting temperature.
         /// </summary>
         /// <returns>Overlap's Tm.</returns>
-        public double GetSimpleMeltingTemperature(ISequence sequence)
+        public double GetSimpleMeltingTemperature()
         {
             double T = 0.0;
             Sequence upper = null;
-            upper = new Sequence(Alphabets.AmbiguousDNA, sequence.ToString().ToUpper());
+            upper = new Sequence(Alphabets.AmbiguousDNA, this.Sequence.ToString().ToUpper());
 
             for (long index = 0; index < upper.Count; index++)
             {
@@ -139,27 +161,52 @@ namespace Mufasa.BackEnd.Designer
         /// Compute overlap's NN-model melting temperature.
         /// </summary>
         /// <returns>Overlap's Tm.</returns>
-        public double GetMeltingTemperature(ISequence sequence)
+        private double GetMeltingTemperature()
         {
             double T = 0.0;
             Sequence upper = null;
-            upper = new Sequence(Alphabets.AmbiguousDNA, sequence.ToString().ToUpper());
+            upper = new Sequence(Alphabets.AmbiguousDNA, this.Sequence.ToString().ToUpper());
             unsafe
             {
                 char* seq = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(upper.ToString());
-                T = Thermodynamics.p3_seqtm(seq, this.Settings.TmSettings.dna_conc,
-                    this.Settings.TmSettings.salt_conc,
-                    this.Settings.TmSettings.divalent_conc,
-                    this.Settings.TmSettings.dntp_conc,
-                    this.Settings.TmSettings.nn_max_len,
-                    this.Settings.TmSettings.tm_method,
-                    this.Settings.TmSettings.salt_corrections);
+                T = Thermodynamics.p3_seqtm(seq, this.Settings.DnaConcentration,
+                    this.Settings.MonovalentConcentration,
+                    this.Settings.DivalentConcentration,
+                    this.Settings.DntpConcentration,
+                    this.Settings.NnMaxLen,
+                    this.Settings.TmMethod,
+                    this.Settings.SaltCorrectionMethod);
             }
-            T = Math.Round(T, 2);
             if (T < -273.15)
             {
                 T = 0.0;
             }
+            return T;
+        }
+
+
+        /// <summary>
+        /// Compute overlap's hairpin melting temperature.
+        /// </summary>
+        /// <returns>Hairpin melting temperature.</returns>
+        private double GetHairpinTemperature()
+        {
+            double T = 0.0;
+            Sequence upper = null;
+            upper = new Sequence(Alphabets.AmbiguousDNA, this.Sequence.ToString().ToUpper());
+
+            unsafe
+            {
+                Thermodynamics.p3_thal_results results;
+                char* seq = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(upper.ToString());
+                Thermodynamics.p3_thal(seq, seq, this.Settings.ThalHairpinSettings, &results);
+                T = results.temp;
+            }
+            if (T < -273.15)
+            {
+                T = 0.0;
+            }
+
             return T;
         }
 
@@ -176,7 +223,8 @@ namespace Mufasa.BackEnd.Designer
                 byte item = this.Seq_5[length];
                 this.Seq_5 = this.Seq_5.GetSubSequence(index, this.Seq_5.Count - index);
                 this.Sequence = new Sequence(Alphabets.AmbiguousDNA, Seq_5.ToString() + Seq_3.ToString());
-                this.Temperature = GetMeltingTemperature(Sequence);
+                this.meltingTemperature = GetMeltingTemperature();
+                this.hairpinMeltingTemperature = GetHairpinTemperature();
                 return item;
             }
             else
@@ -198,7 +246,8 @@ namespace Mufasa.BackEnd.Designer
                 byte item = this.Seq_3[index];
                 this.Seq_3 = this.Seq_3.GetSubSequence(0, index);
                 this.Sequence = new Sequence(Alphabets.AmbiguousDNA, Seq_5.ToString() + Seq_3.ToString());
-                this.Temperature = GetMeltingTemperature(Sequence);
+                this.meltingTemperature = GetMeltingTemperature();
+                this.hairpinMeltingTemperature = GetHairpinTemperature();
                 return item;
             }
             else
@@ -220,7 +269,8 @@ namespace Mufasa.BackEnd.Designer
                 byte item = this.TemplateSeq_3[index];
                 this.Seq_3 = new Sequence(Alphabets.AmbiguousDNA, Seq_3.ToString() + this.TemplateSeq_3.GetSubSequence(this.Seq_3.Count, length));
                 this.Sequence = new Sequence(Alphabets.AmbiguousDNA, Seq_5.ToString() + Seq_3.ToString());
-                this.Temperature = GetMeltingTemperature(Sequence);
+                this.meltingTemperature = GetMeltingTemperature();
+                this.hairpinMeltingTemperature = GetHairpinTemperature();
                 return item;
             }
             else
@@ -240,9 +290,10 @@ namespace Mufasa.BackEnd.Designer
             {
                 long index = this.TemplateSeq_5.Count - this.Seq_5.Count - length;
                 byte item = this.TemplateSeq_5[index];
-                this.Seq_5 = new Sequence(Alphabets.AmbiguousDNA, this.TemplateSeq_5.GetSubSequence(index, length) +  Seq_5.ToString());
+                this.Seq_5 = new Sequence(Alphabets.AmbiguousDNA, this.TemplateSeq_5.GetSubSequence(index, length) + Seq_5.ToString());
                 this.Sequence = new Sequence(Alphabets.AmbiguousDNA, Seq_5.ToString() + Seq_3.ToString());
-                this.Temperature = GetMeltingTemperature(Sequence);
+                this.meltingTemperature = GetMeltingTemperature();
+                this.hairpinMeltingTemperature = GetHairpinTemperature();
                 return item;
             }
             else

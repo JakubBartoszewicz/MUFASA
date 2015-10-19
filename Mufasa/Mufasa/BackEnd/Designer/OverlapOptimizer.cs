@@ -33,7 +33,7 @@ namespace Mufasa.BackEnd.Designer
                 bool done_5 = false;
                 bool tmTooHigh = true;
                 
-                double diff = construct.Overlaps[i].Temperature - construct.Settings.TargetTm;
+                double diff = construct.Overlaps[i].MeltingTemperature - construct.Settings.TargetTm;
                 double _bestDiff = diff;
                                Overlap _best = construct.Overlaps[i];
 
@@ -44,8 +44,8 @@ namespace Mufasa.BackEnd.Designer
                     if ((item_5 != end_5))
                     {
                         item_5 = construct.Overlaps[i].Dequeue(construct.Settings.MinLen_5);
-                        diff = construct.Overlaps[i].Temperature - construct.Settings.TargetTm;
-                        tmTooHigh = (construct.Overlaps[i].Temperature > construct.Settings.TargetTm);
+                        diff = construct.Overlaps[i].MeltingTemperature - construct.Settings.TargetTm;
+                        tmTooHigh = (construct.Overlaps[i].MeltingTemperature > construct.Settings.TargetTm);
 
                         if (Math.Abs(_bestDiff) > Math.Abs(diff))
                         {
@@ -72,9 +72,9 @@ namespace Mufasa.BackEnd.Designer
                     if ((item_3 != end_3))
                     {
                         item_3 = construct.Overlaps[i].Pop(construct.Settings.MinLen_3);
-                        diff = construct.Overlaps[i].Temperature - construct.Settings.TargetTm;
+                        diff = construct.Overlaps[i].MeltingTemperature - construct.Settings.TargetTm;
 
-                        tmTooHigh = (construct.Overlaps[i].Temperature > construct.Settings.TargetTm);
+                        tmTooHigh = (construct.Overlaps[i].MeltingTemperature > construct.Settings.TargetTm);
 
                         if (Math.Abs(_bestDiff) > Math.Abs(diff))
                         {
