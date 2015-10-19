@@ -28,44 +28,32 @@ namespace Mufasa.BackEnd.TmThal
             double dvConc = 1.5,
             int nnMaxLen = 60,
             Thermodynamics.p3_tm_method_type tmMethod = Thermodynamics.p3_tm_method_type.p3_santalucia_auto,
-            Thermodynamics.p3_salt_correction_type saltMethod = Thermodynamics.p3_salt_correction_type.p3_santalucia, 
+            Thermodynamics.p3_salt_correction_type saltMethod = Thermodynamics.p3_salt_correction_type.p3_santalucia,
             double temperature = 55,
             int maxLoop = 30)
         {
 
-            Thermodynamics.p3_thal_args thalArgs = new Thermodynamics.p3_thal_args();
-            Thermodynamics.p3_thal_args thalHairpinArgs = new Thermodynamics.p3_thal_args();
-
-            unsafe
-            {
-                this.thalSettings = &thalArgs;
-                this.thalHairpinSettings = &thalHairpinArgs;
-            }
-
-
-            this.DnaConcentration = dnaConc; 
-            this.DntpConcentration = dntpConc; 
-            this.MonovalentConcentration = mvConc; 
+            this.DnaConcentration = dnaConc;
+            this.DntpConcentration = dntpConc;
+            this.MonovalentConcentration = mvConc;
             this.DivalentConcentration = dvConc;
 
             this.NnMaxLen = nnMaxLen;
             this.TmMethod = tmMethod;
             this.SaltCorrectionMethod = saltMethod;
 
-            this.ReactionTemperature = temperature; 
+            this.ReactionTemperature = temperature;
             this.MaxLoop = maxLoop;
 
-            unsafe
-            {
-                this.thalSettings->debug = 0;
-                this.thalSettings->temponly = 1;
-                this.thalHairpinSettings->debug = 0;
-                this.thalHairpinSettings->temponly = 1;
+            this.thalSettings.debug = 0;
+            this.thalSettings.temponly = 0;
+            this.thalSettings.dimer = 1;
+            this.thalHairpinSettings.debug = 0;
+            this.thalHairpinSettings.temponly = 0;
+            this.thalHairpinSettings.dimer = 0;
 
-                //this.thalSettings->type = Thermodynamics.p3_thal_alignment_type.thal_any;
-                //this.thalHairpinSettings->type = Thermodynamics.p3_thal_alignment_type.thal_hairpin;
-            }
-
+            this.thalSettings.type = Thermodynamics.p3_thal_alignment_type.thal_any;
+            this.thalHairpinSettings.type = Thermodynamics.p3_thal_alignment_type.thal_hairpin;
 
         }
 
@@ -86,25 +74,25 @@ namespace Mufasa.BackEnd.TmThal
         /// <summary>
         /// TmThal.p3_thal settings for duplex calculation
         /// </summary>
-        private unsafe Thermodynamics.p3_thal_args *thalSettings;
+        private Thermodynamics.p3_thal_args thalSettings;
 
         /// <summary>
         /// TmThal.p3_thal settings for duplex calculation
         /// </summary>
-        public unsafe Thermodynamics.p3_thal_args *ThalSettings
+        public Thermodynamics.p3_thal_args ThalSettings
         {
             get { return thalSettings; }
         }
-        
+
         /// <summary>
         /// TmThal.p3_thal settings for hairpin calculation
         /// </summary>
-        private unsafe Thermodynamics.p3_thal_args *thalHairpinSettings;
+        private Thermodynamics.p3_thal_args thalHairpinSettings;
 
         /// <summary>
         /// TmThal.p3_thal settings for duplex calculation
         /// </summary>
-        public unsafe Thermodynamics.p3_thal_args *ThalHairpinSettings
+        public Thermodynamics.p3_thal_args ThalHairpinSettings
         {
             get { return thalHairpinSettings; }
         }
@@ -188,18 +176,16 @@ namespace Mufasa.BackEnd.TmThal
         {
             get
             {
-                unsafe
-                {
-                    return this.thalSettings->maxLoop;
-                }
+
+                return this.thalSettings.maxLoop;
+
             }
             set
             {
-                unsafe
-                {
-                    this.thalSettings->maxLoop = value;
-                    this.thalHairpinSettings->maxLoop = value;
-                }
+
+                this.thalSettings.maxLoop = value;
+                this.thalHairpinSettings.maxLoop = value;
+
             }
         }
 
@@ -255,18 +241,16 @@ namespace Mufasa.BackEnd.TmThal
         {
             get
             {
-                unsafe
-                {
-                    return this.thalSettings->temp;
-                }
+
+                return this.thalSettings.temp;
+
             }
             set
             {
-                unsafe
-                {
-                    this.thalSettings->temp = value;
-                    this.thalHairpinSettings->temp = value;
-                }
+
+                this.thalSettings.temp = value;
+                this.thalHairpinSettings.temp = value;
+
             }
         }
 
@@ -274,7 +258,7 @@ namespace Mufasa.BackEnd.TmThal
         /// <summary>
         /// DNA concentration.
         /// </summary>
-        public double DnaConcentration 
+        public double DnaConcentration
         {
             get
             {
@@ -283,14 +267,13 @@ namespace Mufasa.BackEnd.TmThal
             set
             {
                 this.tmSettings.dna_conc = value;
-                unsafe
-                {
-                    this.thalSettings->dna_conc = value;
-                    this.thalHairpinSettings->dna_conc = value;
-                }
+
+                this.thalSettings.dna_conc = value;
+                this.thalHairpinSettings.dna_conc = value;
+
             }
         }
-    
+
         /// <summary>
         /// dNTP concentration.
         /// </summary>
@@ -303,14 +286,13 @@ namespace Mufasa.BackEnd.TmThal
             set
             {
                 this.tmSettings.dntp_conc = value;
-                unsafe
-                {
-                    this.thalSettings->dntp = value;
-                    this.thalHairpinSettings->dntp = value;
-                }
+
+                this.thalSettings.dntp = value;
+                this.thalHairpinSettings.dntp = value;
+
             }
         }
-        
+
         /// <summary>
         /// Divalent [Mg2+] cations concentration.
         /// </summary>
@@ -323,11 +305,10 @@ namespace Mufasa.BackEnd.TmThal
             set
             {
                 this.tmSettings.divalent_conc = value;
-                unsafe
-                {
-                    this.thalSettings->dv = value;
-                    this.thalHairpinSettings->dv = value;
-                }
+
+                this.thalSettings.dv = value;
+                this.thalHairpinSettings.dv = value;
+
             }
         }
 
@@ -343,11 +324,10 @@ namespace Mufasa.BackEnd.TmThal
             set
             {
                 this.tmSettings.salt_conc = value;
-                unsafe
-                {
-                    this.thalSettings->mv = value;
-                    this.thalHairpinSettings->mv = value;
-                }
+
+                this.thalSettings.mv = value;
+                this.thalHairpinSettings.mv = value;
+
             }
         }
     }

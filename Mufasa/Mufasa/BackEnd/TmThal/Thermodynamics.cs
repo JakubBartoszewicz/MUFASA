@@ -88,7 +88,7 @@ namespace Mufasa.BackEnd.TmThal
         /// <summary>
         /// Structure for passing arguments to THermodynamic ALignment calculation.
         /// </summary>
-        public unsafe struct p3_thal_args
+        public struct p3_thal_args
         {
             /// <summary>
             /// If non zero, print debugging info to stderr. 
@@ -98,7 +98,7 @@ namespace Mufasa.BackEnd.TmThal
             /// <summary>
             /// Alignment type. THAL_ANY, by default. See <see cref="p3_thal_alignment_type"/>
             /// </summary>
-            //public p3_thal_alignment_type type;
+            public p3_thal_alignment_type type;
 
             /// <summary>
             /// Maximum size of loop to consider; longer than 30 bp are not allowed.
@@ -139,19 +139,20 @@ namespace Mufasa.BackEnd.TmThal
             /// If non zero, dimer structure is calculated. 
             /// </summary>
             public int dimer;
-            
+
         } ;
 
 
         /// <summary>
         /// Structure for receiving results from the thermodynamic alignment calculation.
         /// </summary>
-        public unsafe struct p3_thal_results
+        [StructLayout(LayoutKind.Sequential)]
+        public struct p3_thal_results
         {
             /// <summary>
             /// Message.
             /// </summary>
-            public fixed char msg[255];
+            public unsafe fixed char msg[255];
 
             /// <summary>
             /// Melting temperature.
@@ -173,6 +174,7 @@ namespace Mufasa.BackEnd.TmThal
         /// <summary>
         /// Primer3's thal arguments structure.
         /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
         public struct p3_tm_args
         {
             /// <summary>
@@ -197,14 +199,14 @@ namespace Mufasa.BackEnd.TmThal
 
             /// <summary>
             /// The maximum sequence length for
-			/// using the nearest neighbor model
-			/// (as implemented in oligotm.  For
-			/// sequences longer than this, seqtm
-			/// uses the "GC%" formula implemented
+            /// using the nearest neighbor model
+            /// (as implemented in oligotm.  For
+            /// sequences longer than this, seqtm
+            /// uses the "GC%" formula implemented
             /// in long_seq_tm.
             /// </summary>
-            public int nn_max_len; 
-			
+            public int nn_max_len;
+
             /// <summary>
             /// Melting temperature computation method. See <see cref="p3_tm_method_type"/>
             /// </summary>
@@ -236,7 +238,7 @@ namespace Mufasa.BackEnd.TmThal
         /// <param name="salt_corrections">Melting themperature method. See <see cref="p3_salt_correction_type"/></param>
         /// <returns>Oligo's melting temperature.</returns>
         [DllImport("Tm_thal.dll", CallingConvention = CallingConvention.Cdecl)]
-        public unsafe static extern double p3_seqtm(char* seq,
+        public static extern double p3_seqtm(String seq,
             double dna_conc,
             double salt_conc,
             double divalent_conc,
@@ -254,10 +256,9 @@ namespace Mufasa.BackEnd.TmThal
         /// <param name="a">Thal arguments. See <see cref="p3_thal_args"/></param>
         /// <param name="o">Thal results. See <see cref="p3_thal_results"/></param>
         [DllImport("Tm_thal.dll", CallingConvention = CallingConvention.Cdecl)]
-        public unsafe static extern void p3_thal(char* oligo_f,
-            char* oligo_r,
-            p3_thal_args* a,
-            p3_thal_results* o
-        );
+        public static extern void p3_thal(String oligo_f,
+            String oligo_r,
+            ref p3_thal_args a,
+            ref p3_thal_results o);
     }
 }

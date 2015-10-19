@@ -126,7 +126,7 @@ namespace Mufasa.BackEnd.Designer
         public override string ToString()
         {
             String sep = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-            String result = this.Name + sep + this.MeltingTemperature + sep + this.Sequence.Count + sep + this.Sequence;
+            String result = this.Name + sep + this.MeltingTemperature + sep + this.HairpinMeltingTemperature + sep + this.Sequence.Count + sep + this.Sequence;
             return result;
         }
 
@@ -166,21 +166,17 @@ namespace Mufasa.BackEnd.Designer
             double T = 0.0;
             Sequence upper = null;
             upper = new Sequence(Alphabets.AmbiguousDNA, this.Sequence.ToString().ToUpper());
-            unsafe
-            {
-                char* seq = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(upper.ToString());
-                T = Thermodynamics.p3_seqtm(seq, this.Settings.DnaConcentration,
-                    this.Settings.MonovalentConcentration,
-                    this.Settings.DivalentConcentration,
-                    this.Settings.DntpConcentration,
-                    this.Settings.NnMaxLen,
-                    this.Settings.TmMethod,
-                    this.Settings.SaltCorrectionMethod);
-            }
-            if (T < -273.15)
-            {
-                T = 0.0;
-            }
+
+
+            T = Thermodynamics.p3_seqtm(upper.ToString(), this.Settings.DnaConcentration,
+                this.Settings.MonovalentConcentration,
+                this.Settings.DivalentConcentration,
+                this.Settings.DntpConcentration,
+                this.Settings.NnMaxLen,
+                this.Settings.TmMethod,
+                this.Settings.SaltCorrectionMethod);
+
+
             return T;
         }
 
@@ -195,17 +191,14 @@ namespace Mufasa.BackEnd.Designer
             Sequence upper = null;
             upper = new Sequence(Alphabets.AmbiguousDNA, this.Sequence.ToString().ToUpper());
 
-            unsafe
-            {
-                Thermodynamics.p3_thal_results results;
-                char* seq = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(upper.ToString());
-                Thermodynamics.p3_thal(seq, seq, this.Settings.ThalHairpinSettings, &results);
-                T = results.temp;
-            }
-            if (T < -273.15)
-            {
-                T = 0.0;
-            }
+
+            Thermodynamics.p3_thal_results results = new Thermodynamics.p3_thal_results();
+
+            Thermodynamics.p3_thal_args args = this.Settings.ThalHairpinSettings;
+
+            Thermodynamics.p3_thal(upper.ToString(), upper.ToString(), ref args, ref results);
+            T = results.temp;
+
 
             return T;
         }

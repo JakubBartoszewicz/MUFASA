@@ -64,14 +64,14 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Tm" Width ="*" Binding="{Binding Path=Temperature, Mode=OneWay, StringFormat=N2}">
+                        <DataGridTextColumn Header="Tm" Width ="*" Binding="{Binding Path=MeltingTemperature, Mode=OneWay, StringFormat=N2}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Th" Width ="*" Binding="{Binding Path=HairpinTemperature, Mode=OneWay, StringFormat=N2}">
+                        <DataGridTextColumn Header="Th" Width ="*" Binding="{Binding Path=HairpinMeltingTemperature, Mode=OneWay, StringFormat=N2}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
