@@ -83,7 +83,7 @@ namespace Mufasa.BackEnd.Designer
             {
                 throw new TmThalParamException(message);
             }
-            
+
             //forward
             String seq_5 = "";
             String seq_3 = "";
@@ -160,6 +160,13 @@ namespace Mufasa.BackEnd.Designer
                     Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.AmbiguousDNA, overhang_5), new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings, pairIndex));
                 }
             }
+
+            for (int i = 0; i < fragList.Count; i++)
+            {
+                //Duplex melting temperatures
+                Overlaps[i].DuplexMeltingTemperature = Overlaps[i].GetDuplexTemperature(Overlaps[Overlaps[i].PairIndex]);
+                Overlaps[Overlaps[i].PairIndex].DuplexMeltingTemperature = Overlaps[i].DuplexMeltingTemperature;
+            }
         }
 
         /// <summary>
@@ -199,7 +206,6 @@ namespace Mufasa.BackEnd.Designer
             ISequenceFormatter formatter = SequenceFormatters.FindFormatterByFileName(path);
             formatter.Write(this.Sequence);
             formatter.Close();
-        }      
-
+        }
     }
 }

@@ -52,6 +52,15 @@ namespace Mufasa.BackEnd.Designer
         /// </summary>
         public TmThalSettings TmThalSettings;
 
+        /// <value>
+        /// Max hairpin melting temperature.
+        /// </value>
+        public int MaxTh { get; set; }
+
+        /// <value>
+        /// Max duplex melting temperature.
+        /// </value>
+        public int MaxTd { get; set; }
 
         /// <summary>
         /// Designer settings constructor.
@@ -64,6 +73,8 @@ namespace Mufasa.BackEnd.Designer
             this.MinLen_5 = 20;
             this.MaxLen_5 = 30;
             this.TargetTm = 65;
+            this.MaxTh = 55;
+            this.MaxTd= 55;
             this.ReactionVolume = 50;
             this.TmThalSettings = new TmThalSettings();
         }

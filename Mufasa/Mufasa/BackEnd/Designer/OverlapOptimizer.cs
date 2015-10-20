@@ -15,8 +15,6 @@ namespace Mufasa.BackEnd.Designer
         public OverlapOptimizer()
         { }
 
-
-
         /// <summary>
         /// Overlap naive-greedy temperature optimization.
         /// </summary>
@@ -44,6 +42,7 @@ namespace Mufasa.BackEnd.Designer
                     if ((item_5 != end_5))
                     {
                         item_5 = construct.Overlaps[i].Dequeue(construct.Settings.MinLen_5);
+                                                
                         diff = construct.Overlaps[i].MeltingTemperature - construct.Settings.TargetTm;
                         tmTooHigh = (construct.Overlaps[i].MeltingTemperature > construct.Settings.TargetTm);
 
@@ -96,6 +95,10 @@ namespace Mufasa.BackEnd.Designer
                     {
                         done_3 = true;
                     }
+
+                    //Duplex melting temperatures
+                    construct.Overlaps[i].DuplexMeltingTemperature = construct.Overlaps[i].GetDuplexTemperature(construct.Overlaps[construct.Overlaps[i].PairIndex]);
+                    construct.Overlaps[construct.Overlaps[i].PairIndex].DuplexMeltingTemperature = construct.Overlaps[i].DuplexMeltingTemperature;
 
                 } while (!done_5 || !done_3);
 

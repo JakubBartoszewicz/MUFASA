@@ -65,15 +65,20 @@ namespace Mufasa.BackEnd.Designer
             this.SimpleT.Add(Alphabets.AmbiguousDNA.Gap, 0.0);
         }
 
-        /// <summary>
+        /// <value>
         /// Paired overlap index.
-        /// </summary>
+        /// </value>
         public int PairIndex { get; set; }
 
         /// <value>
         /// Nucleotide temperature dictionary.
         /// </value>
         private Dictionary<byte, double> SimpleT;
+
+        /// <value>
+        /// Overlap duplex melting temperature.
+        /// </value>
+        public double DuplexMeltingTemperature { get; set; }
 
         /// <value>
         /// Overlap melting temperature.
@@ -85,19 +90,19 @@ namespace Mufasa.BackEnd.Designer
         /// </value>
         private double meltingTemperature;
 
-        /// <summary>
+        /// <value>
         /// Overlap's hairpin melting temperature.
-        /// </summary>
+        /// </value>
         public double HairpinMeltingTemperature { get { return hairpinMeltingTemperature; } }
 
-        /// <summary>
+        /// <value>
         /// Overlap's hairpin melting temperature.
-        /// </summary>
+        /// </value>
         private double hairpinMeltingTemperature;
 
-        /// <summary>
+        /// <value>
         /// Settings for thermodynamic evaluation.
-        /// </summary>
+        /// </value>
         public TmThalSettings Settings { get; set; }
 
         /// <value>
@@ -165,9 +170,7 @@ namespace Mufasa.BackEnd.Designer
         private double GetMeltingTemperature()
         {
             double T = 0.0;
-            Sequence upper = null;
-            upper = new Sequence(Alphabets.AmbiguousDNA, this.Sequence.ToString().ToUpper());
-
+            String upper = this.Sequence.ToString().ToUpper();
 
             T = Thermodynamics.p3_seqtm(upper.ToString(), this.Settings.DnaConcentration,
                 this.Settings.MonovalentConcentration,
@@ -176,7 +179,6 @@ namespace Mufasa.BackEnd.Designer
                 this.Settings.NnMaxLen,
                 this.Settings.TmMethod,
                 this.Settings.SaltCorrectionMethod);
-
 
             return T;
         }
@@ -189,17 +191,34 @@ namespace Mufasa.BackEnd.Designer
         private double GetHairpinTemperature()
         {
             double T = 0.0;
-            Sequence upper = null;
-            upper = new Sequence(Alphabets.AmbiguousDNA, this.Sequence.ToString().ToUpper());
-
+            String upper = this.Sequence.ToString().ToUpper();
 
             Thermodynamics.thal_results results = new Thermodynamics.thal_results();
             Thermodynamics.p3_thal_args args = this.Settings.ThalHairpinSettings;
 
-            Thermodynamics.p3_thal(upper.ToString(), upper.ToString(), ref args, ref results);
+            Thermodynamics.p3_thal(upper, upper, ref args, ref results);
 
             T = results.temp;
 
+            return T;
+        }
+
+        /// <summary>
+        /// Compute overlap's duplex melting temperature.
+        /// </summary>
+        /// <returns>Duplex melting temperature.</returns>
+        public double GetDuplexTemperature(Overlap twin)
+        {
+            double T = 0.0;
+            String upper = this.Sequence.ToString().ToUpper();
+            String upperTwin = twin.Sequence.ToString().ToUpper();
+
+            Thermodynamics.thal_results results = new Thermodynamics.thal_results();
+            Thermodynamics.p3_thal_args args = this.Settings.ThalSettings;
+
+            Thermodynamics.p3_thal(upper, upperTwin, ref args, ref results);
+
+            T = results.temp;
 
             return T;
         }
@@ -311,7 +330,6 @@ namespace Mufasa.BackEnd.Designer
             {
                 return false;
             }
-
         }
 
         /// <summary>
@@ -363,6 +381,26 @@ namespace Mufasa.BackEnd.Designer
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Check if the overlap's melting temperatures satisfy the conditions.
+        /// </summary>
+        /// <param name="maxTh">Max hairpin melting temperature.</param>
+        /// <param name="maxTd">Max duplex melting temperature.</param>
+        /// <returns></returns>
+        public bool IsAcceptable(double maxTh, double maxTd)
+        {
+            bool accept = false;
+            if ((this.HairpinMeltingTemperature > 0.0D) && (this.DuplexMeltingTemperature > 0.0D))
+            {
+                if ((this.HairpinMeltingTemperature <= maxTh) && (this.DuplexMeltingTemperature <= maxTh))
+                {
+                    accept = true;
+                }
+            }
+
+            return accept;
         }
     }
 }
