@@ -147,12 +147,13 @@ namespace Mufasa.BackEnd.TmThal
         /// Structure for receiving results from the thermodynamic alignment calculation.
         /// </summary>
         [StructLayout(LayoutKind.Sequential)]
-        public struct p3_thal_results
+        public struct thal_results
         {
             /// <summary>
             /// Message.
             /// </summary>
-            public unsafe fixed char msg[255];
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst=255, ArraySubType=UnmanagedType.I1)]
+            public char [] msg;
 
             /// <summary>
             /// Melting temperature.
@@ -237,7 +238,7 @@ namespace Mufasa.BackEnd.TmThal
         /// <param name="tm_method">Melting themperature method. See <see cref="p3_tm_method_type"/></param>
         /// <param name="salt_corrections">Melting themperature method. See <see cref="p3_salt_correction_type"/></param>
         /// <returns>Oligo's melting temperature.</returns>
-        [DllImport("Tm_thal.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("tmthal.dll", CallingConvention = CallingConvention.Cdecl, SetLastError = true)]
         public static extern double p3_seqtm(String seq,
             double dna_conc,
             double salt_conc,
@@ -254,11 +255,21 @@ namespace Mufasa.BackEnd.TmThal
         /// <param name="oligo_f">Forward oligo.</param>
         /// <param name="oligo_r">Reverse oligo.</param>
         /// <param name="a">Thal arguments. See <see cref="p3_thal_args"/></param>
-        /// <param name="o">Thal results. See <see cref="p3_thal_results"/></param>
-        [DllImport("Tm_thal.dll", CallingConvention = CallingConvention.Cdecl)]
+        /// <param name="o">Thal results. See <see cref="thal_results"/></param>
+        [DllImport("tmthal.dll", CallingConvention = CallingConvention.Cdecl, SetLastError = true)]
         public static extern void p3_thal(String oligo_f,
             String oligo_r,
             ref p3_thal_args a,
-            ref p3_thal_results o);
+            ref thal_results o);
+
+
+        /// <summary>
+        /// Loads the primer3's thermodynamic parametes for the primer3_config folder.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+       // [DllImport("tmthal.dll", CallingConvention = CallingConvention.Cdecl, SetLastError = true)]
+       // public static extern thal_results p3_get_thermodynamic_values(String path=".\\primer3_config\\");
+
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using Bio;
 using Bio.IO;
 using Mufasa.BackEnd.TmThal;
@@ -192,11 +193,17 @@ namespace Mufasa.BackEnd.Designer
             upper = new Sequence(Alphabets.AmbiguousDNA, this.Sequence.ToString().ToUpper());
 
 
-            Thermodynamics.p3_thal_results results = new Thermodynamics.p3_thal_results();
-
+            Thermodynamics.thal_results results = new Thermodynamics.thal_results();
+            //Thermodynamics.thal_results results2 = new Thermodynamics.thal_results();
             Thermodynamics.p3_thal_args args = this.Settings.ThalHairpinSettings;
+            //results2.temp = 5.0;
+            results.temp = 5.0;
 
             Thermodynamics.p3_thal(upper.ToString(), upper.ToString(), ref args, ref results);
+
+           // results = (Thermodynamics.thal_results)Marshal.PtrToStructure(resultsP, typeof(Thermodynamics.thal_results));
+
+            //Console.WriteLine(Marshal.GetLastWin32Error().ToString());
             T = results.temp;
 
 

@@ -15,8 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="oligotm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="thal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tmthal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="oligotm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tmthal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
