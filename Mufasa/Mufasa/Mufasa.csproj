@@ -112,6 +112,7 @@
     <Compile Include="BackEnd\Designer\Designer.cs" />
     <Compile Include="BackEnd\Designer\DesignerSettings.cs" />
     <Compile Include="BackEnd\Exceptions\TmThalParamException.cs" />
+    <Compile Include="BackEnd\Lea\Chromosome.cs" />
     <Compile Include="BackEnd\Scores\Score.cs" />
     <Compile Include="BackEnd\Designer\Overlap.cs" />
     <Compile Include="BackEnd\Designer\OverlapOptimizer.cs" />

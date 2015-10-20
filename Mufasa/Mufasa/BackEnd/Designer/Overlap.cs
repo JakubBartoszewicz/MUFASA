@@ -76,9 +76,19 @@ namespace Mufasa.BackEnd.Designer
         private Dictionary<byte, double> SimpleT;
 
         /// <value>
-        /// Overlap duplex melting temperature.
+        /// Overlap heterodimer melting temperature.
         /// </value>
-        public double DuplexMeltingTemperature { get; set; }
+        public double HeterodimerMeltingTemperature { get; set; }
+
+        /// <value>
+        /// Overlap homodimer melting temperature.
+        /// </value>
+        public double HomodimerMeltingTemperature { get { return homodimerMeltingTemperature; } }
+
+        /// <value>
+        /// Overlap's homodimer melting temperature.
+        /// </value>
+        private double homodimerMeltingTemperature;
 
         /// <value>
         /// Overlap melting temperature.
@@ -238,6 +248,7 @@ namespace Mufasa.BackEnd.Designer
                 this.Sequence = new Sequence(Alphabets.AmbiguousDNA, Seq_5.ToString() + Seq_3.ToString());
                 this.meltingTemperature = GetMeltingTemperature();
                 this.hairpinMeltingTemperature = GetHairpinTemperature();
+                this.homodimerMeltingTemperature = GetDuplexTemperature(this);
                 return item;
             }
             else
@@ -261,6 +272,7 @@ namespace Mufasa.BackEnd.Designer
                 this.Sequence = new Sequence(Alphabets.AmbiguousDNA, Seq_5.ToString() + Seq_3.ToString());
                 this.meltingTemperature = GetMeltingTemperature();
                 this.hairpinMeltingTemperature = GetHairpinTemperature();
+                this.homodimerMeltingTemperature = GetDuplexTemperature(this);
                 return item;
             }
             else
@@ -284,6 +296,7 @@ namespace Mufasa.BackEnd.Designer
                 this.Sequence = new Sequence(Alphabets.AmbiguousDNA, Seq_5.ToString() + Seq_3.ToString());
                 this.meltingTemperature = GetMeltingTemperature();
                 this.hairpinMeltingTemperature = GetHairpinTemperature();
+                this.homodimerMeltingTemperature = GetDuplexTemperature(this);
                 return item;
             }
             else
@@ -307,6 +320,7 @@ namespace Mufasa.BackEnd.Designer
                 this.Sequence = new Sequence(Alphabets.AmbiguousDNA, Seq_5.ToString() + Seq_3.ToString());
                 this.meltingTemperature = GetMeltingTemperature();
                 this.hairpinMeltingTemperature = GetHairpinTemperature();
+                this.homodimerMeltingTemperature = GetDuplexTemperature(this);
                 return item;
             }
             else
@@ -392,9 +406,9 @@ namespace Mufasa.BackEnd.Designer
         public bool IsAcceptable(double maxTh, double maxTd)
         {
             bool accept = false;
-            if ((this.HairpinMeltingTemperature > 0.0D) && (this.DuplexMeltingTemperature > 0.0D))
+            if ((this.HairpinMeltingTemperature > 0.0D) && (this.HeterodimerMeltingTemperature > 0.0D))
             {
-                if ((this.HairpinMeltingTemperature <= maxTh) && (this.DuplexMeltingTemperature <= maxTh))
+                if ((this.HairpinMeltingTemperature <= maxTh) && (this.HeterodimerMeltingTemperature <= maxTh))
                 {
                     accept = true;
                 }

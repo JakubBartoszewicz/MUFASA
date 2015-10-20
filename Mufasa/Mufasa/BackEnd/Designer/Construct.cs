@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mufasa.BackEnd.TmThal;
 using Mufasa.BackEnd.Exceptions;
+using Mufasa.BackEnd.Scores;
 
 namespace Mufasa.BackEnd.Designer
 {
@@ -58,6 +59,16 @@ namespace Mufasa.BackEnd.Designer
             }
             Init(fragList, settings);
         }
+
+        /// <value>
+        /// Total construct score.
+        /// </value>
+        public ScoreTotal Score { get { return this.score; } }
+
+        /// <value>
+        /// Total construct score.
+        /// </value>
+        private ScoreTotal score;
 
         /// <value>
         /// Designer settings.
@@ -164,8 +175,8 @@ namespace Mufasa.BackEnd.Designer
             for (int i = 0; i < fragList.Count; i++)
             {
                 //Duplex melting temperatures
-                Overlaps[i].DuplexMeltingTemperature = Overlaps[i].GetDuplexTemperature(Overlaps[Overlaps[i].PairIndex]);
-                Overlaps[Overlaps[i].PairIndex].DuplexMeltingTemperature = Overlaps[i].DuplexMeltingTemperature;
+                Overlaps[i].HeterodimerMeltingTemperature = Overlaps[i].GetDuplexTemperature(Overlaps[Overlaps[i].PairIndex]);
+                Overlaps[Overlaps[i].PairIndex].HeterodimerMeltingTemperature = Overlaps[i].HeterodimerMeltingTemperature;
             }
         }
 
@@ -206,6 +217,16 @@ namespace Mufasa.BackEnd.Designer
             ISequenceFormatter formatter = SequenceFormatters.FindFormatterByFileName(path);
             formatter.Write(this.Sequence);
             formatter.Close();
+        }
+
+        /// <summary>
+        /// Compute construct score.
+        /// </summary>
+        /// <returns>Total construct score.</returns>
+        public ScoreTotal Evaluate()
+        {
+            this.score = new ScoreTotal(this.Overlaps, this.Settings.TargetTm);
+            return this.score;
         }
     }
 }

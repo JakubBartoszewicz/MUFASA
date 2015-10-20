@@ -57,7 +57,7 @@
                         </Style>
                     </DataGrid.ColumnHeaderStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" Width ="2*" Binding="{Binding Path=Name, Mode=OneWay}" >
+                        <DataGridTextColumn Header="Name" Width ="*" Binding="{Binding Path=Name, Mode=OneWay}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -71,14 +71,21 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Th" Width ="*" Binding="{Binding Path=HairpinMeltingTemperature, Mode=OneWay, StringFormat=N2}">
+                        <DataGridTextColumn Header="Hairpin" Width ="*" Binding="{Binding Path=HairpinMeltingTemperature, Mode=OneWay, StringFormat=N2}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Td" Width ="*" Binding="{Binding Path=DuplexMeltingTemperature, Mode=OneWay, StringFormat=N2}">
+                        <DataGridTextColumn Header="Homodimer" Width ="*" Binding="{Binding Path=HomodimerMeltingTemperature, Mode=OneWay, StringFormat=N2}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Heterodimer" Width ="*" Binding="{Binding Path=HeterodimerMeltingTemperature, Mode=OneWay, StringFormat=N2}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -92,7 +99,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Sequence" Width ="10*" Binding="{Binding Path=SequenceString, Mode=OneWay}" >
+                        <DataGridTextColumn Header="Sequence" Width ="6*" Binding="{Binding Path=SequenceString, Mode=OneWay}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -156,21 +163,21 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Scores:" Width ="5*" Binding="{Binding Path=Label, Mode=OneWay}" >
+                        <DataGridTextColumn Header="Scores:" Width ="4*" Binding="{Binding Path=Label, Mode=OneWay}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Raw score" Width ="5*" Binding="{Binding Path=RawScore, Mode=OneWay, StringFormat=N2}">
+                        <DataGridTextColumn Header="Raw score" Width ="4*" Binding="{Binding Path=RawScore, Mode=OneWay, StringFormat=N2}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Normalized score" Width ="5*" Binding="{Binding Path=NormalizedScore, Mode=OneWay, StringFormat=N2}">
+                        <DataGridTextColumn Header="Normalized score" Width ="4*" Binding="{Binding Path=NormalizedScore, Mode=OneWay, StringFormat=N2}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -179,6 +186,7 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+                <ProgressBar Name="progressBar" Minimum="0" Maximum="100" Grid.Column="2" HorizontalAlignment="Center" Height="20" Margin="20,0,0,0" Grid.Row="3" VerticalAlignment="Center" Width="200"/>
             </Grid>
         </ScrollViewer>
         

@@ -22,6 +22,7 @@ using System.Xml.XPath;
 using System.IO;
 using FirstFloor.ModernUI.Presentation;
 using System.Text;
+using System.ComponentModel;
 
 namespace Mufasa.Pages
 {
@@ -65,31 +66,31 @@ namespace Mufasa.Pages
         SolidColorBrush accent = new SolidColorBrush();
 
 
-  
-        /// <summary>
+
+        /// <value>
         /// Open fragment file dialog.
-        /// </summary>
+        /// </value>
         private Microsoft.Win32.OpenFileDialog openFragmentFileDialog;
 
-        /// <summary>
+        /// <value>
         /// Open fragment file dialog.
-        /// </summary>
+        /// </value>
         private Microsoft.Win32.OpenFileDialog openProjectFileDialog;
 
 
-        /// <summary>
+        /// <value>
         /// Save fragment file dialog.
-        /// </summary>
+        /// </value>
         private Microsoft.Win32.SaveFileDialog saveConstructFileDialog;
 
-        /// <summary>
+        /// <value>
         /// Save overlap file dialog.
-        /// </summary>
+        /// </value>
         private Microsoft.Win32.SaveFileDialog saveOverlapsDialog;
 
-        /// <summary>
+        /// <value>
         /// Mufasa reaction designer object.
-        /// </summary>
+        /// </value>
         internal static Designer Designer {get; set;}
 
         /// <summary>
@@ -97,14 +98,14 @@ namespace Mufasa.Pages
         /// </summary>
         private Construct construct;
 
-        /// <summary>
+        /// <value>
         /// Mufasa OverlapOptimizer object.
-        /// </summary>
+        /// </value>
         private OverlapOptimizer overlapOptimizer;
 
-        /// <summary>
+        /// <value>
         /// Mufasa Scores list.
-        /// </summary>
+        /// </value>
         //private List<Score> scoreList;
 
 
@@ -501,22 +502,45 @@ namespace Mufasa.Pages
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void assembleButton_Click(object sender, RoutedEventArgs e)
-        {
-            overlapOptimizer = new OverlapOptimizer();
+        {            
             if (Designer.ConstructionList != null && Designer.ConstructionList.Count > 0)
             {
+                construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
+                overlapOptimizer = new OverlapOptimizer(construct);
+
                 try
                 {
-                    construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
-                    ScoreTotal score = overlapOptimizer.SemiNaiveOptimizeOverlaps(ref construct);
-                    overlapDataGrid.ItemsSource = construct.Overlaps;
-                    overlapDataGrid.Items.Refresh();
-                    List<Score> scoreList = new List<Score>();
-                    scoreList.Add(score.Sm);
-                    scoreList.Add(score.So);
-                    scoreList.Add(score);
-                    scoreDataGrid.ItemsSource = scoreList;
-                    scoreDataGrid.Items.Refresh();
+                    BackgroundWorker bw = new BackgroundWorker();
+                    // this allows our worker to report progress during work
+                    bw.WorkerReportsProgress = true;
+                    // what to do in the background thread
+                    bw.DoWork += new DoWorkEventHandler(overlapOptimizer.SemiNaiveOptimizeOverlaps);
+
+                    // what to do when progress changed (update the progress bar)
+                    bw.ProgressChanged += new ProgressChangedEventHandler(
+                    delegate(object o, ProgressChangedEventArgs args)
+                    {
+                        progressBar.Value = args.ProgressPercentage;
+                    });
+                    // what to do when worker completes its task (notify the user)
+                    bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
+                    delegate(object o, RunWorkerCompletedEventArgs args)
+                    {
+                        construct = overlapOptimizer.Construct;
+                        ScoreTotal score = construct.Score;
+                        overlapDataGrid.ItemsSource = construct.Overlaps;
+                        overlapDataGrid.Items.Refresh();
+                        List<Score> scoreList = new List<Score>();
+                        scoreList.Add(score.Sm);
+                        scoreList.Add(score.So);
+                        scoreList.Add(score);
+                        scoreDataGrid.ItemsSource = scoreList;
+                        scoreDataGrid.Items.Refresh();
+
+                    });
+
+                    bw.RunWorkerAsync();
+                    
                 }
                 catch(TmThalParamException ex)
                 {

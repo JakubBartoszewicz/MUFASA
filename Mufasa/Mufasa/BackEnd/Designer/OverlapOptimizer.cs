@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mufasa.BackEnd.Scores;
+using System.ComponentModel;
 
 namespace Mufasa.BackEnd.Designer
 {
+    /// <remarks>
+    /// Overlap optimizer class.
+    /// </remarks>
     class OverlapOptimizer
     {
         /// <summary>
@@ -16,42 +20,67 @@ namespace Mufasa.BackEnd.Designer
         { }
 
         /// <summary>
+        /// Overlap optimizer constructor.
+        /// </summary>
+        /// <param name="construct">A construct to assemble.</param>
+        public OverlapOptimizer(Construct construct)
+        {
+            this.Construct = construct;
+        }
+
+        /// <value>
+        /// A construct to assemble.
+        /// </value>
+        public Construct Construct { get; set; }
+
+        /// <value>
+        /// BackGroudWorker for optimization.
+        /// </value>
+        private BackgroundWorker b;
+
+        /// <summary>
         /// Overlap naive-greedy temperature optimization.
         /// </summary>
-        public ScoreTotal SemiNaiveOptimizeOverlaps(ref Construct construct)
+        public void SemiNaiveOptimizeOverlaps(object o, DoWorkEventArgs args)
         {
+            this.b = o as BackgroundWorker;
+
             const byte end_3 = 255;
             const byte end_5 = 255;
+            int progress = 0;
 
-            for (int i = 0; i < construct.Overlaps.Count; i++)
+            for (int i = 0; i < this.Construct.Overlaps.Count; i++)
             {
                 byte item_3 = 0;
                 byte item_5 = 0;
                 bool done_3 = false;
                 bool done_5 = false;
                 bool tmTooHigh = true;
-                
-                double diff = construct.Overlaps[i].MeltingTemperature - construct.Settings.TargetTm;
+
+                double diff = this.Construct.Overlaps[i].MeltingTemperature - this.Construct.Settings.TargetTm;
                 double _bestDiff = diff;
-                               Overlap _best = construct.Overlaps[i];
-
-
+                Overlap _best = this.Construct.Overlaps[i];
 
                 do
                 {
                     if ((item_5 != end_5))
                     {
-                        item_5 = construct.Overlaps[i].Dequeue(construct.Settings.MinLen_5);
-                                                
-                        diff = construct.Overlaps[i].MeltingTemperature - construct.Settings.TargetTm;
-                        tmTooHigh = (construct.Overlaps[i].MeltingTemperature > construct.Settings.TargetTm);
+                        item_5 = this.Construct.Overlaps[i].Dequeue(this.Construct.Settings.MinLen_5);
+
+                        diff = this.Construct.Overlaps[i].MeltingTemperature - this.Construct.Settings.TargetTm;
+                        tmTooHigh = (this.Construct.Overlaps[i].MeltingTemperature > this.Construct.Settings.TargetTm);
 
                         if (Math.Abs(_bestDiff) > Math.Abs(diff))
                         {
-                            //if found a better solution, copy it, and do not stop
-                            _bestDiff = diff;
-                            _best = construct.Overlaps[i];
-                            done_5 = false;
+                            //check if hairpin is acceptable
+
+                            if (this.Construct.Overlaps[i].HairpinMeltingTemperature <= this.Construct.Settings.MaxTh)
+                            {
+                                //if found a better solution, copy it, and do not stop
+                                _bestDiff = diff;
+                                _best = this.Construct.Overlaps[i];
+                                done_5 = false;
+                            }
                         }
                         else
                         {
@@ -70,17 +99,22 @@ namespace Mufasa.BackEnd.Designer
 
                     if ((item_3 != end_3))
                     {
-                        item_3 = construct.Overlaps[i].Pop(construct.Settings.MinLen_3);
-                        diff = construct.Overlaps[i].MeltingTemperature - construct.Settings.TargetTm;
+                        item_3 = this.Construct.Overlaps[i].Pop(this.Construct.Settings.MinLen_3);
+                        diff = this.Construct.Overlaps[i].MeltingTemperature - this.Construct.Settings.TargetTm;
 
-                        tmTooHigh = (construct.Overlaps[i].MeltingTemperature > construct.Settings.TargetTm);
+                        tmTooHigh = (this.Construct.Overlaps[i].MeltingTemperature > this.Construct.Settings.TargetTm);
 
                         if (Math.Abs(_bestDiff) > Math.Abs(diff))
                         {
-                            //if found a better solution, copy it, and do not stop
-                            _bestDiff = diff;
-                            _best = construct.Overlaps[i];
-                            done_3 = false;
+                            //check if hairpin is acceptable
+
+                            if (this.Construct.Overlaps[i].HairpinMeltingTemperature <= this.Construct.Settings.MaxTh)
+                            {
+                                //if found a better solution, copy it, and do not stop
+                                _bestDiff = diff;
+                                _best = this.Construct.Overlaps[i];
+                                done_3 = false;
+                            }
                         }
                         else
                         {
@@ -94,17 +128,24 @@ namespace Mufasa.BackEnd.Designer
                     else
                     {
                         done_3 = true;
-                    }
-
-                    //Duplex melting temperatures
-                    construct.Overlaps[i].DuplexMeltingTemperature = construct.Overlaps[i].GetDuplexTemperature(construct.Overlaps[construct.Overlaps[i].PairIndex]);
-                    construct.Overlaps[construct.Overlaps[i].PairIndex].DuplexMeltingTemperature = construct.Overlaps[i].DuplexMeltingTemperature;
+                    }                    
 
                 } while (!done_5 || !done_3);
 
-                construct.Overlaps[i] = _best;
+                this.Construct.Overlaps[i] = _best;
+
+                progress = (int)(100.0 * (double)i / (double)(this.Construct.Overlaps.Count - 1));
+                b.ReportProgress(progress);
             }
-            return new ScoreTotal(construct.Overlaps, construct.Settings.TargetTm);
+
+            for (int i = 0; i < this.Construct.Overlaps.Count; i++)
+            {
+                //Duplex melting temperatures
+                this.Construct.Overlaps[i].HeterodimerMeltingTemperature = this.Construct.Overlaps[i].GetDuplexTemperature(this.Construct.Overlaps[this.Construct.Overlaps[i].PairIndex]);
+                this.Construct.Overlaps[this.Construct.Overlaps[i].PairIndex].HeterodimerMeltingTemperature = this.Construct.Overlaps[i].HeterodimerMeltingTemperature;
+            }
+
+            this.Construct.Evaluate();
         }
     }
 }
