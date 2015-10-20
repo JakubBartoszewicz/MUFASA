@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mufasa.BackEnd.TmThal;
+using Mufasa.BackEnd.Exceptions;
 
 namespace Mufasa.BackEnd.Designer
 {
@@ -72,6 +73,17 @@ namespace Mufasa.BackEnd.Designer
         {
             this.Overlaps = new List<Overlap>();
             this.Settings = settings;
+
+            Thermodynamics.thal_results results = new Thermodynamics.thal_results();
+            Thermodynamics.p3_get_thermodynamic_values(Settings.TmThalParamPath, ref results);
+            String message = new String(results.msg);
+            message = message.Trim('\0');
+
+            if (!String.IsNullOrEmpty(message))
+            {
+                throw new TmThalParamException(message);
+            }
+            
             //forward
             String seq_5 = "";
             String seq_3 = "";

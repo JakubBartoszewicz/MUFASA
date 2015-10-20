@@ -505,8 +505,8 @@ namespace Mufasa.Pages
             overlapOptimizer = new OverlapOptimizer();
             if (Designer.ConstructionList != null && Designer.ConstructionList.Count > 0)
             {
-                //try
-                //{
+                try
+                {
                     construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
                     ScoreTotal score = overlapOptimizer.SemiNaiveOptimizeOverlaps(ref construct);
                     overlapDataGrid.ItemsSource = construct.Overlaps;
@@ -517,11 +517,15 @@ namespace Mufasa.Pages
                     scoreList.Add(score);
                     scoreDataGrid.ItemsSource = scoreList;
                     scoreDataGrid.Items.Refresh();
-                //}
-                //catch (Exception ex)
-                //{
-                //    ModernDialog.ShowMessage("Unable to assemble. (" + ex.Message + ")", "Warning: ", MessageBoxButton.OK);
-                //}
+                }
+                catch(TmThalParamException ex)
+                {
+                    ModernDialog.ShowMessage("Thermodynamic parameters not found. Unable to assemble.\n(" + ex.Message + ")", "Warning: ", MessageBoxButton.OK);
+                }
+                catch (Exception ex)
+                {
+                    ModernDialog.ShowMessage("Unable to assemble.\n(" + ex.Message + ")", "Warning: ", MessageBoxButton.OK);
+                }
             }
             
         }

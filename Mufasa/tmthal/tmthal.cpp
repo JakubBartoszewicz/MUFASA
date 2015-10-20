@@ -16,22 +16,17 @@ namespace tmthal
 		const thal_args *a,
 		thal_results *o)
 	{		
-		//thal_results *o = new thal_results;
-		get_thermodynamic_values(".\\primer3_config\\", o);
 		thal(oligo_f, oligo_r, a, o);
-		//return *o;
 	}
 
 	/* Read the thermodynamic values (parameters) from the parameter files
 	in the directory specified by 'path'.  Return 0 on success and -1
 	on error. The thermodynamic values are stored in multiple static
 	variables. */
-	//extern "C" TMTHAL_API thal_results p3_get_thermodynamic_values(const char* path)
-	//{
-	//	thal_results *o = new thal_results;
-	//	get_thermodynamic_values(path, o);
-	//	return *o;
-	//}
+	extern "C" TMTHAL_API int p3_get_thermodynamic_values(const char* path, thal_results *o)
+	{
+		return get_thermodynamic_values(path, o);
+	}
 
 
 	/* Return the melting temperature of a given sequence, 'seq', of any

@@ -13,6 +13,11 @@ namespace Mufasa.BackEnd.Designer
     class DesignerSettings
     {
         /// <value>
+        /// Path to Primer3's thermodynamic parameters folder.
+        /// </value>
+        public String TmThalParamPath { get; set; }
+
+        /// <value>
         /// Minimal length of the 3' ("gene-specific") part of an overlap.
         /// </value>
         public int MinLen_3 { get; set; }
@@ -53,6 +58,7 @@ namespace Mufasa.BackEnd.Designer
         /// </summary>
         public DesignerSettings()
         {
+            this.TmThalParamPath = ".\\tmthal_config\\";
             this.MinLen_3 = 18;
             this.MaxLen_3 = 25;
             this.MinLen_5 = 20;

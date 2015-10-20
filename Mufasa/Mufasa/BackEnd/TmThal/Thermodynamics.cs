@@ -268,8 +268,8 @@ namespace Mufasa.BackEnd.TmThal
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-       // [DllImport("tmthal.dll", CallingConvention = CallingConvention.Cdecl, SetLastError = true)]
-       // public static extern thal_results p3_get_thermodynamic_values(String path=".\\primer3_config\\");
+        [DllImport("tmthal.dll", CallingConvention = CallingConvention.Cdecl, SetLastError = true)]
+        public static extern void p3_get_thermodynamic_values(String path, ref thal_results o);
 
     }
 }
