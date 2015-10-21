@@ -176,12 +176,11 @@ namespace Mufasa.BackEnd.Designer
             {
                 //Duplex melting temperatures
                 Overlaps[i].HeterodimerMeltingTemperature = Overlaps[i].GetDuplexTemperature(Overlaps[Overlaps[i].PairIndex]);
-                Overlaps[Overlaps[i].PairIndex].HeterodimerMeltingTemperature = Overlaps[i].HeterodimerMeltingTemperature;
             }
         }
 
         /// <summary>
-        /// Cheks if the construct is empty.
+        /// Checks if the construct is empty.
         /// <summary>
         public bool IsEmpty()
         {

@@ -47,7 +47,7 @@ namespace Mufasa.BackEnd.TmThal
 
             this.thalSettings.debug = 0;
             this.thalSettings.temponly = 1;
-            this.thalSettings.dimer = 1;
+            this.thalSettings.dimer = 0;
             this.thalHairpinSettings.debug = 0;
             this.thalHairpinSettings.temponly = 1;
             this.thalHairpinSettings.dimer = 0;

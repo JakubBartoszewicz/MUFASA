@@ -406,12 +406,9 @@ namespace Mufasa.BackEnd.Designer
         public bool IsAcceptable(double maxTh, double maxTd)
         {
             bool accept = false;
-            if ((this.HairpinMeltingTemperature > 0.0D) && (this.HeterodimerMeltingTemperature > 0.0D))
+            if ((this.HairpinMeltingTemperature <= maxTh) && (this.HeterodimerMeltingTemperature <= maxTd) && (this.HomodimerMeltingTemperature <= maxTd))
             {
-                if ((this.HairpinMeltingTemperature <= maxTh) && (this.HeterodimerMeltingTemperature <= maxTh))
-                {
-                    accept = true;
-                }
+                accept = true;
             }
 
             return accept;
