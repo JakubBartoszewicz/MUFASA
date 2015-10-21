@@ -25,16 +25,24 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Label x:Name="bufferLabel" Content="Buffer 5x:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="0"/>
-                <Label x:Name="waterLabel" Content="Water:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="1"/>
-                <Label x:Name="dNTPLabel" Content="dNTP:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="2"/>
-                <Label x:Name="polyLabel" Content="Polymerase:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="3"/>
-                <TextBlock x:Name="bufferTextBlock" Text="{Binding}" Margin="480, 0, 20, 20" Grid.Column="0" Grid.Row="0"/>
-                <TextBlock x:Name="waterTextBlock" Text="{Binding}" Margin="480, 0, 20, 20" Grid.Column="0" Grid.Row="1"/>
-                <TextBlock x:Name="dNTPTextBlock" Text="{Binding}" Margin="480, 0, 20, 20" Grid.Column="0" Grid.Row="2"/>
-                <TextBlock x:Name="polyTextBlock" Text="{Binding}" Margin="480, 0, 20, 20" Grid.Column="0" Grid.Row="3"/>
-                <DataGrid x:Name="concentrationsDataGrid" ItemsSource="{Binding Path=Fragments}" Width="600" Height ="auto"  VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Margin="30, 40, 20, 20" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="False" Grid.Column="0" Grid.Row="4">
+                <Label x:Name="volumeLabel" Content="Total volume:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="0"/>
+                <Label x:Name="bufferLabel" Content="Buffer 5x:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="1"/>
+                <Label x:Name="waterLabel" Content="Water:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="2"/>
+                <Label x:Name="dNTPLabel" Content="dNTP:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="3"/>
+                <Label x:Name="polyLabel" Content="Polymerase:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="4"/>
+
+                <DockPanel VerticalAlignment="Center" Margin="330,0,20,20" Width="150" Grid.Column="0" Grid.Row="0">
+                    <TextBox Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                    <Slider Maximum="150" TickFrequency="0.1" IsSnapToTickEnabled="True" Name="slValue" />
+                </DockPanel>
+
+                <TextBlock x:Name="bufferTextBlock" HorizontalAlignment="Right" Text="{Binding}" Margin="150, 0, 20, 20" Grid.Column="0" Grid.Row="1"/>
+                <TextBlock x:Name="waterTextBlock" HorizontalAlignment="Right" Text="{Binding}" Margin="150, 0, 20, 20" Grid.Column="0" Grid.Row="2"/>
+                <TextBlock x:Name="dNTPTextBlock" HorizontalAlignment="Right" Text="{Binding}" Margin="150, 0, 20, 20" Grid.Column="0" Grid.Row="3"/>
+                <TextBlock x:Name="polyTextBlock" HorizontalAlignment="Right" Text="{Binding}" Margin="150, 0, 20, 20" Grid.Column="0" Grid.Row="4"/>
+                <DataGrid x:Name="concentrationsDataGrid" ItemsSource="{Binding Path=Fragments}" Width="450" Height ="auto"  VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Margin="30, 40, 20, 20" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="False" Grid.Column="0" Grid.Row="5">
                     <DataGrid.RowHeaderStyle>
                         <Style TargetType="DataGridRowHeader">
                             <Setter Property="Content" Value="{Binding Name}" />

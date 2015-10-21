@@ -40,12 +40,12 @@ namespace Mufasa.BackEnd.Designer
         /// <value>
         /// CPEC/Gibson assembly reaction volume.
         /// </value>
-        public int ReactionVolume { get; set; }
+        public double ReactionVolume { get; set; }
 
         /// <value>
         /// Target overlap melting temperature.
         /// </value>
-        public int TargetTm { get; set; }
+        public double TargetTm { get; set; }
 
         /// <summary>
         /// TmThal settings
@@ -55,12 +55,12 @@ namespace Mufasa.BackEnd.Designer
         /// <value>
         /// Max hairpin melting temperature.
         /// </value>
-        public int MaxTh { get; set; }
+        public double MaxTh { get; set; }
 
         /// <value>
         /// Max duplex melting temperature.
         /// </value>
-        public int MaxTd { get; set; }
+        public double MaxTd { get; set; }
 
         /// <summary>
         /// Designer settings constructor.
@@ -72,10 +72,10 @@ namespace Mufasa.BackEnd.Designer
             this.MaxLen_3 = 25;
             this.MinLen_5 = 20;
             this.MaxLen_5 = 30;
-            this.TargetTm = 65;
-            this.MaxTh = 55;
-            this.MaxTd= 55;
-            this.ReactionVolume = 50;
+            this.TargetTm = 65.0;
+            this.MaxTh = 55.0;
+            this.MaxTd= 55.0;
+            this.ReactionVolume = 50.0;
             this.TmThalSettings = new TmThalSettings();
         }
 

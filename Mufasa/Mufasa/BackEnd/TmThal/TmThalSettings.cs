@@ -15,7 +15,7 @@ namespace Mufasa.BackEnd.TmThal
         /// <param name="dntpConc">dNTP-s concentration. (Qian &amp; Tian, 2014): 0.8 mM.</param>
         /// <param name="mvConc">Monovalent cations concentration. Assume phusion buffer.</param>
         /// <param name="dvConc">Divovalent cations concentration. Assume phusion buffer.</param>
-        /// <param name="nnMaxLen"></param>
+        /// <param name="nnMaxLen">Max oligo length fo NN-model computations.</param>
         /// <param name="tmMethod">Melting temperature method. See <see cref="TmThalSettings.TmMethod"/></param>
         /// <param name="saltMethod">Salt correction method. See <see cref="TmThalSettings.SaltCorrectionMethod"/></param>
         /// <param name="temperature">Reaction temperature. Annealing temperature for CPEC reaction (Qian &amp; Tian, 2014), as it is constant and lower than suggested annealing temperature for the PCR step (Tm + 3).</param>

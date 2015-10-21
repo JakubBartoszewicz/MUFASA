@@ -39,6 +39,7 @@ namespace Mufasa.Pages
         private double water;
         private double maxWater;
         private double buffer;
+        private double reactionVolume;
 
 
         /// <summary>
@@ -52,15 +53,8 @@ namespace Mufasa.Pages
         /// </summary>
         private void InitializeFragmentsListBox()
         {
-            dNTP = (double)Design.Designer.Settings.ReactionVolume / 100.0;
-            poly = (double)Design.Designer.Settings.ReactionVolume / 50.0;
-            buffer = (double)Design.Designer.Settings.ReactionVolume / 5.0;
-            dNTPTextBlock.Text = dNTP.ToString();
-            polyTextBlock.Text = poly.ToString();
-            bufferTextBlock.Text = buffer.ToString();
-            maxWater = (double)Design.Designer.Settings.ReactionVolume - dNTP - poly - buffer;
-            water = maxWater;
-            waterTextBlock.Text = water.ToString();
+            this.reactionVolume = Design.Designer.Settings.ReactionVolume;
+            calculatVolumes(this.reactionVolume);
 
             fragmentList = new ObservableCollection<Fragment>();
             for (int i = 0; i < Design.Designer.ConstructionList.Count(); i++)
@@ -88,9 +82,28 @@ namespace Mufasa.Pages
             concentrationsDataGrid.ItemsSource = Fragments;
         }
 
+        /// <summary>
+        /// Calculate reagent volumes.
+        /// </summary>
+        /// <param name="reactionVolume">Total reaction volume.</param>
+        void calculatVolumes(double reactionVolume)
+        {
+            dNTP = reactionVolume / 100.0;
+            poly = reactionVolume / 50.0;
+            buffer = reactionVolume / 5.0;
+            dNTPTextBlock.Text = dNTP.ToString();
+            polyTextBlock.Text = poly.ToString();
+            bufferTextBlock.Text = buffer.ToString();
+            maxWater = reactionVolume - dNTP - poly - buffer;
+            water = maxWater;
+            waterTextBlock.Text = water.ToString();
+        }
+
         //Concentrations were changed
         void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+
+
             //Update the collection view if refresh isn't possible
             if (this.Fragments.IsEditingItem)
                 this.Fragments.CommitEdit();

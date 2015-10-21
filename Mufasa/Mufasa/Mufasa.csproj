@@ -166,8 +166,17 @@
     <Compile Include="Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Settings\ReactionSettings.xaml.cs">
+      <DependentUpon>ReactionSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\DesignerSettingsViewModel.cs" />
+    <Compile Include="Pages\Settings\TmThalSettingsViewModel.cs" />
     <Compile Include="Pages\VolumeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Page Include="Pages\Settings\ReactionSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
