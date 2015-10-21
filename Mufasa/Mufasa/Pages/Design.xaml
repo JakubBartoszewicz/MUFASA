@@ -99,7 +99,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Sequence" Width ="6*" Binding="{Binding Path=SequenceString, Mode=OneWay}" >
+                        <DataGridTextColumn Header="Sequence" Width ="4*" Binding="{Binding Path=SequenceString, Mode=OneWay}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -163,14 +163,14 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Scores:" Width ="4*" Binding="{Binding Path=Label, Mode=OneWay}" >
+                        <DataGridTextColumn Header="Scores:" Width ="3*" Binding="{Binding Path=Label, Mode=OneWay}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Raw score" Width ="4*" Binding="{Binding Path=RawScore, Mode=OneWay, StringFormat=N2}">
+                        <DataGridTextColumn Header="Raw score" Width ="3*" Binding="{Binding Path=RawScore, Mode=OneWay, StringFormat=N2}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Left" />

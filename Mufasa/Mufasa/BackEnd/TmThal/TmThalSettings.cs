@@ -46,10 +46,10 @@ namespace Mufasa.BackEnd.TmThal
             this.MaxLoop = maxLoop;
 
             this.thalSettings.debug = 0;
-            this.thalSettings.temponly = 0;
+            this.thalSettings.temponly = 1;
             this.thalSettings.dimer = 1;
             this.thalHairpinSettings.debug = 0;
-            this.thalHairpinSettings.temponly = 0;
+            this.thalHairpinSettings.temponly = 1;
             this.thalHairpinSettings.dimer = 0;
 
             this.thalSettings.type = Thermodynamics.p3_thal_alignment_type.thal_any;

@@ -128,7 +128,7 @@ namespace Mufasa.BackEnd.Designer
                     else
                     {
                         done_3 = true;
-                    }                    
+                    }
 
                 } while (!done_5 || !done_3);
 
@@ -142,9 +142,7 @@ namespace Mufasa.BackEnd.Designer
             {
                 //Duplex melting temperatures
                 this.Construct.Overlaps[i].HeterodimerMeltingTemperature = this.Construct.Overlaps[i].GetDuplexTemperature(this.Construct.Overlaps[this.Construct.Overlaps[i].PairIndex]);
-                this.Construct.Overlaps[this.Construct.Overlaps[i].PairIndex].HeterodimerMeltingTemperature = this.Construct.Overlaps[i].HeterodimerMeltingTemperature;
             }
-
             this.Construct.Evaluate();
         }
     }
