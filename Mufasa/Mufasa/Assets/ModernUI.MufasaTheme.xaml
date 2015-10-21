@@ -8,7 +8,9 @@
     </ResourceDictionary.MergedDictionaries>
 
     <!-- specify the accent color (optional) -->
-    <Color x:Key="AccentColor">#f0a30a</Color>
+    <!--<Color x:Key="AccentColor">#f0a30a</Color> -->
+
+    <Color x:Key="AccentColor">#c0933a</Color>
 
     <!-- custom theme resources-->
 

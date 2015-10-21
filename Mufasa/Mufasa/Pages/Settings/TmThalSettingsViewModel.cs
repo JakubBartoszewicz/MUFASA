@@ -9,7 +9,7 @@ using Mufasa.BackEnd.TmThal;
 namespace Mufasa.Pages.Settings
 {
     /// <remarks>
-    /// Wraps TmThalSettings class and provide notification of changes
+    /// Wraps TmThalSettings class and provides notification of changes
     /// </remarks>
     class TmThalSettingsViewModel : NotifyPropertyChanged
     {

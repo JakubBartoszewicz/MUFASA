@@ -113,6 +113,7 @@
     <Compile Include="BackEnd\Designer\DesignerSettings.cs" />
     <Compile Include="BackEnd\Exceptions\TmThalParamException.cs" />
     <Compile Include="BackEnd\Lea\Chromosome.cs" />
+    <Compile Include="BackEnd\Lea\LeaSettings.cs" />
     <Compile Include="BackEnd\Scores\Score.cs" />
     <Compile Include="BackEnd\Designer\Overlap.cs" />
     <Compile Include="BackEnd\Designer\OverlapOptimizer.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Settings\LeaSettingsViewModel.cs" />
     <Compile Include="Pages\Settings\ReactionSettings.xaml.cs">
       <DependentUpon>ReactionSettings.xaml</DependentUpon>
     </Compile>

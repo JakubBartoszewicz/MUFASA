@@ -10,16 +10,77 @@
             <Grid MinWidth="200">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+                <GroupBox Grid.Column="0" Header="Overlap parameters" HorizontalAlignment="Left" Margin="20,20,20,20" Grid.Row="0" VerticalAlignment="Top">
+                    <Grid HorizontalAlignment="Left" Height="Auto" Margin="0,0,0,0" VerticalAlignment="Top" Width="Auto">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label x:Name="targetTmLabel" Content="Target Tm:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="0"/>
+                        <Label x:Name="maxThLabel" Content="Max Th:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="1"/>
+                        <Label x:Name="maxTdLabel" Content="Max Td:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="2"/>
+                        <Label x:Name="reactionTempLabel" Content="Alignment T:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="3"/>
+                        <Label x:Name="minlen_3Label" Content="Min. length 3':" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="0"/>
+                        <Label x:Name="maxlen_3Label" Content="Max. length 3':" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="1"/>
+                        <Label x:Name="minlen_5Label" Content="Min. length 5':" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="2"/>
+                        <Label x:Name="maxlen_5TempLabel" Content="Max. length 5':" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="3"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Column="0" Header="Tm/thal parameters" HorizontalAlignment="Left" Margin="20,20,20,20" Grid.Row="1" VerticalAlignment="Top">
+                    <Grid HorizontalAlignment="Left" Height="Auto" Margin="0,0,0,0" VerticalAlignment="Top" Width="Auto">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label x:Name="tmMethodLabel" Content="Tm method:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="0"/>
+                        <Label x:Name="saltCorrLabel" Content="Salt correction:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="1"/>
+                        <Label x:Name="nnMaxLenLabel" Content="NN max. length:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="0"/>
+                        <Label x:Name="maxLoopLabel" Content="Max. loop:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="1"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Column="0" Header="LEA parameters" HorizontalAlignment="Left" Margin="20,20,20,20" Grid.Row="2" VerticalAlignment="Top">
+                    <Grid HorizontalAlignment="Left" Height="Auto" Margin="0,0,0,0" VerticalAlignment="Top" Width="Auto">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label x:Name="mutationLabel" Content="Mutation rate:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="0"/>
+                        <Label x:Name="crossoverLabel" Content="Crossover rate:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="1"/>
+                        <Label x:Name="learningLabel" Content="Learning rate:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="2"/>
+                        <Label x:Name="popsizeLabel" Content="Pop. size:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="0"/>
+                        <Label x:Name="tournamentSizeLabel" Content="Tournament size:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="1"/>
+                        <Label x:Name="stopLabel" Content="Stop:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="2"/>
+                    </Grid>
+                </GroupBox>
+
+
 
             </Grid>
         </ScrollViewer>

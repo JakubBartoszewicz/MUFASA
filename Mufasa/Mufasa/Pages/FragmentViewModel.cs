@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Mufasa.Pages
 {
     /// <summary>
-    /// Wraps Fragment class and provide notification of changes
+    /// Wraps Fragment class and provides notification of changes
     /// </summary>
     public class FragmentViewModel : NotifyPropertyChanged
     {
