@@ -51,7 +51,7 @@ namespace Mufasa.Pages
         }
 
         /// <value>
-        /// Volume.
+        /// Sample volume.
         /// </value>
         public double Volume
         {
@@ -60,6 +60,19 @@ namespace Mufasa.Pages
             {
                 this.Model.Volume = value;
                 OnPropertyChanged("Volume");
+            }
+        }
+
+        /// <value>
+        /// Reaction volume.
+        /// </value>
+        public double ReactionVolume
+        {
+            get { return this.Model.ReactionVolume; }
+            set
+            {
+                this.Model.ReactionVolume = value;
+                OnPropertyChanged("ReactionVolume");
             }
         }
 

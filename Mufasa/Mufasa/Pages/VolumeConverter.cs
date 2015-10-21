@@ -34,7 +34,7 @@ namespace Mufasa.Pages
             if (item == null || view == null)
                 return null;
 
-            var volume = item.Length * 0.1 / item.Concentration;
+            var volume = (item.Length * 0.1 / item.Concentration) *  (item.ReactionVolume / 50.0);
             if (item.IsVector)
             {
                 volume /= 2;
