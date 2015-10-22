@@ -5,9 +5,107 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="768" d:DesignWidth="800" >
+    <UserControl.Resources>
+        <Style x:Key="MufasaNumericUpDown" TargetType="{x:Type ScrollBar}">
+            <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBox VerticalAlignment="Center" MinWidth="25" Text="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, StringFormat=N2}" Width="110"/>
+                            <Grid Grid.Column="1" x:Name="GridRoot" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Background="{TemplateBinding Background}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition MaxHeight="18"/>
+                                    <RowDefinition Height="0.00001*"/>
+                                    <RowDefinition MaxHeight="18"/>
+                                </Grid.RowDefinitions>
+                                <RepeatButton x:Name="IncreaseRepeat" Command="ScrollBar.LineDownCommand" Focusable="False" Width="20">
+                                    <RepeatButton.Content>
+                                        <Canvas>
+                                            <TextBlock Canvas.Top="-4" Canvas.Left="-15" Text="&lt;" >
+                                                <TextBlock.LayoutTransform>
+                                                    <RotateTransform Angle="90" />
+                                                </TextBlock.LayoutTransform>
+                                            </TextBlock>
+                                        </Canvas>
+                                    </RepeatButton.Content>
+                                </RepeatButton>
+                                <RepeatButton Grid.Row="2" x:Name="DecreaseRepeat"  Command="ScrollBar.LineUpCommand" Focusable="False" Width="20">
+                                    <RepeatButton.Content>
+                                        <Canvas>
+                                            <TextBlock Canvas.Top="-3" Canvas.Left="-15" Text="&gt;">
+                                                <TextBlock.LayoutTransform>
+                                                    <RotateTransform Angle="90" />
+                                                </TextBlock.LayoutTransform>
+                                            </TextBlock>
+                                        </Canvas>
+                                    </RepeatButton.Content>
+                                </RepeatButton>
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MufasaIntegerUpDown" TargetType="{x:Type ScrollBar}">
+            <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBox VerticalAlignment="Center" MinWidth="25" Text="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, StringFormat=##}" Width="110" />
+                            <Grid Grid.Column="1" x:Name="GridRoot" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Background="{TemplateBinding Background}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition MaxHeight="18"/>
+                                    <RowDefinition Height="0.00001*"/>
+                                    <RowDefinition MaxHeight="18"/>
+                                </Grid.RowDefinitions>
+                                <RepeatButton x:Name="IncreaseRepeat" Command="ScrollBar.LineDownCommand" Focusable="False" Width="20">
+                                    <RepeatButton.Content>
+                                        <Canvas>
+                                            <TextBlock Canvas.Top="-4" Canvas.Left="-15" Text="&lt;" >
+                                                <TextBlock.LayoutTransform>
+                                                    <RotateTransform Angle="90" />
+                                                </TextBlock.LayoutTransform>
+                                            </TextBlock>
+                                        </Canvas>
+                                    </RepeatButton.Content>
+                                </RepeatButton>
+                                <RepeatButton Grid.Row="2" x:Name="DecreaseRepeat"  Command="ScrollBar.LineUpCommand" Focusable="False" Width="20">
+                                    <RepeatButton.Content>
+                                        <Canvas>
+                                            <TextBlock Canvas.Top="-3" Canvas.Left="-15" Text="&gt;">
+                                                <TextBlock.LayoutTransform>
+                                                    <RotateTransform Angle="90" />
+                                                </TextBlock.LayoutTransform>
+                                            </TextBlock>
+                                        </Canvas>
+                                    </RepeatButton.Content>
+                                </RepeatButton>
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid Style="{StaticResource ContentRoot}">
         <ScrollViewer>
-            <Grid MinWidth="200">
+            <Grid MinWidth="200" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
@@ -19,10 +117,10 @@
                 <GroupBox Grid.Column="0" Header="Overlap parameters" HorizontalAlignment="Left" Margin="20,20,20,20" Grid.Row="0" VerticalAlignment="Top">
                     <Grid HorizontalAlignment="Left" Height="Auto" Margin="0,0,0,0" VerticalAlignment="Top" Width="Auto">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -30,41 +128,62 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <Label x:Name="targetTmLabel" Content="Target Tm:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="0"/>
-                        <Label x:Name="maxThLabel" Content="Max Th:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="1"/>
-                        <Label x:Name="maxTdLabel" Content="Max Td:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="2"/>
-                        <Label x:Name="reactionTempLabel" Content="Alignment T:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="3"/>
-                        <Label x:Name="minlen_3Label" Content="Min. length 3':" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="0"/>
-                        <Label x:Name="maxlen_3Label" Content="Max. length 3':" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="1"/>
-                        <Label x:Name="minlen_5Label" Content="Min. length 5':" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="2"/>
-                        <Label x:Name="maxlen_5TempLabel" Content="Max. length 5':" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="3"/>
+                        <Label x:Name="targetTmLabel" Content="Target Tm:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="0"/>
+                        <ScrollBar x:Name="targetTmScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" Value="65.00" VerticalAlignment="Top"  Minimum="45" Maximum="75" Margin="10" SmallChange="1" Grid.Column="3" Grid.Row="0" ValueChanged="targetTmScrollBar_ValueChanged"/>
+
+                        <Label x:Name="maxThLabel" Content="Max Th:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="1"/>
+                        <ScrollBar x:Name="maxThScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" Value="55.00" VerticalAlignment="Top"  Minimum="45" Maximum="75" Margin="10" SmallChange="1" Grid.Column="3" Grid.Row="1" ValueChanged="maxThScrollBar_ValueChanged"/>
+
+                        <Label x:Name="maxTdLabel" Content="Max Td:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="2"/>
+                        <ScrollBar x:Name="maxTdScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" Value="55.00" VerticalAlignment="Top"  Minimum="45" Maximum="75" Margin="10" SmallChange="1" Grid.Column="3" Grid.Row="2" ValueChanged="maxTdScrollBar_ValueChanged"/>
+
+                        <Label x:Name="minlen_3Label" Content="Min. length 3':" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="0"/>
+                        <ScrollBar x:Name="minlen_3ScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" Value="18" VerticalAlignment="Top"  Minimum="15" Maximum="35" Margin="10" SmallChange="1" Grid.Column="1" Grid.Row="0" ValueChanged="minlen_3ScrollBar_ValueChanged"/>
+
+                        <Label x:Name="maxlen_3Label" Content="Max. length 3':" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="1"/>
+                        <ScrollBar x:Name="maxlen_3ScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" Value="25" VerticalAlignment="Top"  Minimum="15" Maximum="35" Margin="10" SmallChange="1" Grid.Column="1" Grid.Row="1" ValueChanged="maxlen_3ScrollBar_ValueChanged"/>
+
+                        <Label x:Name="minlen_5Label" Content="Min. length 5':" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="2"/>
+                        <ScrollBar x:Name="minlen_5ScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" Value="20" VerticalAlignment="Top"  Minimum="15" Maximum="35" Margin="10" SmallChange="1" Grid.Column="1" Grid.Row="2" ValueChanged="minlen_5ScrollBar_ValueChanged"/>
+
+                        <Label x:Name="maxlen_5TempLabel" Content="Max. length 5':" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="3"/>
+                        <ScrollBar x:Name="maxlen_5ScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" Value="30" VerticalAlignment="Top"  Minimum="15" Maximum="35" Margin="10" SmallChange="1" Grid.Column="1" Grid.Row="3" ValueChanged="maxlen_5ScrollBar_ValueChanged"/>
+
                     </Grid>
                 </GroupBox>
                 <GroupBox Grid.Column="0" Header="Tm/thal parameters" HorizontalAlignment="Left" Margin="20,20,20,20" Grid.Row="1" VerticalAlignment="Top">
                     <Grid HorizontalAlignment="Left" Height="Auto" Margin="0,0,0,0" VerticalAlignment="Top" Width="Auto">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Label x:Name="tmMethodLabel" Content="Tm method:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="0"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1" Margin="10, 10, 10, 10" ItemsSource="{Binding TmMethods}" SelectedItem="{Binding SelectedTmMethod, Mode=TwoWay}" Width="110" VerticalAlignment="Center" />
+
                         <Label x:Name="saltCorrLabel" Content="Salt correction:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="1"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" Margin="10, 10, 10, 10" ItemsSource="{Binding SaltCorrMethods}" SelectedItem="{Binding SelectedSaltCorrMethod, Mode=TwoWay}" Width="110" VerticalAlignment="Center" />
+
                         <Label x:Name="nnMaxLenLabel" Content="NN max. length:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="0"/>
+                        <ScrollBar x:Name="nnMaxLenScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" Value="60" VerticalAlignment="Top"  Minimum="2" Maximum="60" Margin="10" SmallChange="1" Grid.Column="4" Grid.Row="0" ValueChanged="nnMaxLenScrollBar_ValueChanged"/>
+
                         <Label x:Name="maxLoopLabel" Content="Max. loop:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="1"/>
+                        <ScrollBar x:Name="maxLoopScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" Value="30" VerticalAlignment="Top"  Minimum="2" Maximum="30" Margin="10" SmallChange="1" Grid.Column="4" Grid.Row="1" ValueChanged="maxLoopScrollBar_ValueChanged"/>
+
                     </Grid>
                 </GroupBox>
                 <GroupBox Grid.Column="0" Header="LEA parameters" HorizontalAlignment="Left" Margin="20,20,20,20" Grid.Row="2" VerticalAlignment="Top">
                     <Grid HorizontalAlignment="Left" Height="Auto" Margin="0,0,0,0" VerticalAlignment="Top" Width="Auto">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -72,16 +191,23 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Label x:Name="mutationLabel" Content="Mutation rate:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="0"/>
+                        <ScrollBar x:Name="mutationScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" Value="1.00" VerticalAlignment="Top"  Minimum="0" Maximum="1.0" Margin="10" SmallChange="1" Grid.Column="1" Grid.Row="0" ValueChanged="mutationScrollBar_ValueChanged"/>
+
                         <Label x:Name="crossoverLabel" Content="Crossover rate:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="1"/>
+                        <ScrollBar x:Name="crossoverScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" Value="1.00"  VerticalAlignment="Top"  Minimum="0" Maximum="1.00" Margin="10" SmallChange="1" Grid.Column="1" Grid.Row="1" ValueChanged="crossoverScrollBar_ValueChanged"/>
+
                         <Label x:Name="learningLabel" Content="Learning rate:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="2"/>
+                        <ScrollBar x:Name="learningScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" Value="1.00" VerticalAlignment="Top"  Minimum="0" Maximum="1.00" Margin="10" SmallChange="1" Grid.Column="1" Grid.Row="2" ValueChanged="learningScrollBar_ValueChanged"/>
+
                         <Label x:Name="popsizeLabel" Content="Pop. size:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="0"/>
+                        <ScrollBar x:Name="popsizeScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" Value="2000" VerticalAlignment="Top"  Minimum="2" Maximum="1000000" Margin="10" SmallChange="1" Grid.Column="4" Grid.Row="0" ValueChanged="popsizeScrollBar_ValueChanged"/>
+
                         <Label x:Name="tournamentSizeLabel" Content="Tournament size:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="1"/>
+                        <ScrollBar x:Name="tournamentScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" Value="10" VerticalAlignment="Top"  Minimum="2" Maximum="100000" Margin="10" SmallChange="1" Grid.Column="4" Grid.Row="1" ValueChanged="tournamentScrollBar_ValueChanged"/>
+
                         <Label x:Name="stopLabel" Content="Stop:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="2"/>
                     </Grid>
                 </GroupBox>
-
-
-
             </Grid>
         </ScrollViewer>
     </Grid>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mufasa.BackEnd.TmThal;
+using Mufasa.BackEnd.Lea;
 
 namespace Mufasa.BackEnd.Designer
 {
@@ -52,6 +53,11 @@ namespace Mufasa.BackEnd.Designer
         /// </summary>
         public TmThalSettings TmThalSettings;
 
+        /// <summary>
+        /// Lea settings
+        /// </summary>
+        public LeaSettings LeaSettings;
+
         /// <value>
         /// Max hairpin melting temperature.
         /// </value>
@@ -77,6 +83,7 @@ namespace Mufasa.BackEnd.Designer
             this.MaxTd= 55.0;
             this.ReactionVolume = 50.0;
             this.TmThalSettings = new TmThalSettings();
+            this.LeaSettings = new LeaSettings();
         }
 
     }

@@ -29,7 +29,6 @@ namespace Mufasa.BackEnd.TmThal
             int nnMaxLen = 60,
             Thermodynamics.p3_tm_method_type tmMethod = Thermodynamics.p3_tm_method_type.p3_santalucia_auto,
             Thermodynamics.p3_salt_correction_type saltMethod = Thermodynamics.p3_salt_correction_type.p3_santalucia,
-            double temperature = 55,
             int maxLoop = 30)
         {
 
@@ -42,7 +41,6 @@ namespace Mufasa.BackEnd.TmThal
             this.TmMethod = tmMethod;
             this.SaltCorrectionMethod = saltMethod;
 
-            this.ReactionTemperature = temperature;
             this.MaxLoop = maxLoop;
 
             this.thalSettings.debug = 0;
@@ -233,27 +231,6 @@ namespace Mufasa.BackEnd.TmThal
                 this.tmSettings.nn_max_len = value;
             }
         }
-
-        /// <summary>
-        /// Temperature from which hairpin structures will be calculated.
-        /// </summary>
-        public double ReactionTemperature
-        {
-            get
-            {
-
-                return this.thalSettings.temp;
-
-            }
-            set
-            {
-
-                this.thalSettings.temp = value;
-                this.thalHairpinSettings.temp = value;
-
-            }
-        }
-
 
         /// <summary>
         /// DNA concentration.

@@ -336,7 +336,7 @@ namespace Mufasa.BackEnd.Designer
         private bool IsPopAllowed(int minLen, int length = 1)
         {
             //To modify.
-            if (this.Seq_3.Count - length > minLen)
+            if (this.Seq_3.Count - length >= minLen)
             {
                 return true;
             }
@@ -353,7 +353,7 @@ namespace Mufasa.BackEnd.Designer
         private bool IsDequeueAllowed(int minLen, int length = 1)
         {
             //To modify.
-            if (this.Seq_5.Count - length > minLen)
+            if (this.Seq_5.Count - length >= minLen)
             {
                 return true;
             }
@@ -370,7 +370,7 @@ namespace Mufasa.BackEnd.Designer
         private bool IsEnqueueAllowed(int maxLen, int length = 1)
         {
             //To modify.
-            if (this.Seq_5.Count + length - 1 < maxLen && this.Seq_5.Count + length - 1 < this.TemplateSeq_5.Count)
+            if (this.Seq_5.Count + length - 1 <= maxLen && this.Seq_5.Count + length - 1 < this.TemplateSeq_5.Count)
             {
                 return true;
             }
@@ -387,7 +387,7 @@ namespace Mufasa.BackEnd.Designer
         private bool IsPushAllowed(int maxLen, int length = 1)
         {
             //To modify.
-            if (this.Seq_3.Count + length - 1 < maxLen && this.Seq_3.Count + length - 1 < this.TemplateSeq_3.Count)
+            if (this.Seq_3.Count + length - 1 <= maxLen && this.Seq_3.Count + length - 1 < this.TemplateSeq_3.Count)
             {
                 return true;
             }
