@@ -65,7 +65,8 @@ namespace Mufasa.Pages
             fragmentList = new ObservableCollection<Fragment>();
             for (int i = 0; i < Design.Designer.ConstructionList.Count(); i++)
             {
-                Fragment f = Design.Designer.FragmentDict[Design.Designer.ConstructionList[i]];
+                String key = Design.Designer.ConstructionList[i].Replace("vect.", "");
+                Fragment f = Design.Designer.FragmentDict[key];
                 
                 if(i==0)
                 {

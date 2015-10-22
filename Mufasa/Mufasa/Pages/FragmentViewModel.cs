@@ -119,7 +119,17 @@ namespace Mufasa.Pages
         /// </value>
         public String Name
         {
-            get { return this.Model.Name; }
+            get
+            {
+                if (this.Model.IsVector)
+                {
+                    return "vect." + this.Model.Name;
+                }
+                else
+                {
+                    return this.Model.Name;
+                } 
+            }
             set
             {
                 this.Model.Name = value;

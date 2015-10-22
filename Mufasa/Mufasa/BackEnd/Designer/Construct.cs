@@ -43,10 +43,17 @@ namespace Mufasa.BackEnd.Designer
         /// Construct constructor.
         /// </summary>
         /// <param name="fragDict">Fragment Dictionary.</param>
-        /// <param name="nameList">Fragment names. Dictionary keys.</param>
-        public Construct(ObservableCollection<String> nameList, Dictionary<String, Fragment> fragDict, DesignerSettings settings)
+        /// <param name="constructionList">Fragment names. Dictionary keys.</param>
+        public Construct(ObservableCollection<String> constructionList, Dictionary<String, Fragment> fragDict, DesignerSettings settings)
             : base()
         {
+            ObservableCollection<String> nameList = new ObservableCollection<String>(constructionList);
+
+            for (int i = 0; i < nameList.Count; i++)
+            {
+                nameList[i] = nameList[i].Replace("vect.", "");
+            }
+
             ObservableCollection<Fragment> fragList = new ObservableCollection<Fragment>();
             for (int i = 0; i < nameList.Count; i++)
             {
@@ -57,6 +64,7 @@ namespace Mufasa.BackEnd.Designer
                 }
                 fragList.Add(f);
             }
+
             Init(fragList, settings);
         }
 
@@ -123,7 +131,7 @@ namespace Mufasa.BackEnd.Designer
                 if (i == 0)
                 {
                     pairIndex = fragList.Count;
-                    Overlaps.Add(new Overlap(fragList[i].Name + "-fwd", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings, pairIndex));
+                    Overlaps.Add(new Overlap("vect." + fragList[i].Name + "-fwd", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings, pairIndex));
                 }
                 else
                 {
@@ -163,7 +171,7 @@ namespace Mufasa.BackEnd.Designer
                 if (i == fragList.Count - 1)
                 {
                     pairIndex = 0;
-                    Overlaps.Add(new Overlap(fragList[i].Name + "-rev", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings, pairIndex));
+                    Overlaps.Add(new Overlap("vect." + fragList[i].Name + "-rev", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings, pairIndex));
                 }
                 else
                 {

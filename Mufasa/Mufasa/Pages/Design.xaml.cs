@@ -389,7 +389,14 @@ namespace Mufasa.Pages
             {                
                 try
                 {
-                    Designer.AddConstructionFragment(name);
+                    if(Designer.ConstructionList.Count == 0)
+                    {
+                        Designer.AddConstructionFragment("vect." + name);
+                    }
+                    else
+                    {
+                        Designer.AddConstructionFragment(name);
+                    }                    
                 }
                 catch (FragmentNamingException fne)
                 {
@@ -494,6 +501,14 @@ namespace Mufasa.Pages
                     Designer.ConstructionList.RemoveAt(remIdx);
                 }
             }
+
+            for (int i = 0; i < Designer.ConstructionList.Count; i++)
+            {
+                Designer.ConstructionList[i] = Designer.ConstructionList[i].Replace("vect.", "");
+            }
+
+            Designer.ConstructionList[0] = "vect." + Designer.ConstructionList[0];
+
         }
 
         /// <summary>

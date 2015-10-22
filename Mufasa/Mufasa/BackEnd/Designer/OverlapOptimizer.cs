@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Mufasa.BackEnd.Scores;
 using System.ComponentModel;
+using Mufasa.BackEnd.Lea;
+using Mufasa.BackEnd.Scores;
 
 namespace Mufasa.BackEnd.Designer
 {
@@ -38,9 +39,42 @@ namespace Mufasa.BackEnd.Designer
         /// </value>
         private BackgroundWorker b;
 
+
+        /// <summary>
+        /// Lamarckian evolutionary algorithm for overlap optimization.
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="args"></param>
+        public void LeaOptimizeOverlaps(object o, DoWorkEventArgs args)
+        {
+            this.b = o as BackgroundWorker;
+
+            //List<Chromosome> population = new List<Chromosome>();
+        }
+
+
+        private List<Chromosome> Populate(int populationSize) { return new List<Chromosome>(); }
+
+        private void Crossover() { }
+
+        private void LocalSearch() { }
+
+        private void Mutate(){}
+
+        private void Select() { }
+
+        private bool Stop() { return false;}
+
+
+
+
+
+
         /// <summary>
         /// Overlap naive-greedy temperature optimization.
         /// </summary>
+        /// <param name="o"></param>
+        /// <param name="args"></param>
         public void SemiNaiveOptimizeOverlaps(object o, DoWorkEventArgs args)
         {
             this.b = o as BackgroundWorker;
