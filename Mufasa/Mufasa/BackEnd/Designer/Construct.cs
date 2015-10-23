@@ -51,7 +51,7 @@ namespace Mufasa.BackEnd.Designer
 
             for (int i = 0; i < nameList.Count; i++)
             {
-                nameList[i] = nameList[i].Replace("vect.", "");
+                nameList[i] = nameList[i].Replace(Designer.VectorLabel, "");
             }
 
             ObservableCollection<Fragment> fragList = new ObservableCollection<Fragment>();
@@ -131,7 +131,7 @@ namespace Mufasa.BackEnd.Designer
                 if (i == 0)
                 {
                     pairIndex = fragList.Count;
-                    Overlaps.Add(new Overlap("vect." + fragList[i].Name + "-fwd", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings, pairIndex));
+                    Overlaps.Add(new Overlap(Designer.VectorLabel + fragList[i].Name + "-fwd", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings, pairIndex));
                 }
                 else
                 {
@@ -171,7 +171,7 @@ namespace Mufasa.BackEnd.Designer
                 if (i == fragList.Count - 1)
                 {
                     pairIndex = 0;
-                    Overlaps.Add(new Overlap("vect." + fragList[i].Name + "-rev", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings, pairIndex));
+                    Overlaps.Add(new Overlap(Designer.VectorLabel + fragList[i].Name + "-rev", new Sequence(Alphabets.AmbiguousDNA, geneSpecific_3), settings.TmThalSettings, pairIndex));
                 }
                 else
                 {
