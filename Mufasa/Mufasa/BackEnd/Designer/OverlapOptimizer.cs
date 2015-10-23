@@ -69,49 +69,61 @@ namespace Mufasa.BackEnd.Designer
             List<Chromosome> population = Populate();
             List<Chromosome> nextPopulation;
             Random rand = new Random();
+            int progress;
 
             do
             {
                 //Local Search
-
                 nextPopulation = LocalSearch(population);
 
                 do
                 {
-                    List<Chromosome> tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population);
-                    
-                    //Selection
+                    EvaluatePopulation(nextPopulation);
+                    List<Chromosome> tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population, rand);
 
+                    //Selection
                     if (rand.NextDouble() <= this.Settings.LeaSettings.CrossoverRate)
                     {
                         //Crossover
-
-                        Tuple<Chromosome, Chromosome> parents = TournamentTwo(tournament);
-                        Tuple<Chromosome, Chromosome> children = Crossover(parents);
+                        Chromosome mom = Tournament(tournament);
+                        Chromosome dad = Tournament(tournament);
+                        Tuple<Chromosome, Chromosome> children = Crossover(mom, dad, rand);
                         nextPopulation.Add(children.Item1);
                         nextPopulation.Add(children.Item2);
                     }
                     else
                     {
-                        Chromosome child = TournamentOne(tournament);
+                        Chromosome child = Tournament(tournament);
                         nextPopulation.Add(child);
                     }
                 } while (nextPopulation.Count < population.Count);
 
                 //Mutation
+                nextPopulation = MutatePopulation(nextPopulation, rand);
 
-                nextPopulation = MutatePopulation(nextPopulation);
-                Chromosome best = TournamentOne(nextPopulation);
+                Chromosome best = Tournament(nextPopulation);
                 LeaBestAcrossGenerations.Add(best.Score.NormalizedScore);
 
-                if(best.Score.NormalizedScore < LeaBest.Score.NormalizedScore)
+                if (best.Score.NormalizedScore < LeaBest.Score.NormalizedScore)
                 {
-                    //save the best solution so far
-                    LeaBest = best;
+                    //copy the best solution so far
+                    LeaBest = new Chromosome(best);
                 }
 
                 population = nextPopulation;
-            } while (!Stop());
+
+                double worstScore = LeaBestAcrossGenerations.Max();
+
+                //progress = 100 if epsilon == variance
+                progress = (int)((100.0 / worstScore) * (worstScore + this.Settings.LeaSettings.Epsilon - Variance(LeaBestAcrossGenerations)) + 0.5);
+                if (progress > 100)
+                {
+                    //when variance lower than epsilon
+                    progress = 100;
+                }
+                b.ReportProgress(progress);
+
+            } while (progress != 100);
         }
 
         /// <summary>
@@ -139,22 +151,16 @@ namespace Mufasa.BackEnd.Designer
             return population;
         }
 
-        private Tuple<Chromosome, Chromosome> Crossover(Tuple<Chromosome, Chromosome> parents)
+        /// <summary>
+        /// Evaluate population
+        /// </summary>
+        /// <param name="population">Population to evaluate.</param>
+        private void EvaluatePopulation (List<Chromosome> population)
         {
-            //TODO
-            return parents;
-        }
-
-        private Tuple<Chromosome, Chromosome> TournamentTwo(List<Chromosome> participants)
-        {
-            //TODO
-            return new Tuple<Chromosome, Chromosome>(participants[0], participants[1]);
-        }
-
-        private Chromosome TournamentOne(List<Chromosome> participants)
-        {
-            //TODO
-            return participants[0];
+            foreach(Chromosome c in population)
+            {
+                c.Evaluate(this.Construct.Overlaps, this.Settings);
+            }
         }
 
         private List<Chromosome> LocalSearch(List<Chromosome> population)
@@ -163,24 +169,114 @@ namespace Mufasa.BackEnd.Designer
             return population;
         }
 
-        private Chromosome Mutate(Chromosome solution)
+        /// <summary>
+        /// Selects random chromosomes for tournament.
+        /// </summary>
+        /// <param name="tournamentSize">Tournament size.</param>
+        /// <param name="population">Whole population to select from.</param>
+        /// <param name="rand">Randomizer.</param>
+        /// <returns>List of contestors.</returns>
+        private List<Chromosome> SelectForTournament(int tournamentSize, List<Chromosome> population, Random rand)
         {
-            //TODO
+            List<Chromosome> tournament = new List<Chromosome>();
+
+            for (int i = 0; i < tournamentSize; i++)
+            {
+                tournament.Add(population[rand.Next(population.Count)]);
+            }
+
+            return tournament;
+        }
+
+        /// <summary>
+        /// Tournament with one winner.
+        /// </summary>
+        /// <param name="contestors">Tournament contestors.</param>
+        /// <returns>Best chromosome in the tournament.</returns>
+        private Chromosome Tournament(List<Chromosome> contestors)
+        {
+            //Ascending order - score minimization
+            contestors = contestors.OrderBy(o => o.Score.NormalizedScore).ToList();
+            return contestors[0];
+        }
+
+        /// <summary>
+        /// Perform uniform crossover.
+        /// </summary>
+        /// <param name="mom">Parent 1.</param>
+        /// <param name="dad">Parent 2.</param>
+        /// <param name="rand">Randomizer.</param>
+        /// <returns>Tuple of children.</returns>
+        private Tuple<Chromosome, Chromosome> Crossover(Chromosome mom, Chromosome dad, Random rand)
+        {
+            List<int> len_3_1 = new List<int>();
+            List<int> len_5_1 = new List<int>();
+            List<int> len_3_2 = new List<int>();
+            List<int> len_5_2 = new List<int>();
+
+            for (int i = 0; i < mom.Lengths_3.Count; i++)
+            {
+                if (rand.NextDouble() < 0.5)
+                {
+                    len_3_1.Add(mom.Lengths_3[i]);
+                    len_5_1.Add(mom.Lengths_5[i]);
+                    len_3_2.Add(dad.Lengths_3[i]);
+                    len_5_2.Add(dad.Lengths_5[i]);
+                }
+                else
+                {
+                    len_3_1.Add(dad.Lengths_3[i]);
+                    len_5_1.Add(dad.Lengths_5[i]);
+                    len_3_2.Add(mom.Lengths_3[i]);
+                    len_5_2.Add(mom.Lengths_5[i]);
+                }
+
+            }
+            Chromosome child1 = new Chromosome(len_3_1, len_5_1);
+            Chromosome child2 = new Chromosome(len_3_2, len_5_2);
+
+            Tuple<Chromosome, Chromosome> children = new Tuple<Chromosome, Chromosome>(child1, child2);
+            return children;
+        }
+
+        private Chromosome Mutate(Chromosome solution, Random rand)
+        {
+            if (rand.NextDouble() < 0.5D)
+            {
+                //Mutate 3'
+                int index = rand.Next(solution.Lengths_3.Count);
+                int value = rand.Next(this.Settings.MinLen_3, this.Settings.MaxLen_3 + 1);
+                solution.Lengths_3[index] = value;
+            }
+            else
+            {
+                //Mutate 5'
+                int index = rand.Next(solution.Lengths_5.Count);
+                int value = rand.Next(this.Settings.MinLen_5, this.Settings.MaxLen_5 + 1);
+                solution.Lengths_5[index] = value;
+            }
             return solution;
         }
 
-        private List<Chromosome> MutatePopulation(List<Chromosome> population)
+        /// <summary>
+        /// Mutate population of solutions.
+        /// </summary>
+        /// <param name="population">Population.</param>
+        /// <param name="rand">Randomizer.</param>
+        /// <returns>Mutated population.</returns>
+        private List<Chromosome> MutatePopulation(List<Chromosome> population, Random rand)
         {
-            //TODO
+            for (int i = 0; i < population.Count; i++)
+            {
+                if (rand.NextDouble() <= this.Settings.LeaSettings.MutationRate)
+                {
+                    //Solution chosen to be mutated
+                    population[i] = Mutate(population[i], rand);
+                }
+            }
             return population;
         }
-
-        private List<Chromosome> SelectForTournament(int tournamentSize, List<Chromosome> population)
-        {
-            //TODO
-            return population;
-        }
-
+     
         /// <summary>
         /// Check if stopping criterion satisfied.
         /// </summary>
@@ -191,7 +287,6 @@ namespace Mufasa.BackEnd.Designer
 
             return (variance < this.Settings.LeaSettings.Epsilon);
         }
-
 
         /// <summary>
         /// Calculate variance using Welford's method.
@@ -216,8 +311,6 @@ namespace Mufasa.BackEnd.Designer
 
             return S / (k - 1); //whole population variance. 
         }
-
-
 
         /// <summary>
         /// Overlap naive-greedy temperature optimization.

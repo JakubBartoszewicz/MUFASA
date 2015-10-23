@@ -186,7 +186,7 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <ProgressBar Name="progressBar" Minimum="0" Maximum="100" Grid.Column="2" HorizontalAlignment="Center" Height="20" Margin="20,0,0,0" Grid.Row="3" VerticalAlignment="Center" Width="200" IsIndeterminate="True" Visibility="Hidden"/>
+                <ProgressBar Name="progressBar" Minimum="0" Maximum="100" Grid.Column="2" HorizontalAlignment="Center" Height="20" Margin="20,0,0,0" Grid.Row="3" VerticalAlignment="Center" Width="200" IsIndeterminate="False" Visibility="Visible"/>
             </Grid>
         </ScrollViewer>
         

@@ -22,6 +22,17 @@ namespace Mufasa.BackEnd.Lea
             this.Lengths_5 = lengths_5;
         }
 
+        /// <summary>
+        /// Chromosome copying constructor.
+        /// </summary>
+        /// <param name="c"></param>
+        public Chromosome(Chromosome c)
+        {
+            this.Lengths_3 = c.Lengths_3;
+            this.Lengths_5 = c.Lengths_5;
+            this.Score = c.Score;
+        }
+
         /// <value>
         /// List of lengths of 3' (overhang) parts of the overlaps./> 
         /// </value>
