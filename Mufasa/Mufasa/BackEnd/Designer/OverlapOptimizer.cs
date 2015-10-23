@@ -66,9 +66,9 @@ namespace Mufasa.BackEnd.Designer
         {
             this.b = o as BackgroundWorker;
 
-            List<Chromosome> population = Populate();
-            List<Chromosome> nextPopulation;
             Random rand = new Random();
+            List<Chromosome> population = Populate(rand);
+            List<Chromosome> nextPopulation;
             int progress;
             List<Chromosome> tournament;
 
@@ -145,15 +145,15 @@ namespace Mufasa.BackEnd.Designer
         /// <summary>
         /// Generate starting population.
         /// </summary>
-        /// <returns></returns>
-        private List<Chromosome> Populate()
+        /// <param name="rand">Randomizer.</param>
+        /// <returns>Starting population.</returns>
+        private List<Chromosome> Populate(Random rand)
         {
             List<Chromosome> population = new List<Chromosome>();
             for (int c = 0; c < this.Settings.LeaSettings.PopulationSize; c++)
             {
                 List<int> len_3 = new List<int>();
                 List<int> len_5 = new List<int>();
-                Random rand = new Random();
 
                 for (int i = 0; i < this.Construct.Overlaps.Count; i++)
                 {

@@ -523,7 +523,7 @@ namespace Mufasa.Pages
             {
                 construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
                 overlapOptimizer = new OverlapOptimizer(construct, Designer.Settings);
-
+                assembleButton.IsEnabled = false;
 
                 BackgroundWorker bw = new BackgroundWorker();
                 // this allows our worker to report progress during work
@@ -570,7 +570,7 @@ namespace Mufasa.Pages
                     }
 
                     //progressBar.Visibility = Visibility.Hidden;
-
+                    assembleButton.IsEnabled = true;
                 });
 
                 bw.RunWorkerAsync();

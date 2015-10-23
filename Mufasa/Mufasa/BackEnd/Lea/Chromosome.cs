@@ -59,10 +59,20 @@ namespace Mufasa.BackEnd.Lea
 
             for (int i = 0; i < templates.Count; i++)
             {
-                Sequence seq_5 = (Sequence)templates[i].Seq_5.GetSubSequence(templates[i].Seq_5.Count - this.Lengths_5[i], this.Lengths_5[i]);
+                Overlap temp;
                 Sequence seq_3 = (Sequence)templates[i].Seq_3.GetSubSequence(0, this.Lengths_3[i]);
 
-                Overlap temp = new Overlap(templates[i].Name, seq_5, seq_3, templates[i].Settings, templates[i].PairIndex);
+                if (templates[i].Seq_5.Count > 0)
+                {
+                    Sequence seq_5 = (Sequence)templates[i].Seq_5.GetSubSequence(templates[i].Seq_5.Count - this.Lengths_5[i], this.Lengths_5[i]);
+                    temp = new Overlap(templates[i].Name, seq_5, seq_3, templates[i].Settings, templates[i].PairIndex);
+                }
+                else
+                {
+                    temp = new Overlap(templates[i].Name, seq_3, templates[i].Settings, templates[i].PairIndex);
+                }
+
+                overlaps.Add(temp);
             }
 
             return overlaps;
