@@ -47,10 +47,10 @@ namespace Mufasa.BackEnd.Scores
         abstract public void Rescore(List<Overlap> overlaps);
 
         /// <summary>
-        /// Prints the overlap in a human-readable format.
+        /// Prints the overlap in the CSV format.
         /// </summary>
-        /// <returns>String represanting the overlap.</returns>
-        public override string ToString()
+        /// <returns>CSV String represanting the overlap.</returns>
+        public string ToCsv()
         {
             String sep = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
             String result = this.Label + sep + Math.Round(this._score, 2) + sep + Math.Round(this._normalizedScore, 2);

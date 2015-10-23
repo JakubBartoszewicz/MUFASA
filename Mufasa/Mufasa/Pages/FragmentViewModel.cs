@@ -123,7 +123,7 @@ namespace Mufasa.Pages
             {
                 if (this.Model.IsVector)
                 {
-                    return "vect." + this.Model.Name;
+                    return Designer.VectorLabel + this.Model.Name;
                 }
                 else
                 {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using Mufasa.BackEnd.Lea;
 using Mufasa.BackEnd.Scores;
+using Mufasa.BackEnd.Exceptions;
 
 namespace Mufasa.BackEnd.Designer
 {
@@ -24,15 +25,21 @@ namespace Mufasa.BackEnd.Designer
         /// Overlap optimizer constructor.
         /// </summary>
         /// <param name="construct">A construct to assemble.</param>
-        public OverlapOptimizer(Construct construct)
+        public OverlapOptimizer(Construct construct, DesignerSettings settings)
         {
             this.Construct = construct;
+            this.Settings = settings;
         }
 
         /// <value>
         /// A construct to assemble.
         /// </value>
         public Construct Construct { get; set; }
+
+        /// <value>
+        /// Designer settings.
+        /// </value>
+        public DesignerSettings Settings { get; set; }
 
         /// <value>
         /// BackGroudWorker for optimization.
@@ -49,21 +56,46 @@ namespace Mufasa.BackEnd.Designer
         {
             this.b = o as BackgroundWorker;
 
-            //List<Chromosome> population = new List<Chromosome>();
+            List<Chromosome> population = Populate();
         }
 
+        /// <summary>
+        /// Generate starting population.
+        /// </summary>
+        /// <returns></returns>
+        private List<Chromosome> Populate()
+        {
+            List<Chromosome> population = new List<Chromosome>();
+            for (int c = 0; c < this.Settings.LeaSettings.PopulationSize; c++)
+            {
+                List<int> len_3 = new List<int>();
+                List<int> len_5 = new List<int>();
+                Random rand = new Random();
 
-        private List<Chromosome> Populate(int populationSize) { return new List<Chromosome>(); }
+                for (int i = 0; i < this.Construct.Overlaps.Count; i++)
+                {
+                    len_3.Add(rand.Next(this.Settings.MinLen_3, this.Settings.MaxLen_3 + 1));
+                    len_5.Add(rand.Next(this.Settings.MinLen_5, this.Settings.MaxLen_5 + 1));
+                }
+
+                population.Add(new Chromosome(len_3, len_5));
+            }
+
+            return population;
+        }
 
         private void Crossover() { }
 
         private void LocalSearch() { }
 
-        private void Mutate(){}
+        private void Mutate() { }
 
         private void Select() { }
 
-        private bool Stop() { return false;}
+        private bool Stop()
+        {
+            return false;
+        }
 
 
 
@@ -93,7 +125,7 @@ namespace Mufasa.BackEnd.Designer
 
                 double diff = this.Construct.Overlaps[i].MeltingTemperature - this.Construct.Settings.TargetTm;
                 double _bestDiff = diff;
-                Overlap _best = this.Construct.Overlaps[i];
+                Overlap _best = new Overlap(this.Construct.Overlaps[i]);
 
                 do
                 {
@@ -108,11 +140,11 @@ namespace Mufasa.BackEnd.Designer
                         {
                             //check if hairpin is acceptable
 
-                            if (this.Construct.Overlaps[i].HairpinMeltingTemperature <= this.Construct.Settings.MaxTh)
+                            if (this.Construct.Overlaps[i].IsAcceptable(this.Construct.Settings.MaxTh, this.Construct.Settings.MaxTd, false))
                             {
                                 //if found a better solution, copy it, and do not stop
                                 _bestDiff = diff;
-                                _best = this.Construct.Overlaps[i];
+                                _best = new Overlap(this.Construct.Overlaps[i]);
                                 done_5 = false;
                             }
                         }
@@ -142,11 +174,11 @@ namespace Mufasa.BackEnd.Designer
                         {
                             //check if hairpin is acceptable
 
-                            if (this.Construct.Overlaps[i].HairpinMeltingTemperature <= this.Construct.Settings.MaxTh)
+                            if (this.Construct.Overlaps[i].IsAcceptable(this.Construct.Settings.MaxTh, this.Construct.Settings.MaxTd, false))
                             {
                                 //if found a better solution, copy it, and do not stop
                                 _bestDiff = diff;
-                                _best = this.Construct.Overlaps[i];
+                                _best = new Overlap(this.Construct.Overlaps[i]);
                                 done_3 = false;
                             }
                         }
@@ -162,6 +194,19 @@ namespace Mufasa.BackEnd.Designer
                     else
                     {
                         done_3 = true;
+                    }
+                    
+                    if (item_3 == end_3 && item_5 == end_5 && !this.Construct.Overlaps[i].IsAcceptable(this.Construct.Settings.MaxTh, this.Construct.Settings.MaxTd, false))
+                    {
+
+                        /*
+                         * If you are running under the Visual Studio debugger, the debugger will break
+                         * at the point in the DoWork event handler where the unhandled exception was raised.
+                         * - Mark Cranness, Mar 9 '11 @ StackOverflow
+                         * 
+                         * Solution: run without debugging. I want that exception here.
+                         */
+                        throw new AssemblyException(this.Construct.Overlaps[i].ToString());
                     }
 
                 } while (!done_5 || !done_3);

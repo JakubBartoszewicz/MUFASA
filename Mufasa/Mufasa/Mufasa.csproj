@@ -111,6 +111,7 @@
     <Compile Include="BackEnd\Designer\Construct.cs" />
     <Compile Include="BackEnd\Designer\Designer.cs" />
     <Compile Include="BackEnd\Designer\DesignerSettings.cs" />
+    <Compile Include="BackEnd\Exceptions\AssemblyException.cs" />
     <Compile Include="BackEnd\Exceptions\TmThalParamException.cs" />
     <Compile Include="BackEnd\Lea\Chromosome.cs" />
     <Compile Include="BackEnd\Lea\LeaSettings.cs" />

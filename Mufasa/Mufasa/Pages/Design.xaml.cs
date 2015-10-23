@@ -38,14 +38,14 @@ namespace Mufasa.Pages
 
             InitializeComponent();
 
-            
+
             Style itemContainerStyle = new Style(typeof(ListBoxItem), fragmentListBox.ItemContainerStyle);
             itemContainerStyle.Setters.Add(new Setter(ListBoxItem.AllowDropProperty, true));
 
             itemContainerStyle.Setters.Add(new EventSetter(ListBoxItem.DragOverEvent, new DragEventHandler(s_DragOver)));
             itemContainerStyle.Setters.Add(new EventSetter(ListBoxItem.PreviewMouseMoveEvent, new MouseEventHandler(s_PreviewMouseMove)));
             itemContainerStyle.Setters.Add(new EventSetter(ListBoxItem.DropEvent, new DragEventHandler(constructionListBox_Drop)));
-            
+
             black.Color = Color.FromRgb(0x0a, 0x0a, 0x0a);
             white.Color = Color.FromRgb(0xe5, 0xe5, 0xe5);
             grey.Color = Color.FromRgb(0x3e, 0x3e, 0x3e);
@@ -91,7 +91,7 @@ namespace Mufasa.Pages
         /// <value>
         /// Mufasa reaction designer object.
         /// </value>
-        internal static Designer Designer {get; set;}
+        internal static Designer Designer { get; set; }
 
         /// <summary>
         /// Mufasa construct object.
@@ -102,13 +102,6 @@ namespace Mufasa.Pages
         /// Mufasa OverlapOptimizer object.
         /// </value>
         private OverlapOptimizer overlapOptimizer;
-
-        /// <value>
-        /// Mufasa Scores list.
-        /// </value>
-        //private List<Score> scoreList;
-
-
 
         /// <summary>
         /// OpenFragmentFileDialog initialization.
@@ -121,7 +114,7 @@ namespace Mufasa.Pages
             this.openFragmentFileDialog.Filter = "Fasta files|*.fa;*.fas;*.fasta|GenBank files|*.gb;*.gbk|All files|*.*"; // Filter files by extension
             this.openFragmentFileDialog.Multiselect = true;
             this.openFragmentFileDialog.Title = "Open fragment file...";
-            
+
         }
 
         /// <summary>
@@ -206,8 +199,8 @@ namespace Mufasa.Pages
                 bbInputTextBox.Focus();
                 bbInputTextBox.Select(4, bbInputTextBox.Text.Length);
             }
-        } 
-        
+        }
+
         /// <summary>
         /// openFileButton click event handler.
         /// </summary>
@@ -242,7 +235,7 @@ namespace Mufasa.Pages
                     {
                         ModernDialog.ShowMessage(ex.Message, "warning: " + name, MessageBoxButton.OK);
                     }
-                    
+
                 }
                 if (invalidNames.Count > 0)
                 {
@@ -269,8 +262,8 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void fragmentListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(fragmentListBox.SelectedItem!=null)
-            { 
+            if (fragmentListBox.SelectedItem != null)
+            {
                 Fragment sel = Designer.FragmentDict[fragmentListBox.SelectedItem.ToString()];
                 fragmentSequenceTextBox.Text = sel.GetString();
             }
@@ -278,7 +271,7 @@ namespace Mufasa.Pages
             {
                 fragmentSequenceTextBox.Text = "";
             }
-            
+
         }
 
         /// <summary>
@@ -317,14 +310,14 @@ namespace Mufasa.Pages
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void bbInputTextBox_KeyDown(object sender, KeyEventArgs e)
-        {            
+        {
             if (e.Key == Key.Return)
             {
                 ShowBbInformation();
             }
         }
 
-       
+
         /// <summary>
         /// Delete construction fragment event handler.
         /// </summary>
@@ -336,12 +329,15 @@ namespace Mufasa.Pages
             foreach (String str in constructionListBox.SelectedItems)
             {
                 listItems.Add(str);
-            } 
+            }
 
-            foreach (String str in listItems )
+            foreach (String str in listItems)
             {
                 Designer.ConstructionList.Remove(str);
             }
+
+            LabelVector();
+
             constructionListBox.ItemsSource = Designer.ConstructionList;
             constructionListBox.Items.Refresh();
         }
@@ -367,7 +363,7 @@ namespace Mufasa.Pages
                     {
                         construct.SaveAsBio(saveConstructFileDialog.FileName);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         MessageBoxResult result = ModernDialog.ShowMessage(ex.Message, "Exception", MessageBoxButton.OK);
                     }
@@ -383,20 +379,13 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void addConstructionFragmentButton_Click(object sender, RoutedEventArgs e)
         {
-            
+
             List<String> invalidNames = new List<String>();
             foreach (String name in fragmentListBox.SelectedItems)
-            {                
+            {
                 try
                 {
-                    if(Designer.ConstructionList.Count == 0)
-                    {
-                        Designer.AddConstructionFragment("vect." + name);
-                    }
-                    else
-                    {
-                        Designer.AddConstructionFragment(name);
-                    }                    
+                    Designer.AddConstructionFragment(name);
                 }
                 catch (FragmentNamingException fne)
                 {
@@ -419,6 +408,9 @@ namespace Mufasa.Pages
                 message.AppendLine(Environment.NewLine + "Please choose other fragments.");
                 ModernDialog.ShowMessage(message.ToString(), "warning", MessageBoxButton.OK);
             }
+
+            LabelVector();
+
             constructionListBox.ItemsSource = Designer.ConstructionList;
             constructionListBox.Items.Refresh();
         }
@@ -435,7 +427,7 @@ namespace Mufasa.Pages
                 ListBoxItem draggedItem = sender as ListBoxItem;
                 if (e.GetPosition(sender as ListBoxItem).X > 0 && e.GetPosition(sender as ListBoxItem).X <= 177 && e.GetPosition(sender as ListBoxItem).Y > 0 && e.GetPosition(sender as ListBoxItem).Y <= 12)
                 {
-                    
+
                     draggedItem.Background = grey;
                 }
                 else
@@ -443,7 +435,7 @@ namespace Mufasa.Pages
                     draggedItem.Background = bkgd;
                 }
 
-                if ( e.LeftButton == MouseButtonState.Pressed)
+                if (e.LeftButton == MouseButtonState.Pressed)
                 {
                     DragDrop.DoDragDrop(draggedItem, draggedItem.DataContext, DragDropEffects.Move);
                     draggedItem.IsSelected = true;
@@ -502,13 +494,21 @@ namespace Mufasa.Pages
                 }
             }
 
+            LabelVector();
+
+        }
+
+        /// <summary>
+        /// Labelling the vector fragment.
+        /// </summary>
+        private void LabelVector()
+        {
             for (int i = 0; i < Designer.ConstructionList.Count; i++)
             {
-                Designer.ConstructionList[i] = Designer.ConstructionList[i].Replace("vect.", "");
+                Designer.ConstructionList[i] = Designer.ConstructionList[i].Replace(Designer.VectorLabel, "");
             }
 
-            Designer.ConstructionList[0] = "vect." + Designer.ConstructionList[0];
-
+            Designer.ConstructionList[0] = Designer.VectorLabel + Designer.ConstructionList[0];
         }
 
         /// <summary>
@@ -517,29 +517,31 @@ namespace Mufasa.Pages
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void assembleButton_Click(object sender, RoutedEventArgs e)
-        {            
+        {
             if (Designer.ConstructionList != null && Designer.ConstructionList.Count > 0)
             {
                 construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
-                overlapOptimizer = new OverlapOptimizer(construct);
+                overlapOptimizer = new OverlapOptimizer(construct, Designer.Settings);
 
-                try
+
+                BackgroundWorker bw = new BackgroundWorker();
+                // this allows our worker to report progress during work
+                bw.WorkerReportsProgress = true;
+                // what to do in the background thread
+                bw.DoWork += new DoWorkEventHandler(overlapOptimizer.SemiNaiveOptimizeOverlaps);
+
+
+                // what to do when progress changed (update the progress bar)
+                bw.ProgressChanged += new ProgressChangedEventHandler(
+                delegate(object o, ProgressChangedEventArgs args)
                 {
-                    BackgroundWorker bw = new BackgroundWorker();
-                    // this allows our worker to report progress during work
-                    bw.WorkerReportsProgress = true;
-                    // what to do in the background thread
-                    bw.DoWork += new DoWorkEventHandler(overlapOptimizer.SemiNaiveOptimizeOverlaps);
-
-                    // what to do when progress changed (update the progress bar)
-                    bw.ProgressChanged += new ProgressChangedEventHandler(
-                    delegate(object o, ProgressChangedEventArgs args)
-                    {
-                        progressBar.Value = args.ProgressPercentage;
-                    });
-                    // what to do when worker completes its task (notify the user)
-                    bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
-                    delegate(object o, RunWorkerCompletedEventArgs args)
+                    progressBar.Value = args.ProgressPercentage;
+                });
+                // what to do when worker completes its task (notify the user)
+                bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
+                delegate(object o, RunWorkerCompletedEventArgs args)
+                {
+                    if (args.Error == null)
                     {
                         construct = overlapOptimizer.Construct;
                         ScoreTotal score = construct.Score;
@@ -551,22 +553,21 @@ namespace Mufasa.Pages
                         scoreList.Add(score);
                         scoreDataGrid.ItemsSource = scoreList;
                         scoreDataGrid.Items.Refresh();
+                    }
+                    else
+                    {
+                        Exception ex = args.Error as Exception;
+                        ModernDialog.ShowMessage("Unable to assemble.\n(" + ex.Message + ")", "Warning: ", MessageBoxButton.OK);
+                    }
 
-                    });
+                });
 
-                    bw.RunWorkerAsync();
-                    
-                }
-                catch(TmThalParamException ex)
-                {
-                    ModernDialog.ShowMessage("Thermodynamic parameters not found. Unable to assemble.\n(" + ex.Message + ")", "Warning: ", MessageBoxButton.OK);
-                }
-                catch (Exception ex)
-                {
-                    ModernDialog.ShowMessage("Unable to assemble.\n(" + ex.Message + ")", "Warning: ", MessageBoxButton.OK);
-                }
+                bw.RunWorkerAsync();
+
+
+
             }
-            
+
         }
 
         /// <summary>
@@ -577,7 +578,7 @@ namespace Mufasa.Pages
         private void overButton_Click(object sender, RoutedEventArgs e)
         {
             InitializeSaveOverlapsDialog();
-            if (construct !=null)
+            if (construct != null)
             {
                 InitializeSaveFragmentFileDialog();
 
@@ -595,14 +596,14 @@ namespace Mufasa.Pages
                             sw.WriteLine("Scores:" + sep + "Raw score" + sep + "Normalized score");
                             foreach (Score item in scoreDataGrid.Items)
                             {
-                                sw.WriteLine(item.ToString());
+                                sw.WriteLine(item.ToCsv());
 
                             }
                             sw.WriteLine();
                             sw.WriteLine("Name" + sep + "Tm" + sep + "Length" + sep + "Sequence");
                             foreach (Overlap item in overlapDataGrid.Items)
                             {
-                                sw.WriteLine(item.ToString());
+                                sw.WriteLine(item.ToCsv());
 
                             }
                         }
@@ -651,7 +652,7 @@ namespace Mufasa.Pages
                     Designer.openProject(openProjectFileDialog.FileName);
 
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     ModernDialog.ShowMessage(ex.Message, "Warning: ", MessageBoxButton.OK);
                 }

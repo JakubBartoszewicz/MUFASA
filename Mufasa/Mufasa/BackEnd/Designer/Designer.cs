@@ -35,6 +35,8 @@ namespace Mufasa.BackEnd.Designer
         /// </value>
         private ISequenceParser parser;
 
+        public const String VectorLabel = "vect.";
+
         /// <value>
         /// Dictionary of pooled fragments.
         /// </value>
@@ -160,7 +162,7 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="fragment">Name of the fragment to add.</param>
         public void AddConstructionFragment(String fragmentName)
         {
-            if (this.ConstructionList.Contains(fragmentName))
+            if (this.ConstructionList.Contains(fragmentName) || this.ConstructionList.Contains(VectorLabel + fragmentName))
             {
                 throw new FragmentNamingException(fragmentName);
             }

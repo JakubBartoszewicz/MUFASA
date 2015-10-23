@@ -10,6 +10,12 @@ namespace Mufasa.BackEnd.Lea
 {
     class Chromosome
     {
+        public Chromosome(List<int> lengths_3, List<int> lengths_5)
+        {
+            this.Lengths_3 = lengths_3;
+            this.Lengths_5 = lengths_5;
+        }
+
         /// <value>
         /// List of lengths of 3' (overhang) parts of the overlaps./> 
         /// </value>

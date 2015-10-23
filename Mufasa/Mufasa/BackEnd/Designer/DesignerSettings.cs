@@ -79,8 +79,8 @@ namespace Mufasa.BackEnd.Designer
             this.MinLen_5 = 20;
             this.MaxLen_5 = 30;
             this.TargetTm = 65.0;
-            this.MaxTh = 55.0;
-            this.MaxTd= 55.0;
+            this.MaxTh = 70.0;
+            this.MaxTd= 70.0;
             this.ReactionVolume = 50.0;
             this.TmThalSettings = new TmThalSettings();
             this.LeaSettings = new LeaSettings();

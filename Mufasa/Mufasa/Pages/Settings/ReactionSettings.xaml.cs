@@ -120,6 +120,11 @@ namespace Mufasa.Pages.Settings
             Design.Designer.Settings.LeaSettings.TournamentSize = (int)(tournamentScrollBar.Value + 0.5);
         }
 
+        private void stopScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Design.Designer.Settings.LeaSettings.Epsilon = stopScrollBar.Value;
+        }
+
        
     }
 }

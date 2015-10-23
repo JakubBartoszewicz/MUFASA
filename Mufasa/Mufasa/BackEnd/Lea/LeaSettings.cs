@@ -47,5 +47,13 @@ namespace Mufasa.BackEnd.Lea
         /// Local search chance.
         /// </summary>
         public double LearningRate { get; set; }
+
+        /// <summary>
+        /// Stopping criterion. Best solutions variance across generations threshold.
+        /// </summary>
+        /// <remarks>
+        /// Variance of best solutions across generations must be lower than epsilon for the algorithm to stop.
+        /// </remarks>
+        public double Epsilon { get; set; }
     }
 }

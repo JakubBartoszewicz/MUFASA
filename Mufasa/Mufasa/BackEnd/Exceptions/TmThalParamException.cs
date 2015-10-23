@@ -17,7 +17,7 @@ namespace Mufasa.BackEnd.Exceptions
         /// TmThalParamException constructor.
         /// </summary>
         public TmThalParamException()
-            : base()
+            : base("Thermodynamic parameters folder not found.")
         {
 
         }
@@ -27,7 +27,7 @@ namespace Mufasa.BackEnd.Exceptions
         /// </summary>
         /// <param name="message">Message to send.</param>
         public TmThalParamException(string message)
-            : base(message)
+            : base("Thermodynamic parameters folder not found.\n" + message)
         {
 
         }

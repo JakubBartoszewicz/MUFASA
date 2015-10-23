@@ -34,6 +34,7 @@ namespace Mufasa.BackEnd.Designer
             this.TempInit();
             this.meltingTemperature = GetMeltingTemperature();
             this.hairpinMeltingTemperature = GetHairpinTemperature();
+            this.homodimerMeltingTemperature = GetDuplexTemperature(this);
         }
 
         /// <summary>
@@ -136,15 +137,27 @@ namespace Mufasa.BackEnd.Designer
         public ISequence Seq_5 { get; set; }
 
         /// <summary>
-        /// Prints the overlap in a human-readable format.
+        /// Prints the overlap in the CSV format.
+        /// </summary>
+        /// <returns>CSV String represanting the overlap.</returns>
+        public string ToCsv()
+        {
+            String sep = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+            String result = this.Name + sep + this.MeltingTemperature + sep + this.HairpinMeltingTemperature + sep + this.HomodimerMeltingTemperature + sep + this.HeterodimerMeltingTemperature + sep + this.Sequence.Count + sep + this.Sequence;
+            return result;
+        }
+
+
+        /// <summary>
+        /// Prints the overlap info.
         /// </summary>
         /// <returns>String represanting the overlap.</returns>
         public override string ToString()
         {
-            String sep = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-            String result = this.Name + sep + this.MeltingTemperature + sep + this.HairpinMeltingTemperature + sep + this.Sequence.Count + sep + this.Sequence;
+            String result = this.Name + " Tm: " + Math.Round(this.MeltingTemperature, 2) + " Th: " + Math.Round(this.HairpinMeltingTemperature, 2) + " Td(homo): " + Math.Round(this.HomodimerMeltingTemperature, 2) + " \nSequence (" + this.Sequence.Count + "): " + this.Sequence;
             return result;
         }
+
 
 
         /// <value>
@@ -402,13 +415,14 @@ namespace Mufasa.BackEnd.Designer
         /// </summary>
         /// <param name="maxTh">Max hairpin melting temperature.</param>
         /// <param name="maxTd">Max duplex melting temperature.</param>
-        /// <returns></returns>
-        public bool IsAcceptable(double maxTh, double maxTd)
+        /// <param name="considerHeterodimers"></param>
+        /// <returns>True if the overlap is acceptable.</returns>
+        public bool IsAcceptable(double maxTh, double maxTd, bool considerHeterodimers = true)
         {
-            bool accept = false;
-            if ((this.HairpinMeltingTemperature <= maxTh) && (this.HeterodimerMeltingTemperature <= maxTd) && (this.HomodimerMeltingTemperature <= maxTd))
+            bool accept = true;
+            if ((this.HairpinMeltingTemperature > maxTh) || (this.HomodimerMeltingTemperature > maxTd) || (considerHeterodimers && this.HeterodimerMeltingTemperature > maxTd))
             {
-                accept = true;
+                accept = false;
             }
 
             return accept;
