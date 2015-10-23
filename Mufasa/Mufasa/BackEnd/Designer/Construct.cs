@@ -30,6 +30,18 @@ namespace Mufasa.BackEnd.Designer
         }
 
         /// <summary>
+        /// Pre-optimized Construct constructor.
+        /// </summary>
+        /// <param name="fragList">Fragment list.</param>
+        public Construct(List<Overlap> overlaps, ISequence sequence, DesignerSettings settings)
+            : base()
+        {
+            this.Overlaps = overlaps;
+            this.Sequence = sequence;
+            this.Settings = settings;
+        }
+
+        /// <summary>
         /// Construct constructor.
         /// </summary>
         /// <param name="fragList">Fragment list.</param>
@@ -82,6 +94,12 @@ namespace Mufasa.BackEnd.Designer
         /// Designer settings.
         /// </value>
         public DesignerSettings Settings { get; set; }
+
+
+        /// <value>
+        /// Generated overlaps collection.
+        /// </value>
+        public List<Overlap> Overlaps { get; set; }
 
         /// <summary>
         /// Construct initialization.
@@ -208,12 +226,6 @@ namespace Mufasa.BackEnd.Designer
                 }
             }
         }
-
-        /// <value>
-        /// Generated overlaps collection.
-        /// </value>
-        public List<Overlap> Overlaps { get; set; }
-
 
         /// <summary>
         /// Save in one of .NET Bio supported formats like fasta or GenBank.

@@ -29,6 +29,7 @@ namespace Mufasa.BackEnd.Designer
         {
             this.Construct = construct;
             this.Settings = settings;
+            this.LeaBestAcrossGenerations = new List<double>();
         }
 
         /// <value>
@@ -46,6 +47,15 @@ namespace Mufasa.BackEnd.Designer
         /// </value>
         private BackgroundWorker b;
 
+        /// <value>
+        /// List of best solutions of each generation.
+        /// </value>
+        private List<double> LeaBestAcrossGenerations;
+
+        /// <value>
+        /// Best solution.
+        /// </value>
+        private Chromosome LeaBest;
 
         /// <summary>
         /// Lamarckian evolutionary algorithm for overlap optimization.
@@ -57,6 +67,51 @@ namespace Mufasa.BackEnd.Designer
             this.b = o as BackgroundWorker;
 
             List<Chromosome> population = Populate();
+            List<Chromosome> nextPopulation;
+            Random rand = new Random();
+
+            do
+            {
+                //Local Search
+
+                nextPopulation = LocalSearch(population);
+
+                do
+                {
+                    List<Chromosome> tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population);
+                    
+                    //Selection
+
+                    if (rand.NextDouble() <= this.Settings.LeaSettings.CrossoverRate)
+                    {
+                        //Crossover
+
+                        Tuple<Chromosome, Chromosome> parents = TournamentTwo(tournament);
+                        Tuple<Chromosome, Chromosome> children = Crossover(parents);
+                        nextPopulation.Add(children.Item1);
+                        nextPopulation.Add(children.Item2);
+                    }
+                    else
+                    {
+                        Chromosome child = TournamentOne(tournament);
+                        nextPopulation.Add(child);
+                    }
+                } while (nextPopulation.Count < population.Count);
+
+                //Mutation
+
+                nextPopulation = MutatePopulation(nextPopulation);
+                Chromosome best = TournamentOne(nextPopulation);
+                LeaBestAcrossGenerations.Add(best.Score.NormalizedScore);
+
+                if(best.Score.NormalizedScore < LeaBest.Score.NormalizedScore)
+                {
+                    //save the best solution so far
+                    LeaBest = best;
+                }
+
+                population = nextPopulation;
+            } while (!Stop());
         }
 
         /// <summary>
@@ -84,21 +139,83 @@ namespace Mufasa.BackEnd.Designer
             return population;
         }
 
-        private void Crossover() { }
+        private Tuple<Chromosome, Chromosome> Crossover(Tuple<Chromosome, Chromosome> parents)
+        {
+            //TODO
+            return parents;
+        }
 
-        private void LocalSearch() { }
+        private Tuple<Chromosome, Chromosome> TournamentTwo(List<Chromosome> participants)
+        {
+            //TODO
+            return new Tuple<Chromosome, Chromosome>(participants[0], participants[1]);
+        }
 
-        private void Mutate() { }
+        private Chromosome TournamentOne(List<Chromosome> participants)
+        {
+            //TODO
+            return participants[0];
+        }
 
-        private void Select() { }
+        private List<Chromosome> LocalSearch(List<Chromosome> population)
+        {
+            //TODO
+            return population;
+        }
 
+        private Chromosome Mutate(Chromosome solution)
+        {
+            //TODO
+            return solution;
+        }
+
+        private List<Chromosome> MutatePopulation(List<Chromosome> population)
+        {
+            //TODO
+            return population;
+        }
+
+        private List<Chromosome> SelectForTournament(int tournamentSize, List<Chromosome> population)
+        {
+            //TODO
+            return population;
+        }
+
+        /// <summary>
+        /// Check if stopping criterion satisfied.
+        /// </summary>
+        /// <returns>True if variance lower than epsilon.</returns>
         private bool Stop()
         {
-            return false;
+            double variance = Variance(this.LeaBestAcrossGenerations);
+
+            return (variance < this.Settings.LeaSettings.Epsilon);
         }
 
 
+        /// <summary>
+        /// Calculate variance using Welford's method.
+        /// </summary>
+        /// <param name="valueList">List of values.</param>
+        /// <returns></returns>
+        private double Variance(List<double> valueList)
+        {
+            //Jaime, Jason S, Alexandre C; May 22 '09 @ StackOverflow
+            //John D. Cook's blog of statistical computing.
 
+            double M = 0.0;
+            double S = 0.0;
+            int k = 1;
+            foreach (double value in valueList)
+            {
+                double tmpM = M;
+                M += (value - tmpM) / k;
+                S += (value - tmpM) * (value - M);
+                k++;
+            }
+
+            return S / (k - 1); //whole population variance. 
+        }
 
 
 
@@ -195,7 +312,7 @@ namespace Mufasa.BackEnd.Designer
                     {
                         done_3 = true;
                     }
-                    
+
                     if (item_3 == end_3 && item_5 == end_5 && !this.Construct.Overlaps[i].IsAcceptable(this.Construct.Settings.MaxTh, this.Construct.Settings.MaxTd, false))
                     {
 
@@ -204,7 +321,7 @@ namespace Mufasa.BackEnd.Designer
                          * at the point in the DoWork event handler where the unhandled exception was raised.
                          * - Mark Cranness, Mar 9 '11 @ StackOverflow
                          * 
-                         * Solution: run without debugging. I want that exception here.
+                         * Solution: run without debugging. I want that exception here, for now.
                          */
                         throw new AssemblyException(this.Construct.Overlaps[i].ToString());
                     }

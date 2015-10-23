@@ -518,6 +518,7 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void assembleButton_Click(object sender, RoutedEventArgs e)
         {
+            progressBar.Visibility = Visibility.Visible;
             if (Designer.ConstructionList != null && Designer.ConstructionList.Count > 0)
             {
                 construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
@@ -535,7 +536,7 @@ namespace Mufasa.Pages
                 bw.ProgressChanged += new ProgressChangedEventHandler(
                 delegate(object o, ProgressChangedEventArgs args)
                 {
-                    progressBar.Value = args.ProgressPercentage;
+                    //progressBar.Value = args.ProgressPercentage;
                 });
                 // what to do when worker completes its task (notify the user)
                 bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
@@ -560,12 +561,11 @@ namespace Mufasa.Pages
                         ModernDialog.ShowMessage("Unable to assemble.\n(" + ex.Message + ")", "Warning: ", MessageBoxButton.OK);
                     }
 
+                    progressBar.Visibility = Visibility.Hidden;
+
                 });
 
                 bw.RunWorkerAsync();
-
-
-
             }
 
         }
