@@ -137,6 +137,9 @@
                         <Label x:Name="maxTdLabel" Content="Max. Td:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="2" ToolTip="Max. duplex melting temperature."/>
                         <ScrollBar x:Name="maxTdScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" Value="70.00" VerticalAlignment="Top"  Minimum="45" Maximum="100" Margin="10" SmallChange="1" Grid.Column="3" Grid.Row="2" ValueChanged="maxTdScrollBar_ValueChanged"/>
 
+                        <Label x:Name="naiveLabel" Content="Na&#239;ve algorithm:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="3" ToolTip="Use na&#239;ve-greedy algorithm."/>
+                        <CheckBox x:Name="naiveCheckBox" IsChecked="False" Grid.Column="3" Grid.Row="3" Margin="65, 10, 10, 10" Checked="naiveCheckBox_Checked" Unchecked="naiveCheckBox_Checked" />
+
                         <Label x:Name="minlen_3Label" Content="Min. 3' length:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="0" ToolTip="Min. length of the 3' (gene-specific) part of an overlap."/>
                         <ScrollBar x:Name="minlen_3ScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" Value="18" VerticalAlignment="Top"  Minimum="15" Maximum="35" Margin="10" SmallChange="1" Grid.Column="1" Grid.Row="0" ValueChanged="minlen_3ScrollBar_ValueChanged"/>
 

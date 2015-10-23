@@ -91,6 +91,6 @@ namespace Mufasa.BackEnd.Lea
             Construct c = this.ToConstruct(templates, new Sequence(Alphabets.AmbiguousDNA, ""), settings);
             this.Score = c.Evaluate();
             return this.Score;
-        }
+        }        
     }
 }

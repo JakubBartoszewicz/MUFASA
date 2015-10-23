@@ -19,6 +19,11 @@ namespace Mufasa.BackEnd.Designer
         public String TmThalParamPath { get; set; }
 
         /// <value>
+        /// Use the na&#239;ve-greedy algorithm.
+        /// </value>
+        public bool UseNaive { get; set; }
+
+        /// <value>
         /// Minimal length of the 3' ("gene-specific") part of an overlap.
         /// </value>
         public int MinLen_3 { get; set; }
@@ -82,6 +87,7 @@ namespace Mufasa.BackEnd.Designer
             this.MaxTh = 70.0;
             this.MaxTd= 70.0;
             this.ReactionVolume = 50.0;
+            this.UseNaive = false;
             this.TmThalSettings = new TmThalSettings();
             this.LeaSettings = new LeaSettings();
         }

@@ -30,12 +30,13 @@ namespace Mufasa.Pages.Settings
             targetTmScrollBar.Value = Design.Designer.Settings.TargetTm;
             maxThScrollBar.Value = Design.Designer.Settings.MaxTh;
             maxTdScrollBar.Value = Design.Designer.Settings.MaxTd;
-            //reactionTempScrollBar.Value = Design.Designer.Settings.TmThalSettings.ReactionTemperature;
 
             minlen_3ScrollBar.Value = Design.Designer.Settings.MinLen_3;
             maxlen_3ScrollBar.Value = Design.Designer.Settings.MaxLen_3;
             minlen_5ScrollBar.Value = Design.Designer.Settings.MinLen_5;
             maxlen_5ScrollBar.Value = Design.Designer.Settings.MaxLen_5;
+
+            naiveCheckBox.IsChecked = Design.Designer.Settings.UseNaive;
 
             nnMaxLenScrollBar.Value = Design.Designer.Settings.TmThalSettings.NnMaxLen;
             maxLoopScrollBar.Value = Design.Designer.Settings.TmThalSettings.MaxLoop;
@@ -123,6 +124,11 @@ namespace Mufasa.Pages.Settings
         private void stopScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             Design.Designer.Settings.LeaSettings.Epsilon = stopScrollBar.Value;
+        }
+
+        private void naiveCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Design.Designer.Settings.UseNaive = (bool)naiveCheckBox.IsChecked;
         }
 
        

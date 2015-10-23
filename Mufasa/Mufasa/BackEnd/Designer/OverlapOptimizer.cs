@@ -70,22 +70,28 @@ namespace Mufasa.BackEnd.Designer
             List<Chromosome> nextPopulation;
             Random rand = new Random();
             int progress;
+            List<Chromosome> tournament;
 
             do
             {
                 //Local Search
                 nextPopulation = LocalSearch(population);
 
+                //Selection
                 do
                 {
                     EvaluatePopulation(nextPopulation);
-                    List<Chromosome> tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population, rand);
+                    if (LeaBest == null)
+                    {
+                        LeaBest = new Chromosome(Tournament(nextPopulation));
+                    }
 
-                    //Selection
+                    //Crossover
                     if (rand.NextDouble() <= this.Settings.LeaSettings.CrossoverRate)
                     {
-                        //Crossover
+                        tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, nextPopulation, rand);
                         Chromosome mom = Tournament(tournament);
+                        tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, nextPopulation, rand);
                         Chromosome dad = Tournament(tournament);
                         Tuple<Chromosome, Chromosome> children = Crossover(mom, dad, rand);
                         nextPopulation.Add(children.Item1);
@@ -93,7 +99,12 @@ namespace Mufasa.BackEnd.Designer
                     }
                     else
                     {
+                        //Add two children without crossing over
+                        tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, nextPopulation, rand);
                         Chromosome child = Tournament(tournament);
+                        nextPopulation.Add(child);
+                        tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, nextPopulation, rand);
+                        child = Tournament(tournament);
                         nextPopulation.Add(child);
                     }
                 } while (nextPopulation.Count < population.Count);
@@ -124,6 +135,11 @@ namespace Mufasa.BackEnd.Designer
                 b.ReportProgress(progress);
 
             } while (progress != 100);
+
+            if (LeaBest.Score.Equals(ScoreTotal.Inacceptable))
+            {
+                throw new AssemblyException();
+            }
         }
 
         /// <summary>
@@ -155,9 +171,9 @@ namespace Mufasa.BackEnd.Designer
         /// Evaluate population
         /// </summary>
         /// <param name="population">Population to evaluate.</param>
-        private void EvaluatePopulation (List<Chromosome> population)
+        private void EvaluatePopulation(List<Chromosome> population)
         {
-            foreach(Chromosome c in population)
+            foreach (Chromosome c in population)
             {
                 c.Evaluate(this.Construct.Overlaps, this.Settings);
             }
@@ -276,7 +292,7 @@ namespace Mufasa.BackEnd.Designer
             }
             return population;
         }
-     
+
         /// <summary>
         /// Check if stopping criterion satisfied.
         /// </summary>
@@ -303,13 +319,24 @@ namespace Mufasa.BackEnd.Designer
             int k = 1;
             foreach (double value in valueList)
             {
-                double tmpM = M;
-                M += (value - tmpM) / k;
-                S += (value - tmpM) * (value - M);
-                k++;
+                //Do not count invalid solutions
+                if (!Double.IsPositiveInfinity(value))
+                {
+                    double tmpM = M;
+                    M += (value - tmpM) / k;
+                    S += (value - tmpM) * (value - M);
+                    k++;
+                }
             }
 
-            return S / (k - 1); //whole population variance. 
+            if (k != 0)
+            {
+                return S / (k - 1); //whole population variance. 
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         /// <summary>
@@ -427,12 +454,8 @@ namespace Mufasa.BackEnd.Designer
                 b.ReportProgress(progress);
             }
 
-            for (int i = 0; i < this.Construct.Overlaps.Count; i++)
-            {
-                //Duplex melting temperatures
-                this.Construct.Overlaps[i].HeterodimerMeltingTemperature = this.Construct.Overlaps[i].GetDuplexTemperature(this.Construct.Overlaps[this.Construct.Overlaps[i].PairIndex]);
-            }
             this.Construct.Evaluate();
         }
+
     }
 }

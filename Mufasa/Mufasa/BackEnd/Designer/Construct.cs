@@ -244,8 +244,44 @@ namespace Mufasa.BackEnd.Designer
         /// <returns>Total construct score.</returns>
         public ScoreTotal Evaluate()
         {
-            this.score = new ScoreTotal(this.Overlaps, this.Settings.TargetTm);
+            CalculateHeterodimers();
+            if (this.IsAcceptable())
+                this.score = new ScoreTotal(this.Overlaps, this.Settings.TargetTm);
+            else
+                this.score = ScoreTotal.Inacceptable;
             return this.score;
+        }
+
+        /// <summary>
+        /// Check if this is an acceptable solution.
+        /// </summary>
+        /// <param name="overlaps"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
+        private bool IsAcceptable(bool considerHeterodimers = true)
+        {
+            bool accept = true;
+            foreach (Overlap o in this.Overlaps)
+            {
+                if (!o.IsAcceptable(this.Settings.MaxTh, this.Settings.MaxTd, considerHeterodimers))
+                {
+                    accept = false;
+                    break;
+                }
+            }
+            return accept;
+        }
+
+        /// <summary>
+        /// Calculate heterodimer Tds.
+        /// </summary>
+        private void CalculateHeterodimers()
+        {
+            for (int i = 0; i < this.Overlaps.Count; i++)
+            {
+                //Duplex melting temperatures
+                this.Overlaps[i].HeterodimerMeltingTemperature = this.Overlaps[i].GetDuplexTemperature(this.Overlaps[this.Overlaps[i].PairIndex]);
+            }
         }
     }
 }

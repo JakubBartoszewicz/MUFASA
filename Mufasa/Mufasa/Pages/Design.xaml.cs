@@ -529,7 +529,15 @@ namespace Mufasa.Pages
                 // this allows our worker to report progress during work
                 bw.WorkerReportsProgress = true;
                 // what to do in the background thread
-                bw.DoWork += new DoWorkEventHandler(overlapOptimizer.SemiNaiveOptimizeOverlaps);
+
+                if (Designer.Settings.UseNaive)
+                {
+                    bw.DoWork += new DoWorkEventHandler(overlapOptimizer.SemiNaiveOptimizeOverlaps);
+                }
+                else
+                {
+                    bw.DoWork += new DoWorkEventHandler(overlapOptimizer.LeaOptimizeOverlaps);
+                }
 
 
                 // what to do when progress changed (update the progress bar)

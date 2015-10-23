@@ -10,12 +10,30 @@ namespace Mufasa.BackEnd.Scores
     class ScoreTotal : Score
     {
 
+        public static ScoreTotal Inacceptable = new ScoreTotal();
+
+        /// <summary>
+        /// Score constructor.
+        /// </summary>
+        /// <param name="overlaps">Overlap list.</param>
+        /// <param name="targetTm">Target melting temperature.</param>
         public ScoreTotal(List<Overlap> overlaps, double targetTm)
         {
             this.Label = "Total score";
             this.Description = "Total score";
             this.TargetTm = targetTm;
             Rescore(overlaps);
+        }
+
+        /// <summary>
+        /// Empty Score constructor for inacceptable solutions.
+        /// </summary>
+        public ScoreTotal()
+        {
+            this.Label = "inacceptable solution";
+            this.Description = "inacceptable solution";
+            this._normalizedScore = Double.PositiveInfinity;
+            this._score = Double.PositiveInfinity;
         }
 
         /// <summary>
