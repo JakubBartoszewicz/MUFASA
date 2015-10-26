@@ -22,15 +22,8 @@ namespace Mufasa.BackEnd.Lea
             this.MutationRate = 1.0;
             this.LearningRate = 1.0;
             this.Epsilon = 0.01;
-            this.MinIterations = 2;
-
         }
 
-
-        /// <summary>
-        /// Min. iterations to perform.
-        /// </summary>
-        public int MinIterations { get; set; }
 
         /// <value>
         /// Starting population size.

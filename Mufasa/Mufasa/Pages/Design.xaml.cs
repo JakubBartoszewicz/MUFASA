@@ -519,6 +519,7 @@ namespace Mufasa.Pages
         private void assembleButton_Click(object sender, RoutedEventArgs e)
         {
             //progressBar.Visibility = Visibility.Visible;
+            progressBar.Value = 0;
             if (Designer.ConstructionList != null && Designer.ConstructionList.Count > 0)
             {
                 construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);

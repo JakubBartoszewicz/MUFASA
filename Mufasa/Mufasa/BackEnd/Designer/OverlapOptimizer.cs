@@ -69,7 +69,7 @@ namespace Mufasa.BackEnd.Designer
             Random rand = new Random();
             List<Chromosome> population = Populate(rand);
             List<Chromosome> nextPopulation;
-            int progress;
+            int progress = 0;
             List<Chromosome> tournament;
 
             EvaluatePopulation(population);
@@ -124,26 +124,22 @@ namespace Mufasa.BackEnd.Designer
 
 
                 population = nextPopulation;
-                
+
+                // assess variance only if i > MinIterations
+                variance = Variance(LeaBestAcrossGenerations);
+
+                if (variance > maxVariance)
+                {
+                    maxVariance = variance;
+                }
+
                 //progress = 100 if epsilon == variance
-                if (i > this.Settings.LeaSettings.MinIterations)
+                if (variance < maxVariance)
                 {
-
-                    // assess variance only if i > MinIterations
-                    variance = Variance(LeaBestAcrossGenerations);
-
-                    if(variance > maxVariance)
-                    {
-                        maxVariance = variance;
-                    }
-
-                    progress = (int)((100.0 / maxVariance) * (maxVariance + this.Settings.LeaSettings.Epsilon - variance) + 0.5);
+                    //don't confuse the user
+                    progress = Math.Max(progress, (int)((100.0 / maxVariance) * (maxVariance + this.Settings.LeaSettings.Epsilon - variance) + 0.5));
                 }
-                else
-                {
-                    //yup, we're alive
-                    progress = 1;
-                }
+
                 if (progress > 100)
                 {
                     //when variance lower than epsilon
