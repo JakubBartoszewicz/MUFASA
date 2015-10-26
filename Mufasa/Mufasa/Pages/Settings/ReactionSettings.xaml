@@ -203,10 +203,10 @@
                         <ScrollBar x:Name="learningScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" Value="1.00" VerticalAlignment="Top"  Minimum="0" Maximum="1.00" Margin="10" SmallChange="1" Grid.Column="1" Grid.Row="2" ValueChanged="learningScrollBar_ValueChanged"/>
 
                         <Label x:Name="popsizeLabel" Content="Pop. size:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="0" ToolTip="Number of candidate solutions per iteration."/>
-                        <ScrollBar x:Name="popsizeScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" Value="2000" VerticalAlignment="Top"  Minimum="2" Maximum="1000000" Margin="10" SmallChange="1" Grid.Column="4" Grid.Row="0" ValueChanged="popsizeScrollBar_ValueChanged"/>
+                        <ScrollBar x:Name="popsizeScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" Value="20" VerticalAlignment="Top"  Minimum="2" Maximum="1000000" Margin="10" SmallChange="1" Grid.Column="4" Grid.Row="0" ValueChanged="popsizeScrollBar_ValueChanged"/>
 
                         <Label x:Name="tournamentSizeLabel" Content="Tournament size:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="1" ToolTip="Affects selection stage."/>
-                        <ScrollBar x:Name="tournamentScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" Value="10" VerticalAlignment="Top"  Minimum="2" Maximum="100000" Margin="10" SmallChange="1" Grid.Column="4" Grid.Row="1" ValueChanged="tournamentScrollBar_ValueChanged"/>
+                        <ScrollBar x:Name="tournamentScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" Value="5" VerticalAlignment="Top"  Minimum="2" Maximum="100000" Margin="10" SmallChange="1" Grid.Column="4" Grid.Row="1" ValueChanged="tournamentScrollBar_ValueChanged"/>
 
                         <Label x:Name="stopLabel" Content="Variance &#949;:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="2" ToolTip="Stopping criterion. Variance of best solutions across generations must be lower than epsilon for the algorithm to stop."/>
                         <ScrollBar x:Name="stopScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" Value="0.01" VerticalAlignment="Top"  Minimum="0.01" Maximum="1.00" Margin="10" SmallChange="0.01" Grid.Column="3" Grid.Row="2" ValueChanged="stopScrollBar_ValueChanged"/>

@@ -47,6 +47,8 @@ namespace Mufasa.Pages.Settings
 
             popsizeScrollBar.Value = Design.Designer.Settings.LeaSettings.PopulationSize;
             tournamentScrollBar.Value = Design.Designer.Settings.LeaSettings.TournamentSize;
+
+            stopScrollBar.Value = Design.Designer.Settings.LeaSettings.Epsilon;
         }
 
         private void targetTmScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

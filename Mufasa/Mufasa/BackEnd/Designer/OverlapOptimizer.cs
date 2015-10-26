@@ -72,6 +72,11 @@ namespace Mufasa.BackEnd.Designer
             int progress;
             List<Chromosome> tournament;
 
+            EvaluatePopulation(population);
+            LeaBest = new Chromosome(Tournament(population));
+            double variance;
+            double maxVariance = 0.0;
+            int i = 0;
             do
             {
                 //Local Search
@@ -80,18 +85,12 @@ namespace Mufasa.BackEnd.Designer
                 //Selection
                 do
                 {
-                    EvaluatePopulation(nextPopulation);
-                    if (LeaBest == null)
-                    {
-                        LeaBest = new Chromosome(Tournament(nextPopulation));
-                    }
-
                     //Crossover
                     if (rand.NextDouble() <= this.Settings.LeaSettings.CrossoverRate)
                     {
-                        tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, nextPopulation, rand);
+                        tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population, rand);
                         Chromosome mom = Tournament(tournament);
-                        tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, nextPopulation, rand);
+                        tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population, rand);
                         Chromosome dad = Tournament(tournament);
                         Tuple<Chromosome, Chromosome> children = Crossover(mom, dad, rand);
                         nextPopulation.Add(children.Item1);
@@ -100,10 +99,10 @@ namespace Mufasa.BackEnd.Designer
                     else
                     {
                         //Add two children without crossing over
-                        tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, nextPopulation, rand);
+                        tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population, rand);
                         Chromosome child = Tournament(tournament);
                         nextPopulation.Add(child);
-                        tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, nextPopulation, rand);
+                        tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population, rand);
                         child = Tournament(tournament);
                         nextPopulation.Add(child);
                     }
@@ -112,34 +111,55 @@ namespace Mufasa.BackEnd.Designer
                 //Mutation
                 nextPopulation = MutatePopulation(nextPopulation, rand);
 
+                EvaluatePopulation(nextPopulation);
+
+
                 Chromosome best = Tournament(nextPopulation);
                 LeaBestAcrossGenerations.Add(best.Score.NormalizedScore);
-
                 if (best.Score.NormalizedScore < LeaBest.Score.NormalizedScore)
                 {
                     //copy the best solution so far
                     LeaBest = new Chromosome(best);
                 }
 
+
                 population = nextPopulation;
-
-                double worstScore = LeaBestAcrossGenerations.Max();
-
+                
                 //progress = 100 if epsilon == variance
-                progress = (int)((100.0 / worstScore) * (worstScore + this.Settings.LeaSettings.Epsilon - Variance(LeaBestAcrossGenerations)) + 0.5);
+                if (i > this.Settings.LeaSettings.MinIterations)
+                {
+
+                    // assess variance only if i > MinIterations
+                    variance = Variance(LeaBestAcrossGenerations);
+
+                    if(variance > maxVariance)
+                    {
+                        maxVariance = variance;
+                    }
+
+                    progress = (int)((100.0 / maxVariance) * (maxVariance + this.Settings.LeaSettings.Epsilon - variance) + 0.5);
+                }
+                else
+                {
+                    //yup, we're alive
+                    progress = 1;
+                }
                 if (progress > 100)
                 {
                     //when variance lower than epsilon
                     progress = 100;
                 }
                 b.ReportProgress(progress);
-
+                i++;
             } while (progress != 100);
 
             if (LeaBest.Score.Equals(ScoreTotal.Inacceptable))
             {
                 throw new AssemblyException();
             }
+
+            this.Construct = LeaBest.ToConstruct(this.Construct.Overlaps, this.Construct.Sequence, this.Construct.Settings);
+            this.Construct.Evaluate();
         }
 
         /// <summary>
@@ -182,7 +202,7 @@ namespace Mufasa.BackEnd.Designer
         private List<Chromosome> LocalSearch(List<Chromosome> population)
         {
             //TODO
-            return population;
+            return new List<Chromosome>();
         }
 
         /// <summary>
@@ -329,14 +349,8 @@ namespace Mufasa.BackEnd.Designer
                 }
             }
 
-            if (k != 0)
-            {
-                return S / (k - 1); //whole population variance. 
-            }
-            else
-            {
-                return 0;
-            }
+            return S / (k - 1); //whole population variance. 
+
         }
 
         /// <summary>
