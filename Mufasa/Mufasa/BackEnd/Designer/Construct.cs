@@ -83,12 +83,8 @@ namespace Mufasa.BackEnd.Designer
         /// <value>
         /// Total construct score.
         /// </value>
-        public ScoreTotal Score { get { return this.score; } }
+        public ScoreTotal Score { get; set; }
 
-        /// <value>
-        /// Total construct score.
-        /// </value>
-        private ScoreTotal score;
 
         /// <value>
         /// Designer settings.
@@ -242,14 +238,14 @@ namespace Mufasa.BackEnd.Designer
         /// Compute construct score.
         /// </summary>
         /// <returns>Total construct score.</returns>
-        public ScoreTotal Evaluate()
+        public ScoreTotal Evaluate(bool ignoreHeterodimers = false)
         {
-            CalculateHeterodimers();
-            if (this.IsAcceptable())
-                this.score = new ScoreTotal(this.Overlaps, this.Settings.TargetTm);
+            if (this.IsAcceptable(ignoreHeterodimers))
+                this.Score = new ScoreTotal(this.Overlaps, this.Settings.TargetTm);
             else
-                this.score = ScoreTotal.Inacceptable;
-            return this.score;
+                this.Score = ScoreTotal.Inacceptable;
+
+            return this.Score;
         }
 
         /// <summary>
@@ -258,12 +254,12 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="overlaps"></param>
         /// <param name="settings"></param>
         /// <returns></returns>
-        private bool IsAcceptable(bool considerHeterodimers = true)
+        private bool IsAcceptable(bool ignoreHeterodimers = false)
         {
             bool accept = true;
             foreach (Overlap o in this.Overlaps)
             {
-                if (!o.IsAcceptable(this.Settings.MaxTh, this.Settings.MaxTd, considerHeterodimers))
+                if (!o.IsAcceptable(this.Settings.MaxTh, this.Settings.MaxTd, ignoreHeterodimers))
                 {
                     accept = false;
                     break;
@@ -275,13 +271,6 @@ namespace Mufasa.BackEnd.Designer
         /// <summary>
         /// Calculate heterodimer Tds.
         /// </summary>
-        private void CalculateHeterodimers()
-        {
-            for (int i = 0; i < this.Overlaps.Count; i++)
-            {
-                //Duplex melting temperatures
-                this.Overlaps[i].HeterodimerMeltingTemperature = this.Overlaps[i].GetDuplexTemperature(this.Overlaps[this.Overlaps[i].PairIndex]);
-            }
-        }
+
     }
 }

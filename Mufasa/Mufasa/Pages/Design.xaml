@@ -12,7 +12,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>                   
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -32,7 +32,7 @@
                 <TextBox x:Name="bbInputTextBox" KeyDown="bbInputTextBox_KeyDown" Text="BBa_" HorizontalAlignment="Left" Width="150" Height="30" Margin="0,0,20,10" VerticalAlignment="Top"  Grid.Column="1" Grid.Row="1" ToolTip="Press enter to search the Registry."/>
 
                 <ListView x:Name="constructionListBox" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" SelectionMode="Extended" IsSynchronizedWithCurrentItem="True" ToolTip="Fragments of your construct." Grid.Column="1" Grid.Row="4" MinHeight="200" MinWidth="177" BorderThickness="1" ClipToBounds="True">
-                
+
                 </ListView>
                 <DataGrid x:Name="overlapDataGrid" Grid.Column="2" Margin="20,0,0,0" FontFamily="Courier New" FontSize="12"   ToolTip="Generated overlaps." Grid.Row="4" ClipToBounds="True" MinHeight="200" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False" CanUserResizeColumns="False">
                     <DataGrid.RowHeaderStyle>
@@ -106,14 +106,14 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                                                
+
                     </DataGrid.Columns>
                 </DataGrid>
                 <Button x:Name="saveButton" Content="Save project as..." HorizontalAlignment="Left" Margin="20,64,20,20" VerticalAlignment="Top" Width="137" ToolTip="Save your construct project." Height="26" Grid.Column="0" Grid.Row="4" Click="saveButton_Click"/>
                 <Button x:Name="assembleButton" Content="Assemble" HorizontalAlignment="Left" Margin="20,20,20,20" VerticalAlignment="Top" Width="137" ToolTip="Assemble your construct." Height="26" Grid.Column="0" Grid.Row="4" Click="assembleButton_Click"/>
                 <Button x:Name="overButton" Content="Save overlaps..." HorizontalAlignment="Left" Margin="20,108,20,20" VerticalAlignment="Top" Width="137" ToolTip="Save your overlaps." Height="26" Grid.Column="0" Grid.Row="4" Click="overButton_Click"/>
                 <Button x:Name="openProjectButton" Content="Open project..." HorizontalAlignment="Left" Margin="20,152,20,20" VerticalAlignment="Top" Width="137" ToolTip="Save your overlaps." Height="26" Grid.Column="0" Grid.Row="4" Click="openProjectButton_Click"/>
-                
+
                 <Button x:Name="deleteConstructionFragmentButton" Content="&gt;&gt;;" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,20,20,20"  Width="50" ToolTip="Delete selected fragments." Height="26" Grid.Column="1" Grid.Row="3" Click="deleteConstructionFragmentButton_Click" RenderTransformOrigin="0.5,0.5">
                     <Button.RenderTransform>
                         <TransformGroup>
@@ -185,10 +185,11 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                     </DataGrid.Columns>
-                </DataGrid>
-                <ProgressBar Name="progressBar" Minimum="0" Maximum="100" Grid.Column="2" HorizontalAlignment="Center" Height="20" Margin="20,0,0,0" Grid.Row="3" VerticalAlignment="Center" Width="200" IsIndeterminate="False" Visibility="Visible"/>
+                </DataGrid>                
+                <ProgressBar Name="progressBar" Minimum="0" Maximum="100" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" Height="20" Margin="20,0,0,10" VerticalAlignment="Bottom" Width="200" IsIndeterminate="False" Visibility="Visible" />
+                <ProgressBar Name="workingBar" IsIndeterminate="True" Minimum="0" Maximum="100" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" Height="20" Margin="20,10,0,0" VerticalAlignment="Top" Width="200" Visibility="Hidden" />
             </Grid>
         </ScrollViewer>
-        
+
     </Grid>
 </UserControl>

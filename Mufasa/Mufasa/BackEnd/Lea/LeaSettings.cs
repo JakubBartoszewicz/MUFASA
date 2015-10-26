@@ -19,11 +19,13 @@ namespace Mufasa.BackEnd.Lea
             this.PopulationSize = 20;
             this.TournamentSize = 5;
             this.CrossoverRate = 1.0;
-            this.MutationRate = 1.0;
+            this.MutationRate = 0.8;
             this.LearningRate = 1.0;
             this.Epsilon = 0.01;
+            this.IgnoreHeterodimers = false;
         }
 
+        public bool IgnoreHeterodimers { get; set; }
 
         /// <value>
         /// Starting population size.

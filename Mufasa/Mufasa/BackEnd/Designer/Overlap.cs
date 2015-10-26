@@ -417,15 +417,28 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="maxTd">Max duplex melting temperature.</param>
         /// <param name="considerHeterodimers"></param>
         /// <returns>True if the overlap is acceptable.</returns>
-        public bool IsAcceptable(double maxTh, double maxTd, bool considerHeterodimers = true)
+        public bool IsAcceptable(double maxTh, double maxTd, bool ignoreHeterodimers = false)
         {
             bool accept = true;
-            if ((this.HairpinMeltingTemperature > maxTh) || (this.HomodimerMeltingTemperature > maxTd) || (considerHeterodimers && this.HeterodimerMeltingTemperature > maxTd))
+            if ((this.HairpinMeltingTemperature > maxTh) || (this.HomodimerMeltingTemperature > maxTd) || (ignoreHeterodimers && this.HeterodimerMeltingTemperature > maxTd))
             {
                 accept = false;
             }
 
             return accept;
+        }
+
+        /// <summary>
+        /// Calculate heterodimer melting temperatures.
+        /// </summary>
+        /// <param name="overlaps">Overlap list.</param>
+        public static void CalculateHeterodimers(List<Overlap> overlaps)
+        {
+            for (int i = 0; i < overlaps.Count; i++)
+            {
+                //Duplex melting temperatures
+                overlaps[i].HeterodimerMeltingTemperature = overlaps[i].GetDuplexTemperature(overlaps[overlaps[i].PairIndex]);
+            }
         }
     }
 }

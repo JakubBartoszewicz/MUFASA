@@ -72,7 +72,7 @@ namespace Mufasa.BackEnd.Designer
             int progress = 0;
             List<Chromosome> tournament;
 
-            EvaluatePopulation(population);
+            EvaluatePopulation(population, this.Settings.LeaSettings.IgnoreHeterodimers);
             LeaBest = new Chromosome(Tournament(population));
             double variance;
             double maxVariance = 0.0;
@@ -111,10 +111,11 @@ namespace Mufasa.BackEnd.Designer
                 //Mutation
                 nextPopulation = MutatePopulation(nextPopulation, rand);
 
-                EvaluatePopulation(nextPopulation);
+                EvaluatePopulation(nextPopulation, this.Settings.LeaSettings.IgnoreHeterodimers);
 
 
                 Chromosome best = Tournament(nextPopulation);
+
                 LeaBestAcrossGenerations.Add(best.Score.NormalizedScore);
                 if (best.Score.NormalizedScore < LeaBest.Score.NormalizedScore)
                 {
@@ -133,8 +134,10 @@ namespace Mufasa.BackEnd.Designer
                     maxVariance = variance;
                 }
 
+
                 //progress = 100 if epsilon == variance
-                if (variance < maxVariance)
+                //if variance descending
+                if (maxVariance > variance)
                 {
                     //don't confuse the user
                     progress = Math.Max(progress, (int)((100.0 / maxVariance) * (maxVariance + this.Settings.LeaSettings.Epsilon - variance) + 0.5));
@@ -147,14 +150,17 @@ namespace Mufasa.BackEnd.Designer
                 }
                 b.ReportProgress(progress);
                 i++;
-            } while (progress != 100);
+            } while (this.Settings.LeaSettings.Epsilon < variance);
+
+            progress = 100;
+            b.ReportProgress(progress);
 
             if (LeaBest.Score.Equals(ScoreTotal.Inacceptable))
             {
                 throw new AssemblyException();
             }
 
-            this.Construct = LeaBest.ToConstruct(this.Construct.Overlaps, this.Construct.Sequence, this.Construct.Settings);
+            this.Construct.Overlaps = LeaBest.ToOverlaps(this.Construct.Overlaps);
             this.Construct.Evaluate();
         }
 
@@ -177,7 +183,7 @@ namespace Mufasa.BackEnd.Designer
                     len_5.Add(rand.Next(this.Settings.MinLen_5, this.Settings.MaxLen_5 + 1));
                 }
 
-                population.Add(new Chromosome(len_3, len_5));
+                population.Add(new Chromosome(len_3, len_5, this.Settings.TargetTm));
             }
 
             return population;
@@ -187,11 +193,11 @@ namespace Mufasa.BackEnd.Designer
         /// Evaluate population
         /// </summary>
         /// <param name="population">Population to evaluate.</param>
-        private void EvaluatePopulation(List<Chromosome> population)
+        private void EvaluatePopulation(List<Chromosome> population, bool ignoreHeterodimers)
         {
             foreach (Chromosome c in population)
             {
-                c.Evaluate(this.Construct.Overlaps, this.Settings);
+                c.Evaluate(this.Construct.Overlaps, this.Settings, ignoreHeterodimers);
             }
         }
 
@@ -264,8 +270,8 @@ namespace Mufasa.BackEnd.Designer
                 }
 
             }
-            Chromosome child1 = new Chromosome(len_3_1, len_5_1);
-            Chromosome child2 = new Chromosome(len_3_2, len_5_2);
+            Chromosome child1 = new Chromosome(len_3_1, len_5_1, this.Settings.TargetTm);
+            Chromosome child2 = new Chromosome(len_3_2, len_5_2, this.Settings.TargetTm);
 
             Tuple<Chromosome, Chromosome> children = new Tuple<Chromosome, Chromosome>(child1, child2);
             return children;
@@ -443,7 +449,7 @@ namespace Mufasa.BackEnd.Designer
                         done_3 = true;
                     }
 
-                    if (item_3 == end_3 && item_5 == end_5 && !this.Construct.Overlaps[i].IsAcceptable(this.Construct.Settings.MaxTh, this.Construct.Settings.MaxTd, false))
+                    if (item_3 == end_3 && item_5 == end_5 && !this.Construct.Overlaps[i].IsAcceptable(this.Construct.Settings.MaxTh, this.Construct.Settings.MaxTd, true))
                     {
 
                         /*
@@ -465,6 +471,12 @@ namespace Mufasa.BackEnd.Designer
             }
 
             this.Construct.Evaluate();
+
+            if (Double.IsPositiveInfinity(this.Construct.Score.NormalizedScore))
+            {
+                //if failed to achieve an acceptable construct
+                throw new AssemblyException("Heteroduplex melting temperature too high. ");
+            }
         }
 
     }

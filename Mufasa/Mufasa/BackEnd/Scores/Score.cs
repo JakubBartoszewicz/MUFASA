@@ -12,23 +12,12 @@ namespace Mufasa.BackEnd.Scores
         /// <summary>
         /// Raw score.
         /// </summary>
-        public double RawScore { get { return _score; } }
+        public double RawScore { get; protected set; }
 
         /// <summary>
         /// Normalized Score.
         /// </summary>
-        public double NormalizedScore { get { return _normalizedScore; } }
-
-
-        /// <summary>
-        /// Raw score.
-        /// </summary>
-        protected double _score;
-
-        /// <summary>
-        /// Normalized Score.
-        /// </summary>
-        protected double _normalizedScore;
+        public double NormalizedScore { get; protected set; }
 
         /// <summary>
         /// Score label or name
@@ -53,7 +42,7 @@ namespace Mufasa.BackEnd.Scores
         public string ToCsv()
         {
             String sep = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-            String result = this.Label + sep + Math.Round(this._score, 2) + sep + Math.Round(this._normalizedScore, 2);
+            String result = this.Label + sep + Math.Round(this.RawScore, 2) + sep + Math.Round(this.NormalizedScore, 2);
             return result;
         }
     }

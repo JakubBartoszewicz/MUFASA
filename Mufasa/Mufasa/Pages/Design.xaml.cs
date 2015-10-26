@@ -518,7 +518,7 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void assembleButton_Click(object sender, RoutedEventArgs e)
         {
-            //progressBar.Visibility = Visibility.Visible;
+            workingBar.Visibility = Visibility.Visible;
             progressBar.Value = 0;
             if (Designer.ConstructionList != null && Designer.ConstructionList.Count > 0)
             {
@@ -570,7 +570,7 @@ namespace Mufasa.Pages
                         ModernDialog.ShowMessage("Unable to assemble.\n(" + ex.Message + ")", "Warning: ", MessageBoxButton.OK);
                     }
 
-                    //progressBar.Visibility = Visibility.Hidden;
+                    workingBar.Visibility = Visibility.Hidden;
                     assembleButton.IsEnabled = true;
                 });
 

@@ -22,6 +22,8 @@ namespace Mufasa.BackEnd.Scores
             this.Label = "Total score";
             this.Description = "Total score";
             this.TargetTm = targetTm;
+            this.Sm = new ScoreMean();
+            this.So = new ScoreOptimum(targetTm);
             Rescore(overlaps);
         }
 
@@ -32,30 +34,32 @@ namespace Mufasa.BackEnd.Scores
         {
             this.Label = "inacceptable solution";
             this.Description = "inacceptable solution";
-            this._normalizedScore = Double.PositiveInfinity;
-            this._score = Double.PositiveInfinity;
+            this.NormalizedScore = Double.PositiveInfinity;
+            this.RawScore = Double.PositiveInfinity;
+        }
+
+        /// <summary>
+        /// Empty Score constructor for unscored solutions.
+        /// </summary>
+        public ScoreTotal(double targetTm)
+        {
+            this.Label = "Total score";
+            this.Description = "Total score";
+            this.NormalizedScore = Double.PositiveInfinity;
+            this.RawScore = Double.PositiveInfinity;
+            this.Sm = new ScoreMean();
+            this.So = new ScoreOptimum(targetTm);
         }
 
         /// <summary>
         /// ScoreMean partial score.
         /// </summary>
-        public ScoreMean Sm { get { return _sm; } }
+        public ScoreMean Sm { get; private set; }
 
         /// <summary>
         /// ScoreOptimum partial score.
         /// </summary>
-        public ScoreOptimum So { get { return _so; } }
-
-        /// <summary>
-        /// ScoreMean partial score.
-        /// </summary>
-        private ScoreMean _sm;
-
-        /// <summary>
-        /// ScoreOptimum partial score.
-        /// </summary>
-        private ScoreOptimum _so;
-
+        public ScoreOptimum So { get; private set; }
 
         /// <summary>
         /// Target melting temperature.
@@ -68,10 +72,11 @@ namespace Mufasa.BackEnd.Scores
         /// <param name="overlaps">Overlap list.</param>
         override public void Rescore(List<Overlap> overlaps)
         {
-            this._sm = new ScoreMean(overlaps);
-            this._so = new ScoreOptimum(overlaps, this.TargetTm);
-            this._normalizedScore = (0.5 * _sm.NormalizedScore) + (0.5 * _so.NormalizedScore);
-            this._score = (0.5 * _sm.RawScore) + (0.5 * _so.RawScore);
+            Overlap.CalculateHeterodimers(overlaps);
+            this.Sm.Rescore(overlaps);
+            this.So.Rescore(overlaps);
+            this.NormalizedScore = (0.5 * Sm.NormalizedScore) + (0.5 * So.NormalizedScore);
+            this.RawScore = (0.5 * Sm.RawScore) + (0.5 * So.RawScore);
         }
     }
 }
