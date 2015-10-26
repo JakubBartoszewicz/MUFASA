@@ -518,13 +518,19 @@ namespace Mufasa.Pages
         /// <param name="e"></param>
         private void assembleButton_Click(object sender, RoutedEventArgs e)
         {
-            workingBar.Visibility = Visibility.Visible;
-            progressBar.Value = 0;
-            if (Designer.ConstructionList != null && Designer.ConstructionList.Count > 0)
+            if (assembleButton.Content.ToString() == "Stop")
             {
+                overlapOptimizer.Stop();
+                assembleButton.IsEnabled = false;
+            }
+
+            if (Designer.ConstructionList != null && Designer.ConstructionList.Count > 0 && assembleButton.Content.ToString() != "Stop")
+            {
+                workingBar.Visibility = Visibility.Visible;
+                progressBar.Value = 0;
                 construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
                 overlapOptimizer = new OverlapOptimizer(construct, Designer.Settings);
-                assembleButton.IsEnabled = false;
+                assembleButton.Content = "Stop";
 
                 BackgroundWorker bw = new BackgroundWorker();
                 // this allows our worker to report progress during work
@@ -571,6 +577,7 @@ namespace Mufasa.Pages
                     }
 
                     workingBar.Visibility = Visibility.Hidden;
+                    assembleButton.Content = "Assemble";
                     assembleButton.IsEnabled = true;
                 });
 

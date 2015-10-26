@@ -18,14 +18,14 @@ namespace Mufasa.Pages.Settings
     /// <summary>
     /// Interaction logic for DesignerSettings.xaml
     /// </summary>
-    public partial class ReactionSettings : UserControl
+    public partial class Settings : UserControl
     {
-        public ReactionSettings()
+        public Settings()
         {
             InitializeComponent();
 
             // create and assign the appearance view model
-            this.DataContext = new ReactionSettingsViewModel();
+            this.DataContext = new ParametersViewModel();
 
             targetTmScrollBar.Value = Design.Designer.Settings.TargetTm;
             maxThScrollBar.Value = Design.Designer.Settings.MaxTh;
@@ -49,6 +49,8 @@ namespace Mufasa.Pages.Settings
             tournamentScrollBar.Value = Design.Designer.Settings.LeaSettings.TournamentSize;
 
             stopScrollBar.Value = Design.Designer.Settings.LeaSettings.Epsilon;
+            maxIterationsScrollBar.Value = Design.Designer.Settings.LeaSettings.MaxIterations;
+            minIterationsScrollBar.Value = Design.Designer.Settings.LeaSettings.MinIterations;
         }
 
 
@@ -147,6 +149,18 @@ namespace Mufasa.Pages.Settings
         {
             if (this.IsInitialized)
                 Design.Designer.Settings.UseNaive = (bool)naiveCheckBox.IsChecked;
+        }
+
+        private void maxIterationsScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (this.IsInitialized)
+                Design.Designer.Settings.LeaSettings.MaxIterations = (int)(maxIterationsScrollBar.Value + 0.5);
+        }
+
+        private void minIterationsScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (this.IsInitialized)
+                Design.Designer.Settings.LeaSettings.MinIterations = (int)(minIterationsScrollBar.Value + 0.5);
         }
 
 

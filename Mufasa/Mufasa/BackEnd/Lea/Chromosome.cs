@@ -21,6 +21,7 @@ namespace Mufasa.BackEnd.Lea
             this.Lengths_3 = lengths_3;
             this.Lengths_5 = lengths_5;
             this.Score = new ScoreTotal(targetTm);
+            this.Overlaps = new List<Overlap>();
         }
 
         /// <summary>
@@ -32,7 +33,13 @@ namespace Mufasa.BackEnd.Lea
             this.Lengths_3 = c.Lengths_3;
             this.Lengths_5 = c.Lengths_5;
             this.Score = c.Score;
+            this.Overlaps = c.Overlaps;
         }
+
+        /// <summary>
+        /// Overlap list.
+        /// </summary>
+        public List<Overlap> Overlaps { get; set; }
 
 
         /// <value>
@@ -57,7 +64,7 @@ namespace Mufasa.BackEnd.Lea
         /// <returns>List of overlaps represented by this chromosome.</returns>
         public List<Overlap> ToOverlaps(List<Overlap> templates)
         {
-            List<Overlap> overlaps = new List<Overlap>();
+            Overlaps.Clear();
 
             for (int i = 0; i < templates.Count; i++)
             {
@@ -74,10 +81,10 @@ namespace Mufasa.BackEnd.Lea
                     temp = new Overlap(templates[i].Name, seq_3, templates[i].Settings, templates[i].PairIndex);
                 }
 
-                overlaps.Add(temp);
+                Overlaps.Add(temp);
             }
 
-            return overlaps;
+            return Overlaps;
         }
 
         /// <summary>

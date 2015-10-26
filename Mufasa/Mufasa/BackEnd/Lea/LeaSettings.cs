@@ -23,8 +23,23 @@ namespace Mufasa.BackEnd.Lea
             this.LearningRate = 1.0;
             this.Epsilon = 0.01;
             this.IgnoreHeterodimers = false;
+            this.MaxIterations = 50;
+            this.MinIterations = 10;
         }
 
+        /// <value>
+        /// Max iterations to perform.
+        /// </value>
+        public int MinIterations { get; set; }
+
+        /// <value>
+        /// Max iterations to perform.
+        /// </value>
+        public int MaxIterations { get; set; }
+
+        /// <value>
+        /// True to ignore heterodimer melting temperature calculation.
+        /// </value>
         public bool IgnoreHeterodimers { get; set; }
 
         /// <value>

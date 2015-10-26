@@ -8,9 +8,9 @@ using Mufasa.BackEnd.TmThal;
 
 namespace Mufasa.Pages.Settings
 {
-    class ReactionSettingsViewModel : NotifyPropertyChanged
+    class ParametersViewModel : NotifyPropertyChanged
     {
-        public ReactionSettingsViewModel()
+        public ParametersViewModel()
         {
             tmMethodsDict = new Dictionary<string, Thermodynamics.p3_tm_method_type>();
             tmMethodsDict.Add(Breslauer, Thermodynamics.p3_tm_method_type.p3_breslauer_auto);

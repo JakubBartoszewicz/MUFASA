@@ -29,7 +29,7 @@ namespace Mufasa.BackEnd.Designer
         {
             this.Construct = construct;
             this.Settings = settings;
-            this.LeaBestAcrossGenerations = new List<double>();
+            this.leaBestAcrossGenerations = new List<double>();
         }
 
         /// <value>
@@ -50,12 +50,19 @@ namespace Mufasa.BackEnd.Designer
         /// <value>
         /// List of best solutions of each generation.
         /// </value>
-        private List<double> LeaBestAcrossGenerations;
+        private List<double> leaBestAcrossGenerations;
 
         /// <value>
         /// Best solution.
         /// </value>
-        private Chromosome LeaBest;
+        private Chromosome leaBest;
+
+        /// <value>
+        /// True to stop optimization.
+        /// </value>
+        private bool stop;
+
+
 
         /// <summary>
         /// Lamarckian evolutionary algorithm for overlap optimization.
@@ -64,6 +71,8 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="args"></param>
         public void LeaOptimizeOverlaps(object o, DoWorkEventArgs args)
         {
+            stop = false; 
+
             this.b = o as BackgroundWorker;
 
             Random rand = new Random();
@@ -71,9 +80,11 @@ namespace Mufasa.BackEnd.Designer
             List<Chromosome> nextPopulation;
             int progress = 0;
             List<Chromosome> tournament;
+            Chromosome mom, dad, child;
+            Tuple<Chromosome, Chromosome> children;
 
             EvaluatePopulation(population, this.Settings.LeaSettings.IgnoreHeterodimers);
-            LeaBest = new Chromosome(Tournament(population));
+            leaBest = new Chromosome(Tournament(population));
             double variance;
             double maxVariance = 0.0;
             int i = 0;
@@ -89,10 +100,10 @@ namespace Mufasa.BackEnd.Designer
                     if (rand.NextDouble() <= this.Settings.LeaSettings.CrossoverRate)
                     {
                         tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population, rand);
-                        Chromosome mom = Tournament(tournament);
+                        mom = Tournament(tournament);
                         tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population, rand);
-                        Chromosome dad = Tournament(tournament);
-                        Tuple<Chromosome, Chromosome> children = Crossover(mom, dad, rand);
+                        dad = Tournament(tournament);
+                        children = Crossover(mom, dad, rand);
                         nextPopulation.Add(children.Item1);
                         nextPopulation.Add(children.Item2);
                     }
@@ -100,7 +111,7 @@ namespace Mufasa.BackEnd.Designer
                     {
                         //Add two children without crossing over
                         tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population, rand);
-                        Chromosome child = Tournament(tournament);
+                        child = Tournament(tournament);
                         nextPopulation.Add(child);
                         tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population, rand);
                         child = Tournament(tournament);
@@ -116,18 +127,18 @@ namespace Mufasa.BackEnd.Designer
 
                 Chromosome best = Tournament(nextPopulation);
 
-                LeaBestAcrossGenerations.Add(best.Score.NormalizedScore);
-                if (best.Score.NormalizedScore < LeaBest.Score.NormalizedScore)
+                leaBestAcrossGenerations.Add(best.Score.NormalizedScore);
+                if (best.Score.NormalizedScore < leaBest.Score.NormalizedScore)
                 {
                     //copy the best solution so far
-                    LeaBest = new Chromosome(best);
+                    leaBest = new Chromosome(best);
                 }
 
 
                 population = nextPopulation;
 
                 // assess variance only if i > MinIterations
-                variance = Variance(LeaBestAcrossGenerations);
+                variance = Variance(leaBestAcrossGenerations);
 
                 if (variance > maxVariance)
                 {
@@ -137,10 +148,14 @@ namespace Mufasa.BackEnd.Designer
 
                 //progress = 100 if epsilon == variance
                 //if variance descending
-                if (maxVariance > variance)
+                if (maxVariance > variance && i > this.Settings.LeaSettings.MinIterations)
                 {
                     //don't confuse the user
-                    progress = Math.Max(progress, (int)((100.0 / maxVariance) * (maxVariance + this.Settings.LeaSettings.Epsilon - variance) + 0.5));
+                    progress = Math.Max((int)(100.0 * (double)i / (double)this.Settings.LeaSettings.MaxIterations), (int)((100.0 / maxVariance) * (maxVariance + this.Settings.LeaSettings.Epsilon - variance) + 0.5));
+                }
+                else
+                {
+                    progress = (int)Math.Max((100.0 * (double)i / (double)this.Settings.LeaSettings.MaxIterations), (double)progress);
                 }
 
                 if (progress > 100)
@@ -150,18 +165,20 @@ namespace Mufasa.BackEnd.Designer
                 }
                 b.ReportProgress(progress);
                 i++;
-            } while (this.Settings.LeaSettings.Epsilon < variance);
+            } while (!stop && (progress < 100) && (i < this.Settings.LeaSettings.MaxIterations));
 
             progress = 100;
             b.ReportProgress(progress);
+            stop = false;
 
-            if (LeaBest.Score.Equals(ScoreTotal.Inacceptable))
+            if (leaBest.Score.Equals(ScoreTotal.Inacceptable))
             {
                 throw new AssemblyException();
             }
 
-            this.Construct.Overlaps = LeaBest.ToOverlaps(this.Construct.Overlaps);
+            this.Construct.Overlaps = leaBest.ToOverlaps(this.Construct.Overlaps);
             this.Construct.Evaluate();
+            
         }
 
         /// <summary>
@@ -316,14 +333,11 @@ namespace Mufasa.BackEnd.Designer
         }
 
         /// <summary>
-        /// Check if stopping criterion satisfied.
+        /// Stop the calcualations.
         /// </summary>
-        /// <returns>True if variance lower than epsilon.</returns>
-        private bool Stop()
+        public void Stop()
         {
-            double variance = Variance(this.LeaBestAcrossGenerations);
-
-            return (variance < this.Settings.LeaSettings.Epsilon);
+            this.stop = true;
         }
 
         /// <summary>
@@ -362,6 +376,8 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="args"></param>
         public void SemiNaiveOptimizeOverlaps(object o, DoWorkEventArgs args)
         {
+            stop = false;
+
             this.b = o as BackgroundWorker;
 
             const byte end_3 = 255;
@@ -462,7 +478,7 @@ namespace Mufasa.BackEnd.Designer
                         throw new AssemblyException(this.Construct.Overlaps[i].ToString());
                     }
 
-                } while (!done_5 || !done_3);
+                } while (!stop && (!done_5 || !done_3) );
 
                 this.Construct.Overlaps[i] = _best;
 
@@ -470,6 +486,7 @@ namespace Mufasa.BackEnd.Designer
                 b.ReportProgress(progress);
             }
 
+            stop = false;
             this.Construct.Evaluate();
 
             if (Double.IsPositiveInfinity(this.Construct.Score.NormalizedScore))
@@ -477,6 +494,7 @@ namespace Mufasa.BackEnd.Designer
                 //if failed to achieve an acceptable construct
                 throw new AssemblyException("Heteroduplex melting temperature too high. ");
             }
+
         }
 
     }

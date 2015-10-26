@@ -7,9 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Style="{StaticResource ContentRoot}">
-        <mui:ModernTab Layout="List" SelectedSource="/Pages/Settings/ReactionSettings.xaml">
+        <mui:ModernTab Layout="List" SelectedSource="/Pages/Settings/Parameters.xaml">
             <mui:ModernTab.Links>
-                <mui:Link DisplayName="reaction parameters" Source="/Pages/Settings/ReactionSettings.xaml" />
+                <mui:Link DisplayName="reaction parameters" Source="/Pages/Settings/Parameters.xaml" />
                 <mui:Link DisplayName="appearance" Source="/Pages/Settings/Appearance.xaml" />
             </mui:ModernTab.Links>
         </mui:ModernTab>
