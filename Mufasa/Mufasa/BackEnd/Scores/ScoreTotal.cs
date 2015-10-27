@@ -47,6 +47,7 @@ namespace Mufasa.BackEnd.Scores
             this.Description = "Total score";
             this.NormalizedScore = Double.PositiveInfinity;
             this.RawScore = Double.PositiveInfinity;
+            this.TargetTm = targetTm;
             this.Sm = new ScoreMean();
             this.So = new ScoreOptimum(targetTm);
         }

@@ -543,7 +543,12 @@ namespace Mufasa.Pages
                 }
                 else
                 {
-                    bw.DoWork += new DoWorkEventHandler(overlapOptimizer.LeaOptimizeOverlaps);
+                    bw.DoWork += (s, args) => 
+                    {
+                        //preoptimize
+                        overlapOptimizer.SemiNaiveOptimizeOverlaps(s, args);
+                        overlapOptimizer.LeaOptimizeOverlaps(s, args);
+                    };                        
                 }
 
 

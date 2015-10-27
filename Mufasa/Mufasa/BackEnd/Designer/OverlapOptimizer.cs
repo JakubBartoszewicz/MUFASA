@@ -28,6 +28,11 @@ namespace Mufasa.BackEnd.Designer
         public OverlapOptimizer(Construct construct, DesignerSettings settings)
         {
             this.Construct = construct;
+            this.Templates = new List<Overlap>();
+            foreach (Overlap o in this.Construct.Overlaps)
+            {
+                this.Templates.Add(new Overlap(o));
+            }
             this.Settings = settings;
             this.leaBestAcrossGenerations = new List<double>();
         }
@@ -36,6 +41,11 @@ namespace Mufasa.BackEnd.Designer
         /// A construct to assemble.
         /// </value>
         public Construct Construct { get; set; }
+
+        /// <value>
+        /// Overlap templates.
+        /// </value>
+        public List<Overlap> Templates { get; set; }
 
         /// <value>
         /// Designer settings.
@@ -62,8 +72,6 @@ namespace Mufasa.BackEnd.Designer
         /// </value>
         private bool stop;
 
-
-
         /// <summary>
         /// Lamarckian evolutionary algorithm for overlap optimization.
         /// </summary>
@@ -71,28 +79,31 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="args"></param>
         public void LeaOptimizeOverlaps(object o, DoWorkEventArgs args)
         {
-            stop = false; 
+            stop = false;
 
             this.b = o as BackgroundWorker;
 
             Random rand = new Random();
-            List<Chromosome> population = Populate(rand);
-            List<Chromosome> nextPopulation;
+            List<Chromosome> population;
+
+            List<Chromosome> nextPopulation = new List<Chromosome>();
             int progress = 0;
+            b.ReportProgress(progress);
             List<Chromosome> tournament;
             Chromosome mom, dad, child;
             Tuple<Chromosome, Chromosome> children;
-
-            EvaluatePopulation(population, this.Settings.LeaSettings.IgnoreHeterodimers);
-            leaBest = new Chromosome(Tournament(population));
             double variance;
             double maxVariance = 0.0;
             int i = 0;
+
+            population = Populate(rand, this.Construct.Overlaps);
+
+            //Local Search evaluates population
+            population = LocalSearch(population, rand, this.Settings.LeaSettings.IgnoreHeterodimers);
+            leaBest = new Chromosome(Tournament(population));
+
             do
             {
-                //Local Search
-                nextPopulation = LocalSearch(population);
-
                 //Selection
                 do
                 {
@@ -122,8 +133,8 @@ namespace Mufasa.BackEnd.Designer
                 //Mutation
                 nextPopulation = MutatePopulation(nextPopulation, rand);
 
-                EvaluatePopulation(nextPopulation, this.Settings.LeaSettings.IgnoreHeterodimers);
-
+                //Local Search evaluates population
+                nextPopulation = LocalSearch(nextPopulation, rand, this.Settings.LeaSettings.IgnoreHeterodimers);
 
                 Chromosome best = Tournament(nextPopulation);
 
@@ -134,8 +145,9 @@ namespace Mufasa.BackEnd.Designer
                     leaBest = new Chromosome(best);
                 }
 
-
-                population = nextPopulation;
+                population.Clear();
+                population.AddRange(nextPopulation);
+                nextPopulation.Clear();
 
                 // assess variance only if i > MinIterations
                 variance = Variance(leaBestAcrossGenerations);
@@ -176,25 +188,31 @@ namespace Mufasa.BackEnd.Designer
                 throw new AssemblyException();
             }
 
-            this.Construct.Overlaps = leaBest.ToOverlaps(this.Construct.Overlaps);
+            this.Construct.Overlaps = leaBest.ToOverlaps(this.Templates);
             this.Construct.Evaluate();
-            
+
         }
 
         /// <summary>
         /// Generate starting population.
         /// </summary>
         /// <param name="rand">Randomizer.</param>
+        /// <param name="preoptimized">preoptimized solution.</param>
         /// <returns>Starting population.</returns>
-        private List<Chromosome> Populate(Random rand)
+        private List<Chromosome> Populate(Random rand, List<Overlap> preoptimized = null)
         {
             List<Chromosome> population = new List<Chromosome>();
-            for (int c = 0; c < this.Settings.LeaSettings.PopulationSize; c++)
+            if (preoptimized != null)
+            {
+                population.Add(new Chromosome(preoptimized, this.Settings.TargetTm));
+                population.Add(new Chromosome(preoptimized, this.Settings.TargetTm));
+            }
+            for (int c = population.Count; c < this.Settings.LeaSettings.PopulationSize; c++)
             {
                 List<int> len_3 = new List<int>();
                 List<int> len_5 = new List<int>();
 
-                for (int i = 0; i < this.Construct.Overlaps.Count; i++)
+                for (int i = 0; i < this.Templates.Count; i++)
                 {
                     len_3.Add(rand.Next(this.Settings.MinLen_3, this.Settings.MaxLen_3 + 1));
                     len_5.Add(rand.Next(this.Settings.MinLen_5, this.Settings.MaxLen_5 + 1));
@@ -214,14 +232,53 @@ namespace Mufasa.BackEnd.Designer
         {
             foreach (Chromosome c in population)
             {
-                c.Evaluate(this.Construct.Overlaps, this.Settings, ignoreHeterodimers);
+                c.Evaluate(this.Templates, this.Settings, ignoreHeterodimers);
             }
         }
 
-        private List<Chromosome> LocalSearch(List<Chromosome> population)
+        /// <summary>
+        /// Search for local improvement.
+        /// </summary>
+        /// <param name="population">Population to improve.</param>
+        /// <param name="rand">Randomizer.</param>
+        /// <param name="ignoreHeterodimers">True to ignore heterodimer melting temperatures.</param>
+        /// <returns>Refined population.</returns>
+        private List<Chromosome> LocalSearch(List<Chromosome> population, Random rand, bool ignoreHeterodimers = false)
         {
-            //TODO
-            return new List<Chromosome>();
+           List<Chromosome> pool = new List<Chromosome>();
+            int index;
+            for (int i = 0; i < population.Count; i++)
+            {
+                if (rand.NextDouble() < this.Settings.LeaSettings.LearningRate)
+                {
+                    index = rand.Next(this.Templates.Count);
+                    pool.Clear();
+                    pool.Add(population[i]);
+                    pool.Add(new Chromosome(population[i]));
+                    pool.Add(new Chromosome(population[i]));
+                    pool.Add(new Chromosome(population[i]));
+                    pool.Add(new Chromosome(population[i]));
+
+                    if(pool[0].Lengths_3[index] < this.Settings.MaxLen_3)
+                        pool[1].Lengths_3[index]++;
+                    if (pool[0].Lengths_3[index] > this.Settings.MinLen_3)
+                        pool[2].Lengths_3[index]--;
+                    if (pool[0].Lengths_5[index] < this.Settings.MaxLen_5)
+                        pool[3].Lengths_5[index]++;
+                    if (pool[0].Lengths_5[index] > this.Settings.MinLen_5)
+                        pool[4].Lengths_5[index]--;
+
+                    EvaluatePopulation(pool, ignoreHeterodimers);
+                    population[i] = Tournament(pool);
+
+                }
+                else
+                {
+                    population[i].Evaluate(this.Templates, this.Settings, ignoreHeterodimers);
+                }
+            }
+
+            return population;
         }
 
         /// <summary>
@@ -294,20 +351,28 @@ namespace Mufasa.BackEnd.Designer
             return children;
         }
 
+        /// <summary>
+        /// Mutate one chromosome.
+        /// </summary>
+        /// <param name="solution">Solution to mutate.</param>
+        /// <param name="rand">Randomizer.</param>
+        /// <returns>Mutated chromosome.</returns>
         private Chromosome Mutate(Chromosome solution, Random rand)
         {
+            int index;
+            int value;
             if (rand.NextDouble() < 0.5D)
             {
                 //Mutate 3'
-                int index = rand.Next(solution.Lengths_3.Count);
-                int value = rand.Next(this.Settings.MinLen_3, this.Settings.MaxLen_3 + 1);
+                index = rand.Next(solution.Lengths_3.Count);
+                value = rand.Next(this.Settings.MinLen_3, this.Settings.MaxLen_3 + 1);
                 solution.Lengths_3[index] = value;
             }
             else
             {
                 //Mutate 5'
-                int index = rand.Next(solution.Lengths_5.Count);
-                int value = rand.Next(this.Settings.MinLen_5, this.Settings.MaxLen_5 + 1);
+                index = rand.Next(solution.Lengths_5.Count);
+                value = rand.Next(this.Settings.MinLen_5, this.Settings.MaxLen_5 + 1);
                 solution.Lengths_5[index] = value;
             }
             return solution;
@@ -478,7 +543,7 @@ namespace Mufasa.BackEnd.Designer
                         throw new AssemblyException(this.Construct.Overlaps[i].ToString());
                     }
 
-                } while (!stop && (!done_5 || !done_3) );
+                } while (!stop && (!done_5 || !done_3));
 
                 this.Construct.Overlaps[i] = _best;
 
