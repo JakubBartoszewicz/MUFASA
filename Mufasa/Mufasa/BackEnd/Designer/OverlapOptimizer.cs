@@ -110,6 +110,7 @@ namespace Mufasa.BackEnd.Designer
                 population = LocalSearch(population, rand, this.Settings.LeaSettings.IgnoreHeterodimers);
             best = new Chromosome(Tournament(population));
             leaBest = new Chromosome(best);
+            leaBestAcrossGenerations.Add(best.Score.NormalizedScore);
             
             do
             {
