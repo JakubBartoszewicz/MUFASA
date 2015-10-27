@@ -20,7 +20,7 @@ namespace Mufasa.BackEnd.Lea
             this.TournamentSize = 5;
             this.CrossoverRate = 1.0;
             this.MutationRate = 0.8;
-            this.LearningRate = 1.0;
+            this.LearningRate = 0.5;
             this.Epsilon = 0.01;
             this.IgnoreHeterodimers = false;
             this.MaxIterations = 50;

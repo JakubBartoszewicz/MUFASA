@@ -195,13 +195,13 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Label x:Name="mutationLabel" Content="Mutation rate:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="0" ToolTip="Mutation chance."/>
-                        <ScrollBar x:Name="mutationScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" VerticalAlignment="Top"  Minimum="0" Maximum="1.0" Margin="10" SmallChange="1" Grid.Column="1" Grid.Row="0" ValueChanged="mutationScrollBar_ValueChanged"/>
+                        <ScrollBar x:Name="mutationScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" VerticalAlignment="Top"  Minimum="0" Maximum="1.0" Margin="10" SmallChange="0.1" Grid.Column="1" Grid.Row="0" ValueChanged="mutationScrollBar_ValueChanged"/>
 
                         <Label x:Name="crossoverLabel" Content="Crossover rate:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="1" ToolTip="Crossover chance."/>
-                        <ScrollBar x:Name="crossoverScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" VerticalAlignment="Top"  Minimum="0" Maximum="1.00" Margin="10" SmallChange="1" Grid.Column="1" Grid.Row="1" ValueChanged="crossoverScrollBar_ValueChanged"/>
+                        <ScrollBar x:Name="crossoverScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" VerticalAlignment="Top"  Minimum="0" Maximum="1.00" Margin="10" SmallChange="0.1" Grid.Column="1" Grid.Row="1" ValueChanged="crossoverScrollBar_ValueChanged"/>
 
                         <Label x:Name="learningLabel" Content="Learning rate:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="2" ToolTip="Local search chance."/>
-                        <ScrollBar x:Name="learningScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" VerticalAlignment="Top"  Minimum="0" Maximum="1.00" Margin="10" SmallChange="1" Grid.Column="1" Grid.Row="2" ValueChanged="learningScrollBar_ValueChanged"/>
+                        <ScrollBar x:Name="learningScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" VerticalAlignment="Top"  Minimum="0" Maximum="1.00" Margin="10" SmallChange="0.1" Grid.Column="1" Grid.Row="2" ValueChanged="learningScrollBar_ValueChanged"/>
 
                         <Label x:Name="popsizeLabel" Content="Pop. size:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="0" ToolTip="Number of candidate solutions per iteration."/>
                         <ScrollBar x:Name="popsizeScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaIntegerUpDown}" VerticalAlignment="Top"  Minimum="2" Maximum="1000000" Margin="10" SmallChange="1" Grid.Column="4" Grid.Row="0" ValueChanged="popsizeScrollBar_ValueChanged"/>

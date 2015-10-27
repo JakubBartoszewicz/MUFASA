@@ -99,6 +99,7 @@ namespace Mufasa.BackEnd.Designer
             population = Populate(rand, this.Construct.Overlaps);
 
             //Local Search evaluates population
+            EvaluatePopulation(population, this.Settings.LeaSettings.IgnoreHeterodimers);
             population = LocalSearch(population, rand, this.Settings.LeaSettings.IgnoreHeterodimers);
             leaBest = new Chromosome(Tournament(population));
 
@@ -134,6 +135,7 @@ namespace Mufasa.BackEnd.Designer
                 nextPopulation = MutatePopulation(nextPopulation, rand);
 
                 //Local Search evaluates population
+                EvaluatePopulation(population, this.Settings.LeaSettings.IgnoreHeterodimers);
                 nextPopulation = LocalSearch(nextPopulation, rand, this.Settings.LeaSettings.IgnoreHeterodimers);
 
                 Chromosome best = Tournament(nextPopulation);
@@ -245,36 +247,39 @@ namespace Mufasa.BackEnd.Designer
         /// <returns>Refined population.</returns>
         private List<Chromosome> LocalSearch(List<Chromosome> population, Random rand, bool ignoreHeterodimers = false)
         {
-           List<Chromosome> pool = new List<Chromosome>();
+            List<Chromosome> pool = new List<Chromosome>();
             int index;
+            //Ascending order - score minimization
+            population = population.OrderBy(o => o.Score.NormalizedScore).ToList();
+
             for (int i = 0; i < population.Count; i++)
             {
-                if (rand.NextDouble() < this.Settings.LeaSettings.LearningRate)
+                if ((double)i < this.Settings.LeaSettings.LearningRate * (double)population.Count)
                 {
                     index = rand.Next(this.Templates.Count);
                     pool.Clear();
-                    pool.Add(population[i]);
                     pool.Add(new Chromosome(population[i]));
                     pool.Add(new Chromosome(population[i]));
                     pool.Add(new Chromosome(population[i]));
                     pool.Add(new Chromosome(population[i]));
 
-                    if(pool[0].Lengths_3[index] < this.Settings.MaxLen_3)
-                        pool[1].Lengths_3[index]++;
-                    if (pool[0].Lengths_3[index] > this.Settings.MinLen_3)
-                        pool[2].Lengths_3[index]--;
-                    if (pool[0].Lengths_5[index] < this.Settings.MaxLen_5)
-                        pool[3].Lengths_5[index]++;
-                    if (pool[0].Lengths_5[index] > this.Settings.MinLen_5)
-                        pool[4].Lengths_5[index]--;
+                    if (population[i].Lengths_3[index] < this.Settings.MaxLen_3)
+                        pool[0].Lengths_3[index]++;
+                    if (population[i].Lengths_3[index] > this.Settings.MinLen_3)
+                        pool[1].Lengths_3[index]--;
+                    if (population[i].Lengths_5[index] < this.Settings.MaxLen_5)
+                        pool[2].Lengths_5[index]++;
+                    if (population[i].Lengths_5[index] > this.Settings.MinLen_5)
+                        pool[3].Lengths_5[index]--;
 
                     EvaluatePopulation(pool, ignoreHeterodimers);
+                    pool.Add(population[i]);
                     population[i] = Tournament(pool);
 
                 }
                 else
                 {
-                    population[i].Evaluate(this.Templates, this.Settings, ignoreHeterodimers);
+                    break;
                 }
             }
 
