@@ -23,6 +23,7 @@ using System.IO;
 using FirstFloor.ModernUI.Presentation;
 using System.Text;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Mufasa.Pages
 {
@@ -683,6 +684,86 @@ namespace Mufasa.Pages
                 fragmentListBox.Items.Refresh();
 
             }
+        }
+
+        private void testButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (testButton.Content.ToString() == "Stop")
+            {
+                overlapOptimizer.Stop();
+                testButton.IsEnabled = false;
+            }
+
+            if (Designer.ConstructionList != null && Designer.ConstructionList.Count > 0 && testButton.Content.ToString() != "Stop")
+            {
+                workingBar.Visibility = Visibility.Visible;
+                progressBar.Value = 0;
+                construct = new Construct(Designer.ConstructionList, Designer.FragmentDict, Designer.Settings);
+                overlapOptimizer = new OverlapOptimizer(construct, Designer.Settings);
+                testButton.Content = "Stop";
+                BackgroundWorker bw = new BackgroundWorker();
+                Stopwatch sw = new Stopwatch();
+                // this allows our worker to report progress during work
+                bw.WorkerReportsProgress = true;
+                // what to do in the background thread
+
+                if (Designer.Settings.UseNaive)
+                {
+                    overlapOptimizer.IgnorePreoptimizationExceptions = false;
+                    sw.Start();
+                    bw.DoWork += new DoWorkEventHandler(overlapOptimizer.SemiNaiveOptimizeOverlaps);
+                }
+                else
+                {
+                    overlapOptimizer.IgnorePreoptimizationExceptions = true;
+                    bw.DoWork += (s, args) =>
+                    {
+                        sw.Start();
+                        //preoptimize
+                        overlapOptimizer.SemiNaiveOptimizeOverlaps(s, args);
+                        overlapOptimizer.LeaOptimizeOverlaps(s, args);
+                    };
+                }
+
+
+                // what to do when progress changed (update the progress bar)
+                bw.ProgressChanged += new ProgressChangedEventHandler(
+                delegate(object o, ProgressChangedEventArgs args)
+                {
+                    progressBar.Value = args.ProgressPercentage;
+                });
+                // what to do when worker completes its task (notify the user)
+                bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
+                delegate(object o, RunWorkerCompletedEventArgs args)
+                {
+                    sw.Stop();
+                    if (args.Error == null)
+                    {
+                        construct = overlapOptimizer.Construct;
+                        ScoreTotal score = construct.Score;
+                        overlapDataGrid.ItemsSource = construct.Overlaps;
+                        overlapDataGrid.Items.Refresh();
+                        List<Score> scoreList = new List<Score>();
+                        scoreList.Add(score.Sm);
+                        scoreList.Add(score.So);
+                        scoreList.Add(score);
+                        scoreDataGrid.ItemsSource = scoreList;
+                        scoreDataGrid.Items.Refresh();
+                    }
+                    else
+                    {
+                        Exception ex = args.Error as Exception;
+                        ModernDialog.ShowMessage("Unable to assemble.\n(" + ex.Message + ")", "Warning: ", MessageBoxButton.OK);
+                    }
+
+                    workingBar.Visibility = Visibility.Hidden;
+                    testButton.Content = "Test";
+                    testButton.IsEnabled = true;
+                });
+
+                bw.RunWorkerAsync();
+            }
+
         }
     }
 }
