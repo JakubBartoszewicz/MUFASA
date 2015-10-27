@@ -35,12 +35,18 @@ namespace Mufasa.BackEnd.Designer
             }
             this.Settings = settings;
             this.leaBestAcrossGenerations = new List<double>();
+            this.IgnorePreoptimizationExceptions = true;
         }
 
         /// <value>
         /// A construct to assemble.
         /// </value>
         public Construct Construct { get; set; }
+
+        /// <value>
+        /// True to ignore inacceptable solutions during the preoptimization stage.
+        /// </value>
+        public bool IgnorePreoptimizationExceptions { get; set; }
 
         /// <value>
         /// Overlap templates.
@@ -90,7 +96,7 @@ namespace Mufasa.BackEnd.Designer
             int progress = 0;
             b.ReportProgress(progress);
             List<Chromosome> tournament;
-            Chromosome mom, dad, child;
+            Chromosome mom, dad, child, best;
             Tuple<Chromosome, Chromosome> children;
             double variance;
             double maxVariance = 0.0;
@@ -100,9 +106,11 @@ namespace Mufasa.BackEnd.Designer
 
             //Local Search evaluates population
             EvaluatePopulation(population, this.Settings.LeaSettings.IgnoreHeterodimers);
-            population = LocalSearch(population, rand, this.Settings.LeaSettings.IgnoreHeterodimers);
-            leaBest = new Chromosome(Tournament(population));
-
+            if (!stop) 
+                population = LocalSearch(population, rand, this.Settings.LeaSettings.IgnoreHeterodimers);
+            best = new Chromosome(Tournament(population));
+            leaBest = new Chromosome(best);
+            
             do
             {
                 //Selection
@@ -135,13 +143,15 @@ namespace Mufasa.BackEnd.Designer
                 nextPopulation = MutatePopulation(nextPopulation, rand);
 
                 //Local Search evaluates population
-                EvaluatePopulation(population, this.Settings.LeaSettings.IgnoreHeterodimers);
-                nextPopulation = LocalSearch(nextPopulation, rand, this.Settings.LeaSettings.IgnoreHeterodimers);
-
-                Chromosome best = Tournament(nextPopulation);
+                if (!stop)
+                    EvaluatePopulation(nextPopulation, this.Settings.LeaSettings.IgnoreHeterodimers);
+                if (!stop)
+                    nextPopulation = LocalSearch(nextPopulation, rand, this.Settings.LeaSettings.IgnoreHeterodimers);
+                if (!stop)
+                best = Tournament(nextPopulation);
 
                 leaBestAcrossGenerations.Add(best.Score.NormalizedScore);
-                if (best.Score.NormalizedScore < leaBest.Score.NormalizedScore)
+                if (!stop && best.Score.NormalizedScore < leaBest.Score.NormalizedScore)
                 {
                     //copy the best solution so far
                     leaBest = new Chromosome(best);
@@ -185,14 +195,15 @@ namespace Mufasa.BackEnd.Designer
             b.ReportProgress(progress);
             stop = false;
 
-            if (leaBest.Score.Equals(ScoreTotal.Inacceptable))
+            if (leaBest == null || leaBest.Score.Equals(ScoreTotal.Inacceptable))
             {
                 throw new AssemblyException();
             }
-
-            this.Construct.Overlaps = leaBest.ToOverlaps(this.Templates);
-            this.Construct.Evaluate();
-
+            else
+            {
+                this.Construct.Overlaps = leaBest.ToOverlaps(this.Templates);
+                this.Construct.Evaluate();
+            }
         }
 
         /// <summary>
@@ -535,7 +546,7 @@ namespace Mufasa.BackEnd.Designer
                         done_3 = true;
                     }
 
-                    if (item_3 == end_3 && item_5 == end_5 && !this.Construct.Overlaps[i].IsAcceptable(this.Construct.Settings.MaxTh, this.Construct.Settings.MaxTd, true))
+                    if (!this.IgnorePreoptimizationExceptions && item_3 == end_3 && item_5 == end_5 && !this.Construct.Overlaps[i].IsAcceptable(this.Construct.Settings.MaxTh, this.Construct.Settings.MaxTd, true))
                     {
 
                         /*
@@ -559,7 +570,7 @@ namespace Mufasa.BackEnd.Designer
             stop = false;
             this.Construct.Evaluate();
 
-            if (Double.IsPositiveInfinity(this.Construct.Score.NormalizedScore))
+            if (!this.IgnorePreoptimizationExceptions && Double.IsPositiveInfinity(this.Construct.Score.NormalizedScore))
             {
                 //if failed to achieve an acceptable construct
                 throw new AssemblyException("Heteroduplex melting temperature too high. ");

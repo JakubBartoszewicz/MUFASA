@@ -539,10 +539,12 @@ namespace Mufasa.Pages
 
                 if (Designer.Settings.UseNaive)
                 {
+                    overlapOptimizer.IgnorePreoptimizationExceptions = false;
                     bw.DoWork += new DoWorkEventHandler(overlapOptimizer.SemiNaiveOptimizeOverlaps);
                 }
                 else
                 {
+                    overlapOptimizer.IgnorePreoptimizationExceptions = true;
                     bw.DoWork += (s, args) => 
                     {
                         //preoptimize

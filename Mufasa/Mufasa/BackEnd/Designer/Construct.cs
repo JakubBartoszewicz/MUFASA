@@ -267,10 +267,5 @@ namespace Mufasa.BackEnd.Designer
             }
             return accept;
         }
-
-        /// <summary>
-        /// Calculate heterodimer Tds.
-        /// </summary>
-
     }
 }

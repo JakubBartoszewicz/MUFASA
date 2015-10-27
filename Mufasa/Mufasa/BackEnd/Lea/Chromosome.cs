@@ -110,7 +110,23 @@ namespace Mufasa.BackEnd.Lea
         /// <returns>Total score of the chromosome.</returns>
         public ScoreTotal Evaluate(List<Overlap> templates, DesignerSettings settings, bool ignoreHeterodimers)
         {
-            this.Score.Rescore(this.ToOverlaps(templates));
+            this.ToOverlaps(templates);
+
+            bool accept = true;
+            foreach (Overlap o in this.Overlaps)
+            {
+                if (!o.IsAcceptable(settings.MaxTh, settings.MaxTd, ignoreHeterodimers))
+                {
+                    accept = false;
+                    break;
+                }
+            }
+
+            if (accept)
+                this.Score.Rescore(Overlaps);
+            else
+                this.Score = ScoreTotal.Inacceptable;
+
             return this.Score;
         }        
     }
