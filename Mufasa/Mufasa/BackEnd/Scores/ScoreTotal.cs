@@ -53,6 +53,18 @@ namespace Mufasa.BackEnd.Scores
         }
 
         /// <summary>
+        /// ScoreTotal copying constructor.
+        /// </summary>
+        /// <param name="s">Score to copy.</param>
+        public ScoreTotal(ScoreTotal s)
+            : base(s)
+        {
+            this.Sm = new ScoreMean(s.Sm);
+            this.So = new ScoreOptimum(s.So);
+            this.TargetTm = s.TargetTm;
+        }
+
+        /// <summary>
         /// ScoreMean partial score.
         /// </summary>
         public ScoreMean Sm { get; private set; }

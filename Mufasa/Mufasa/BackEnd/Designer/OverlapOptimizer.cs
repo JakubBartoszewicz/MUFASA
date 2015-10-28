@@ -106,14 +106,14 @@ namespace Mufasa.BackEnd.Designer
 
             //Local Search evaluates population
             EvaluatePopulation(population, this.Settings.LeaSettings.IgnoreHeterodimers);
-            if (!stop) 
+            if (!stop)
                 population = LocalSearch(population, rand, this.Settings.LeaSettings.IgnoreHeterodimers);
             best = new Chromosome(Tournament(population));
             leaBest = new Chromosome(best);
             List<Chromosome> bestes = new List<Chromosome>();
             leaBestAcrossGenerations.Add(best.Score.NormalizedScore);
             bestes.Add(new Chromosome(best));
-            
+
             do
             {
                 //Selection
@@ -134,10 +134,10 @@ namespace Mufasa.BackEnd.Designer
                     {
                         //Add two children without crossing over
                         tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population, rand);
-                        child = Tournament(tournament);
+                        child = new Chromosome(Tournament(tournament));
                         nextPopulation.Add(child);
                         tournament = SelectForTournament(this.Settings.LeaSettings.TournamentSize, population, rand);
-                        child = Tournament(tournament);
+                        child = new Chromosome(Tournament(tournament));
                         nextPopulation.Add(child);
                     }
                 } while (nextPopulation.Count < population.Count);
@@ -151,19 +151,22 @@ namespace Mufasa.BackEnd.Designer
                 if (!stop)
                     nextPopulation = LocalSearch(nextPopulation, rand, this.Settings.LeaSettings.IgnoreHeterodimers);
                 if (!stop)
+                {
                     best = Tournament(nextPopulation);
 
-                leaBestAcrossGenerations.Add(best.Score.NormalizedScore);
+                    bestes.Add(new Chromosome(best));
+                    leaBestAcrossGenerations.Add(best.Score.NormalizedScore);
+                }
                 if (!stop && best.Score.NormalizedScore < leaBest.Score.NormalizedScore)
                 {
                     //copy the best solution so far
                     leaBest = new Chromosome(best);
-                    bestes.Add(new Chromosome(best));
                 }
 
                 population.Clear();
                 population.AddRange(nextPopulation);
                 nextPopulation.Clear();
+
 
                 // assess variance only if i > MinIterations
                 variance = Variance(leaBestAcrossGenerations);

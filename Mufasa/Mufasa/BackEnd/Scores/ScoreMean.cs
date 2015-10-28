@@ -30,6 +30,16 @@ namespace Mufasa.BackEnd.Scores
         }
 
         /// <summary>
+        /// ScoreMean copying constructor.
+        /// </summary>
+        /// <param name="s">Score to copy.</param>
+        public ScoreMean(ScoreMean s)
+        {
+            this.RawScore = s.RawScore;
+            this.NormalizedScore = s.NormalizedScore;
+        }
+
+        /// <summary>
         /// Scoring function.
         /// </summary>
         /// <param name="overlaps">Overlap list.</param>

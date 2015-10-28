@@ -10,6 +10,24 @@ namespace Mufasa.BackEnd.Scores
     abstract class Score
     {
         /// <summary>
+        /// Score copying constructor.
+        /// </summary>
+        /// <param name="s">Score to copy.</param>
+        public Score(Score s)
+        {
+            this.RawScore = s.RawScore;
+            this.NormalizedScore = s.NormalizedScore;
+        }
+
+         /// <summary>
+        /// Score copying constructor.
+        /// </summary>
+        public Score()
+        {
+
+        }
+
+        /// <summary>
         /// Raw score.
         /// </summary>
         public double RawScore { get; protected set; }

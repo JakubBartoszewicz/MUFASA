@@ -32,6 +32,16 @@ namespace Mufasa.BackEnd.Scores
         }
 
         /// <summary>
+        /// ScoreOptimum copying constructor.
+        /// </summary>
+        /// <param name="s">Score to copy.</param>
+        public ScoreOptimum(ScoreOptimum s)
+        {
+            this.RawScore = s.RawScore;
+            this.NormalizedScore = s.NormalizedScore;
+        }
+
+        /// <summary>
         /// Scoring function.
         /// </summary>
         /// <param name="overlaps">Overlap list.</param>

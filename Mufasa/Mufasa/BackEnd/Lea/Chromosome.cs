@@ -30,9 +30,9 @@ namespace Mufasa.BackEnd.Lea
         /// <param name="c"></param>
         public Chromosome(Chromosome c)
         {
-            this.Lengths_3 = c.Lengths_3;
-            this.Lengths_5 = c.Lengths_5;
-            this.Score = c.Score;
+            this.Lengths_3 = new List<int>(c.Lengths_3);
+            this.Lengths_5 = new List<int>(c.Lengths_5);
+            this.Score = new ScoreTotal (c.Score);
             this.Overlaps = new List<Overlap>();
 
             foreach (Overlap o in c.Overlaps)
