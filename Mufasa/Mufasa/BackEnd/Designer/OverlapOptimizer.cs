@@ -110,7 +110,9 @@ namespace Mufasa.BackEnd.Designer
                 population = LocalSearch(population, rand, this.Settings.LeaSettings.IgnoreHeterodimers);
             best = new Chromosome(Tournament(population));
             leaBest = new Chromosome(best);
+            List<Chromosome> bestes = new List<Chromosome>();
             leaBestAcrossGenerations.Add(best.Score.NormalizedScore);
+            bestes.Add(new Chromosome(best));
             
             do
             {
@@ -149,13 +151,14 @@ namespace Mufasa.BackEnd.Designer
                 if (!stop)
                     nextPopulation = LocalSearch(nextPopulation, rand, this.Settings.LeaSettings.IgnoreHeterodimers);
                 if (!stop)
-                best = Tournament(nextPopulation);
+                    best = Tournament(nextPopulation);
 
                 leaBestAcrossGenerations.Add(best.Score.NormalizedScore);
                 if (!stop && best.Score.NormalizedScore < leaBest.Score.NormalizedScore)
                 {
                     //copy the best solution so far
                     leaBest = new Chromosome(best);
+                    bestes.Add(new Chromosome(best));
                 }
 
                 population.Clear();

@@ -33,7 +33,12 @@ namespace Mufasa.BackEnd.Lea
             this.Lengths_3 = c.Lengths_3;
             this.Lengths_5 = c.Lengths_5;
             this.Score = c.Score;
-            this.Overlaps = c.Overlaps;
+            this.Overlaps = new List<Overlap>();
+
+            foreach (Overlap o in c.Overlaps)
+            {
+                this.Overlaps.Add(new Overlap(o));
+            }
         }
 
         public Chromosome(List<Overlap> preoptimized, double targetTm)

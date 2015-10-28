@@ -508,8 +508,8 @@ namespace Mufasa.Pages
             {
                 Designer.ConstructionList[i] = Designer.ConstructionList[i].Replace(Designer.VectorLabel, "");
             }
-
-            Designer.ConstructionList[0] = Designer.VectorLabel + Designer.ConstructionList[0];
+            if (Designer.ConstructionList.Count > 0)
+                Designer.ConstructionList[0] = Designer.VectorLabel + Designer.ConstructionList[0];
         }
 
         /// <summary>
