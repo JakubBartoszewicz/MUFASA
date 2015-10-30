@@ -200,7 +200,7 @@
                         <Label x:Name="crossoverLabel" Content="Crossover rate:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="1" ToolTip="Crossover chance."/>
                         <ScrollBar x:Name="crossoverScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" VerticalAlignment="Top"  Minimum="0" Maximum="1.00" Margin="10" SmallChange="0.1" Grid.Column="1" Grid.Row="1" ValueChanged="crossoverScrollBar_ValueChanged"/>
 
-                        <Label x:Name="learningLabel" Content="Learning rate:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="2" ToolTip="Local search chance."/>
+                        <Label x:Name="learningLabel" Content="Local search rate:" Margin="20, 20, 20, 20" Grid.Column="0" Grid.Row="2" ToolTip="Local search cap."/>
                         <ScrollBar x:Name="learningScrollBar" HorizontalAlignment="Left" Style="{DynamicResource MufasaNumericUpDown}" VerticalAlignment="Top"  Minimum="0" Maximum="1.00" Margin="10" SmallChange="0.1" Grid.Column="1" Grid.Row="2" ValueChanged="learningScrollBar_ValueChanged"/>
 
                         <Label x:Name="popsizeLabel" Content="Pop. size:" Margin="20, 20, 20, 20" Grid.Column="2" Grid.Row="0" ToolTip="Number of candidate solutions per iteration."/>

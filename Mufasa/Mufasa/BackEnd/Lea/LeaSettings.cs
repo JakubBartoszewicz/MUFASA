@@ -16,14 +16,14 @@ namespace Mufasa.BackEnd.Lea
         /// </summary>
         public LeaSettings()
         {
-            this.PopulationSize = 20;
-            this.TournamentSize = 5;
+            this.PopulationSize = 30;
+            this.TournamentSize = 6;
             this.CrossoverRate = 1.0;
-            this.MutationRate = 0.8;
-            this.LearningRate = 0.5;
+            this.MutationRate = 1.0;
+            this.LearningRate = 0.0;
             this.Epsilon = 0.01;
             this.IgnoreHeterodimers = false;
-            this.MaxIterations = 50;
+            this.MaxIterations = 25;
             this.MinIterations = 10;
         }
 
