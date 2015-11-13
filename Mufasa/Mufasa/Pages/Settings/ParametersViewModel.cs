@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mufasa.BackEnd.TmThal;
 
+//Copyright (C) 2015 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.Pages.Settings
 {
     class ParametersViewModel : NotifyPropertyChanged

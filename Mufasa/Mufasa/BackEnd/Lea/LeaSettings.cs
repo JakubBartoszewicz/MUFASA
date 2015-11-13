@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//Copyright (C) 2015 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.BackEnd.Lea
 {
     /// <remarks>

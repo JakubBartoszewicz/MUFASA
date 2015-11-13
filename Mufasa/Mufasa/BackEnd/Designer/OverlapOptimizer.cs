@@ -8,6 +8,7 @@ using Mufasa.BackEnd.Lea;
 using Mufasa.BackEnd.Scores;
 using Mufasa.BackEnd.Exceptions;
 
+//Copyright (C) 2014, 2015 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.BackEnd.Designer
 {
     /// <remarks>

@@ -8,6 +8,7 @@ using Bio;
 using Bio.IO;
 using Mufasa.BackEnd.TmThal;
 
+//Copyright (C) 2014, 2015 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.BackEnd.Designer
 {
     /// <remarks>

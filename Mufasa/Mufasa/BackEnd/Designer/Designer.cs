@@ -13,6 +13,7 @@ using System.Windows;
 using System.Net;
 using Bio.IO.GenBank;
 
+//Copyright (C) 2014, 2015 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.BackEnd.Designer
 {
     /// <remarks>
@@ -132,6 +133,7 @@ namespace Mufasa.BackEnd.Designer
             return sequences.First();
         }
 
+        //Copyright (C) 2014 Melania Nowicka
         /// <summary>
         /// Adds a BioBrick <paramref name="name"/> if valid.
         /// </summary>

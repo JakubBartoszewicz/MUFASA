@@ -18,6 +18,7 @@ using System.Globalization;
 using System.ComponentModel;
 using System.Collections.Specialized;
 
+//Copyright (C) 2014, 2015 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.Pages
 {
 

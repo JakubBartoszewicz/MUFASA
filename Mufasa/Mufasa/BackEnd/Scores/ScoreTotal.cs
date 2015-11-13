@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mufasa.BackEnd.Designer;
 
+//Copyright (C) 2015 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.BackEnd.Scores
 {
     class ScoreTotal : Score

@@ -4,6 +4,12 @@
 #include "oligotm.c"
 
 
+//Copyright (C) 2015 Jakub Bartoszewicz
+/*Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2004, 2006, 2007, 2009, 2010,
+2011, 2012
+Whitehead Institute for Biomedical Research, Steve Rozen
+(http://purl.com/STEVEROZEN/), and Helen Skaletsky
+All rights reserved.*/
 namespace tmthal
 {
 	/* Central method for finding the best alignment.  On error, o->temp

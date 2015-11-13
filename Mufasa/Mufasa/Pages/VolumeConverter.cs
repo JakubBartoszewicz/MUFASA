@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
+//Copyright (C) 2014, 2015 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.Pages
 {
     /// <remarks>

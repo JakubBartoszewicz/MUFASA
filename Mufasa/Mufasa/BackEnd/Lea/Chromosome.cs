@@ -7,6 +7,7 @@ using Bio;
 using Mufasa.BackEnd.Designer;
 using Mufasa.BackEnd.Scores;
 
+//Copyright (C) 2015 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.BackEnd.Lea
 {
     class Chromosome

@@ -25,6 +25,7 @@ using System.Text;
 using System.ComponentModel;
 using System.Diagnostics;
 
+//Copyright (C) 2014, 2015 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.Pages
 {
     /// <summary>
@@ -146,6 +147,7 @@ namespace Mufasa.Pages
 
         }
 
+        //Copyright (C) 2014 Melania Nowicka
         /// <summary>
         /// Shows bb information.
         /// </summary>
@@ -305,6 +307,7 @@ namespace Mufasa.Pages
 
         }
 
+        //Copyright (C) 2014 Melania Nowicka
         /// <summary>
         /// Search event handler.
         /// </summary>
