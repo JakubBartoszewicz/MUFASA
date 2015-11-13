@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
+//Copyright (C) 2014, 2015 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.Pages
 {
     /// <remarks>
@@ -34,12 +35,12 @@ namespace Mufasa.Pages
             if (item == null || view == null)
                 return null;
 
-            var volume = item.Length * 0.1 / item.Concentration;
+            var volume = (item.Length * 0.1 / item.Concentration) *  (item.ReactionVolume / 50.0);
             if (item.IsVector)
             {
                 volume /= 2;
             }
-            return Math.Round(volume,1).ToString();
+            return Math.Round(volume,2).ToString();
         }
 
         /// <summary>

@@ -17,7 +17,6 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -25,25 +24,34 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Label x:Name="bufferLabel" Content="Buffer 5x:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="0"/>
-                <Label x:Name="waterLabel" Content="Water:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="1"/>
-                <Label x:Name="dNTPLabel" Content="dNTP:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="2"/>
-                <Label x:Name="polyLabel" Content="Polymerase:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="3"/>
-                <TextBlock x:Name="bufferTextBlock" Text="{Binding}" Margin="480, 0, 20, 20" Grid.Column="0" Grid.Row="0"/>
-                <TextBlock x:Name="waterTextBlock" Text="{Binding}" Margin="480, 0, 20, 20" Grid.Column="0" Grid.Row="1"/>
-                <TextBlock x:Name="dNTPTextBlock" Text="{Binding}" Margin="480, 0, 20, 20" Grid.Column="0" Grid.Row="2"/>
-                <TextBlock x:Name="polyTextBlock" Text="{Binding}" Margin="480, 0, 20, 20" Grid.Column="0" Grid.Row="3"/>
-                <DataGrid x:Name="concentrationsDataGrid" ItemsSource="{Binding Path=Fragments}" Width="600" Height ="auto"  VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Margin="30, 40, 20, 20" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="False" Grid.Column="0" Grid.Row="4">
+                <Label x:Name="volumeLabel" Content="Total volume:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="0"/>
+                <Label x:Name="bufferLabel" Content="Buffer 5x:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="1"/>
+                <Label x:Name="waterLabel" Content="Water:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="2"/>
+                <Label x:Name="dNTPLabel" Content="dNTP mix (40mM):" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="3"/>
+                <Label x:Name="polyLabel" Content="Polymerase:" Margin="30, 0, 20, 20" Grid.Column="0" Grid.Row="4"/>
+
+                <DockPanel VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,20" Width="225" Grid.Column="0" Grid.Row="0">
+                    <TextBox Text="{Binding ElementName=volumeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                    <Slider Maximum="50" TickFrequency="1" IsSnapToTickEnabled="True" Name="volumeSlider" ValueChanged="volumeSlider_ValueChanged" LargeChange="5" SmallChange="1" />
+                </DockPanel>
+
+                <TextBlock x:Name="bufferTextBlock" HorizontalAlignment="Right" Text="{Binding StringFormat=N1}"  Margin="0, 0, 20, 20" Grid.Column="0" Grid.Row="1"/>
+                <TextBlock x:Name="waterTextBlock" HorizontalAlignment="Right" Text="{Binding StringFormat=N1}" Margin="0, 0, 20, 20" Grid.Column="0" Grid.Row="2"/>
+                <TextBlock x:Name="dNTPTextBlock" HorizontalAlignment="Right" Text="{Binding StringFormat=N1}" Margin="0, 0, 20, 20" Grid.Column="0" Grid.Row="3"/>
+                <TextBlock x:Name="polyTextBlock" HorizontalAlignment="Right" Text="{Binding StringFormat=N1}" Margin="0, 0, 20, 20" Grid.Column="0" Grid.Row="4"/>
+                <DataGrid x:Name="concentrationsDataGrid" ItemsSource="{Binding Path=Fragments}" Width="600" Height ="auto"  VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Margin="30, 40, 20, 20" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="False" Grid.Column="0" Grid.Row="5">
                     <DataGrid.RowHeaderStyle>
                         <Style TargetType="DataGridRowHeader">
-                            <Setter Property="Content" Value="{Binding Name}" />
-                            <Setter Property="Width" Value="150"/>
+                            <Setter Property="Content" Value="" />
+                            <Setter Property="Width" Value="0"/>
                             <Setter Property="Height" Value="25"/>
                             <Setter Property="Background" Value="#252525"/>
                             <Setter Property="Foreground" Value="#F0A30A"/>
-                            <Setter Property="MaxWidth" Value="150px"/>
-                            <Setter Property="MinWidth" Value="50px"/>
+                            <Setter Property="MaxWidth" Value="0px"/>
+                            <Setter Property="MinWidth" Value="0px"/>
+                            <Setter Property="Visibility" Value="Collapsed"/>
                         </Style>
                     </DataGrid.RowHeaderStyle>
                     <DataGrid.ColumnHeaderStyle>
@@ -52,28 +60,36 @@
                             <Setter Property="Height" Value="25"/>
                             <Setter Property="Background" Value="#333333"/>
                             <Setter Property="Foreground" Value="#F0A30A"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="Padding" Value="5,0,0,0"/>                  
                         </Style>
                     </DataGrid.ColumnHeaderStyle>
                     <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Path=Name, Mode=OneWay}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTextColumn Header="Length [bp]" Binding="{Binding Path=Length, Mode=OneWay}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Concentration [ng/&#181;l]" Binding="{Binding Concentration, NotifyOnTargetUpdated=True, StringFormat={}{0:F2}}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Volume [&#181;l]">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                             <DataGridTextColumn.Binding>

@@ -13,6 +13,7 @@ using System.Windows;
 using System.Net;
 using Bio.IO.GenBank;
 
+//Copyright (C) 2014, 2015 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.BackEnd.Designer
 {
     /// <remarks>
@@ -34,6 +35,8 @@ namespace Mufasa.BackEnd.Designer
         /// Fragment file parser
         /// </value>
         private ISequenceParser parser;
+
+        public const String VectorLabel = "vect.";
 
         /// <value>
         /// Dictionary of pooled fragments.
@@ -130,6 +133,7 @@ namespace Mufasa.BackEnd.Designer
             return sequences.First();
         }
 
+        //Copyright (C) 2014 Melania Nowicka
         /// <summary>
         /// Adds a BioBrick <paramref name="name"/> if valid.
         /// </summary>
@@ -146,11 +150,11 @@ namespace Mufasa.BackEnd.Designer
 
             if (sequenceString.Length < 150)
             {
-                SequenceTooShort(url, name, new SequenceLengthException("Sequence in " + name + " is shorter than 150nt. It should not be used as a fragment.", new Sequence(Alphabets.DNA, sequenceString)));
+                SequenceTooShort(url, name, new SequenceLengthException("Sequence in " + name + " is shorter than 150nt. It should not be used as a fragment.", new Sequence(Alphabets.AmbiguousDNA, sequenceString)));
             }
             else
             {
-                this.FragmentDict.Add(name, new Fragment(url, name, new Sequence(Alphabets.DNA, sequenceString)));
+                this.FragmentDict.Add(name, new Fragment(url, name, new Sequence(Alphabets.AmbiguousDNA, sequenceString)));
             }
         } 
         
@@ -160,7 +164,7 @@ namespace Mufasa.BackEnd.Designer
         /// <param name="fragment">Name of the fragment to add.</param>
         public void AddConstructionFragment(String fragmentName)
         {
-            if (this.ConstructionList.Contains(fragmentName))
+            if (this.ConstructionList.Contains(fragmentName) || this.ConstructionList.Contains(VectorLabel + fragmentName))
             {
                 throw new FragmentNamingException(fragmentName);
             }
@@ -183,7 +187,7 @@ namespace Mufasa.BackEnd.Designer
             foreach (var feat in meta.Features.MiscFeatures)
             {
                 String subseq = project.GetString().Substring(feat.Location.LocationStart-1, feat.Location.LocationEnd - feat.Location.LocationStart + 1);
-                FragmentDict.Add(feat.StandardName, new Fragment(file, feat.StandardName, new Sequence(Alphabets.DNA, subseq)));
+                FragmentDict.Add(feat.StandardName, new Fragment(file, feat.StandardName, new Sequence(Alphabets.AmbiguousDNA, subseq)));
             }
         }        
     }

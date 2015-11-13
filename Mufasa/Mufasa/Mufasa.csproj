@@ -23,9 +23,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -35,9 +34,10 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,6 +46,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>mufasa.ico</ApplicationIcon>
@@ -109,11 +110,22 @@
     <Compile Include="BackEnd\Designer\Construct.cs" />
     <Compile Include="BackEnd\Designer\Designer.cs" />
     <Compile Include="BackEnd\Designer\DesignerSettings.cs" />
+    <Compile Include="BackEnd\Exceptions\AssemblyException.cs" />
+    <Compile Include="BackEnd\Exceptions\TmThalParamException.cs" />
+    <Compile Include="BackEnd\Lea\Chromosome.cs" />
+    <Compile Include="BackEnd\Lea\LeaSettings.cs" />
+    <Compile Include="BackEnd\Scores\Score.cs" />
     <Compile Include="BackEnd\Designer\Overlap.cs" />
+    <Compile Include="BackEnd\Designer\OverlapOptimizer.cs" />
+    <Compile Include="BackEnd\Scores\ScoreMean.cs" />
+    <Compile Include="BackEnd\Scores\ScoreOptimum.cs" />
     <Compile Include="BackEnd\Exceptions\FragmentNamingException.cs" />
     <Compile Include="BackEnd\Designer\Fragment.cs" />
     <Compile Include="BackEnd\Exceptions\SequenceCountException.cs" />
     <Compile Include="BackEnd\Exceptions\SequenceLengthException.cs" />
+    <Compile Include="BackEnd\Scores\ScoreTotal.cs" />
+    <Compile Include="BackEnd\TmThal\Thermodynamics.cs" />
+    <Compile Include="BackEnd\TmThal\TmThalSettings.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -155,8 +167,16 @@
     <Compile Include="Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Settings\Parameters.xaml.cs">
+      <DependentUpon>Parameters.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\ParametersViewModel.cs" />
     <Compile Include="Pages\VolumeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Page Include="Pages\Settings\Parameters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -32,7 +32,7 @@ namespace Mufasa.Pages.Settings
         };*/
 
         // 20 accent colors from Windows Phone 8
-        private Color[] accentColors = new Color[]{
+        /*private Color[] accentColors = new Color[]{
             Color.FromRgb(0xa4, 0xc4, 0x00),   // lime
             Color.FromRgb(0x60, 0xa9, 0x17),   // green
             Color.FromRgb(0x00, 0x8a, 0x00),   // emerald
@@ -54,7 +54,20 @@ namespace Mufasa.Pages.Settings
             Color.FromRgb(0x76, 0x60, 0x8a),   // mauve
             Color.FromRgb(0x87, 0x79, 0x4e),   // taupe            
             Color.FromRgb(0x0a, 0x0a, 0x0a),   // lightblack
+        };*/
+
+        //Mufasa colors
+        private Color[] accentColors = new Color[]{
+            Color.FromRgb(0xc0, 0x93, 0x3a),   //lion
+            Color.FromRgb(0x82, 0x5a, 0x2c),   // brown
+            Color.FromRgb(0x6d, 0x87, 0x64),   // olive
+            Color.FromRgb(0x64, 0x76, 0x87),   // steel
+            Color.FromRgb(0x76, 0x60, 0x8a),   // mauve
+            Color.FromRgb(0x87, 0x79, 0x4e),   // taupe            
+            Color.FromRgb(0x3a, 0x3a, 0x3a),   // gray
+            Color.FromRgb(0x1a, 0x1a, 0x1a),   // lightblack
         };
+
 
         private Color selectedAccentColor;
         private LinkCollection themes = new LinkCollection();
@@ -66,8 +79,8 @@ namespace Mufasa.Pages.Settings
         {
             // add the default themes
             this.themes.Add(mufasaDefaultTheme);
-            this.themes.Add(new Link { DisplayName = "dark", Source = AppearanceManager.DarkThemeSource });
-            this.themes.Add(new Link { DisplayName = "light", Source = AppearanceManager.LightThemeSource });
+            //this.themes.Add(new Link { DisplayName = "dark", Source = AppearanceManager.DarkThemeSource });
+            //this.themes.Add(new Link { DisplayName = "light", Source = AppearanceManager.LightThemeSource });
 
             this.SelectedFontSize = AppearanceManager.Current.FontSize == FontSize.Large ? FontLarge : FontSmall;
             SyncThemeAndColor();
@@ -92,10 +105,10 @@ namespace Mufasa.Pages.Settings
             }
         }
 
-        public LinkCollection Themes
-        {
-            get { return this.themes; }
-        }
+        //public LinkCollection Themes
+        //{
+        //    get { return this.themes; }
+        //}
 
         public string[] FontSizes
         {

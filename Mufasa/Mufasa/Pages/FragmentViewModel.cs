@@ -1,4 +1,5 @@
 ﻿using Bio;
+using FirstFloor.ModernUI.Presentation;
 using Mufasa.BackEnd.Designer;
 using System;
 using System.Collections.Generic;
@@ -7,12 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//Copyright (C) 2014 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.Pages
 {
     /// <summary>
-    /// Wraps Fragment class and provide notification of changes
+    /// Wraps Fragment class and provides notification of changes
     /// </summary>
-    public class FragmentViewModel
+    public class FragmentViewModel : NotifyPropertyChanged
     {
         /// <summary>
         /// FragmentViewModel constructor.
@@ -36,9 +38,9 @@ namespace Mufasa.Pages
         /// </value>
         public Fragment Model { get; private set; }
 
-        /// <summary>
+        /// <value>
         /// Concentration.
-        /// </summary>
+        /// </value>
         public double Concentration
         {
             get { return this.Model.Concentration; }
@@ -49,9 +51,9 @@ namespace Mufasa.Pages
             }
         }
 
-        /// <summary>
-        /// Volume.
-        /// </summary>
+        /// <value>
+        /// Sample volume.
+        /// </value>
         public double Volume
         {
             get { return this.Model.Volume; }
@@ -62,9 +64,22 @@ namespace Mufasa.Pages
             }
         }
 
-        /// <summary>
+        /// <value>
+        /// Reaction volume.
+        /// </value>
+        public double ReactionVolume
+        {
+            get { return this.Model.ReactionVolume; }
+            set
+            {
+                this.Model.ReactionVolume = value;
+                OnPropertyChanged("ReactionVolume");
+            }
+        }
+
+        /// <value>
         /// True if a vector fragment.
-        /// </summary>
+        /// </value>
         public bool IsVector
         {
             get { return this.Model.IsVector; }
@@ -75,9 +90,9 @@ namespace Mufasa.Pages
             }
         }
 
-        /// <summary>
+        /// <value>
         /// Fragment length.
-        /// </summary>
+        /// </value>
         public long Length
         {
             get { return this.Model.Length; }
@@ -100,21 +115,31 @@ namespace Mufasa.Pages
                 OnPropertyChanged("Source");
             }
         }
-        /// <summary>
+        /// <value>
         /// Name of the fragment.
-        /// </summary>
+        /// </value>
         public String Name
         {
-            get { return this.Model.Name; }
+            get
+            {
+                if (this.Model.IsVector)
+                {
+                    return Designer.VectorLabel + this.Model.Name;
+                }
+                else
+                {
+                    return this.Model.Name;
+                } 
+            }
             set
             {
                 this.Model.Name = value;
                 OnPropertyChanged("Name");
             }
         }
-        /// <summary>
+        /// <value>
         /// Fragment sequence.
-        /// </summary>
+        /// </value>
         public ISequence Sequence
         {
             get { return this.Model.Sequence; }
@@ -122,23 +147,6 @@ namespace Mufasa.Pages
             {
                 this.Model.Sequence = value;
                 OnPropertyChanged("Sequence");
-            }
-        }
-
-        /// <summary>
-        /// PropertyChanged event.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// PropertyChanged trigger.
-        /// </summary>
-        /// <param name="propertyName"></param>
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

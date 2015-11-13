@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//Copyright (C) 2014 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.BackEnd.Designer
 {
     /// <remarks>
@@ -39,9 +40,15 @@ namespace Mufasa.BackEnd.Designer
         public bool IsVector { get; set; }
 
         /// <summary>
+        /// Fragment sample volume.
+        /// </summary>
+        public double Volume { get; set; }
+
+        /// <summary>
         /// Reaction volume.
         /// </summary>
-        public double Volume { get; set; }  
+        public double ReactionVolume { get; set; }  
+
         /// <summary>
         /// Fragment constructor.
         /// </summary>

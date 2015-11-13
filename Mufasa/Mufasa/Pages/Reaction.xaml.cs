@@ -18,6 +18,7 @@ using System.Globalization;
 using System.ComponentModel;
 using System.Collections.Specialized;
 
+//Copyright (C) 2014, 2015 Jakub Bartoszewicz (if not stated otherwise)
 namespace Mufasa.Pages
 {
 
@@ -28,6 +29,8 @@ namespace Mufasa.Pages
         public Reaction()
         {
             InitializeComponent();
+            this.fragmentsVolume = 0.0;
+
             if (Design.Designer.ConstructionList.Count() != 0)
             {
                 InitializeFragmentsListBox();
@@ -37,8 +40,9 @@ namespace Mufasa.Pages
         private double dNTP;
         private double poly;
         private double water;
-        private double maxWater;
         private double buffer;
+        private double reactionVolume;
+        private double fragmentsVolume;
 
 
         /// <summary>
@@ -51,21 +55,19 @@ namespace Mufasa.Pages
         /// Reaction list box initialization.
         /// </summary>
         private void InitializeFragmentsListBox()
-        {
-            dNTP = (double)Design.Designer.Settings.ReactionVolume / 100.0;
-            poly = (double)Design.Designer.Settings.ReactionVolume / 50.0;
-            buffer = (double)Design.Designer.Settings.ReactionVolume / 5.0;
-            dNTPTextBlock.Text = dNTP.ToString();
-            polyTextBlock.Text = poly.ToString();
-            bufferTextBlock.Text = buffer.ToString();
-            maxWater = (double)Design.Designer.Settings.ReactionVolume - dNTP - poly - buffer;
-            water = maxWater;
-            waterTextBlock.Text = water.ToString();
+        {            
+            this.reactionVolume = Design.Designer.Settings.ReactionVolume;
+
+            //slider calls calculateVolumes
+            this.volumeSlider.Value = this.reactionVolume;
+
+            
 
             fragmentList = new ObservableCollection<Fragment>();
             for (int i = 0; i < Design.Designer.ConstructionList.Count(); i++)
             {
-                Fragment f = Design.Designer.FragmentDict[Design.Designer.ConstructionList[i]];
+                String key = Design.Designer.ConstructionList[i].Replace(Designer.VectorLabel, "");
+                Fragment f = Design.Designer.FragmentDict[key];
                 
                 if(i==0)
                 {
@@ -76,6 +78,7 @@ namespace Mufasa.Pages
                     f.IsVector = false;
                 }
                 fragmentList.Add(f);
+                fragmentList[i].ReactionVolume = this.reactionVolume;
             }
 
             this.Items = new ObservableCollection<FragmentViewModel>(fragmentList.Select(m => new FragmentViewModel(m)));
@@ -86,6 +89,23 @@ namespace Mufasa.Pages
                 m.PropertyChanged += new PropertyChangedEventHandler(Item_PropertyChanged);
 
             concentrationsDataGrid.ItemsSource = Fragments;
+        }
+
+        /// <summary>
+        /// Calculate reagent volumes.
+        /// </summary>
+        /// <param name="reactionVolume">Total reaction volume.</param>
+        void calculateVolumes(double reactionVolume)
+        {
+            dNTP = reactionVolume / 50.0; //Qian & Tian, 2014
+            poly = reactionVolume / 50.0; //Qian & Tian, 2014
+            buffer = reactionVolume / 5.0;
+            dNTPTextBlock.Text = dNTP.ToString();
+            polyTextBlock.Text = poly.ToString();
+            bufferTextBlock.Text = buffer.ToString();
+            water = reactionVolume - dNTP - poly - buffer - fragmentsVolume;
+            waterTextBlock.Text = water.ToString();
+            waterTextBlock.UpdateLayout();
         }
 
         //Concentrations were changed
@@ -102,19 +122,26 @@ namespace Mufasa.Pages
             for (int i = 0; i < Fragments.Count; i++ )
             {
                 concentrationsDataGrid.UpdateLayout();
+               // FragmentViewModel it = (FragmentViewModel)concentrationsDataGrid.Items[i];
                 concentrationsDataGrid.ScrollIntoView(concentrationsDataGrid.Items[i]);
                 DataGridRow row = (DataGridRow)concentrationsDataGrid.ItemContainerGenerator.ContainerFromIndex(i);
-                DataGridCell RowColumn = concentrationsDataGrid.Columns[2].GetCellContent(row).Parent as DataGridCell;
+                DataGridCell RowColumn = concentrationsDataGrid.Columns[3].GetCellContent(row).Parent as DataGridCell;
+
+                NumberStyles style = NumberStyles.AllowDecimalPoint;
+                //CultureInfo culture = CultureInfo.CreateSpecificCulture("en-GB");
+                CultureInfo culture = System.Globalization.CultureInfo.CurrentCulture;
+
                 string cellValue = ((TextBlock)RowColumn.Content).Text;
-                double vol = Double.Parse(cellValue);
+               
+                double vol = Double.Parse(cellValue, style, culture);
+
                 if(!Double.IsInfinity(vol))
                     volume += vol;
             }
 
-            water = maxWater - volume;
-            waterTextBlock.Text = water.ToString();
-            waterTextBlock.UpdateLayout();
-
+            fragmentsVolume = volume;
+            calculateVolumes(this.reactionVolume);
+            
         }
 
         //Items were added or removed
@@ -142,6 +169,22 @@ namespace Mufasa.Pages
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             this.InitializeFragmentsListBox();
+        }
+
+        private void volumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            this.reactionVolume = volumeSlider.Value;
+            Design.Designer.Settings.ReactionVolume = this.reactionVolume;
+
+            if (this.Items != null)
+            {
+                for (int i = 0; i < this.Items.Count; i++)
+                {
+                    this.Items[i].ReactionVolume = this.reactionVolume;
+                }
+            }
+
+            calculateVolumes(this.reactionVolume);
         }           
     }
 }
